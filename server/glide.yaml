@@ -1,0 +1,8 @@
+package: github.com/makki0205/web
+import:
+- package: github.com/gin-gonic/gin
+- package: github.com/go-sql-driver/mysql
+- package: github.com/itsjamie/gin-cors
+- package: github.com/jinzhu/gorm
+- package: github.com/trevex/golem
+- package: gopkg.in/yaml.v2
