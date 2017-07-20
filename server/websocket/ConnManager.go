@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"fmt"
 	"github.com/trevex/golem"
 	"sync"
 )
@@ -45,7 +44,6 @@ func (self *ConnManager) Set(conn *golem.Connection) int {
 	self.lock.Lock()
 	self.connModels = append(self.connModels, NewConn(conn))
 	connModel := self.connModels[len(self.connModels)-1]
-	fmt.Println(connModel.Id == len(self.connModels)-1)
 	self.lock.Unlock()
 	return connModel.Id
 }

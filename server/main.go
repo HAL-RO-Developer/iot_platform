@@ -3,12 +3,19 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/itsjamie/gin-cors"
-	"github.com/makki0205/web/midelware"
-	"github.com/makki0205/web/websocket"
+	"github.com/HAL-RO-Developer/iot_platform/server/midelware"
+	"github.com/HAL-RO-Developer/iot_platform/server/websocket"
+	"github.com/HAL-RO-Developer/iot_platform/server/socket"
 )
 
 func main() {
 	//gin.SetMode(gin.ReleaseMode)
+	go socket.ServerInit(4000)
+	webRouter := createRouter()
+	webRouter.Run(":3000")
+}
+
+func createRouter() *gin.Engine{
 	r := gin.Default()
 	r.Static("/js", "./public/js")
 	r.Static("/image", "./public/image")
@@ -33,5 +40,5 @@ func main() {
 			"email": "llxo2_5oxll@icloud.com",
 		})
 	})
-	r.Run(":3000")
+	return r
 }
