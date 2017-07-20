@@ -21,15 +21,17 @@ func serverHandle(conn net.Conn){
 	socket := SocketManager(conn)
 	uuid := socket.Read()
 	// TODO UUIDのデータベース照合
-	if _, ok := sockets[uuid]; !ok {
+	if _, ok := sockets[uuid]; ok {
 		panic("uuidが重複しました")
 	}
 	sockets[uuid] = socket
+	fmt.Println("device is conect : "+ socket.conn.RemoteAddr().String() +" | uuid : "+ uuid)
 	for{
 		message := socket.Read()
 		if message == ""{
 			delete(sockets, uuid)
 			fmt.Println("[切断]"+ socket.conn.RemoteAddr().String())
+			socket.conn.Close()
 			break
 		}
 		// TODO clientに渡す

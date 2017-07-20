@@ -7,7 +7,7 @@ import (
 type Socket struct {
 	conn net.Conn
 }
-var sockets map[string]*Socket
+var sockets = map[string]*Socket{}
 
 func SocketManager(conn net.Conn) *Socket{
 	return &Socket{conn: conn}
@@ -19,7 +19,7 @@ func (this *Socket)Send(msg string){
 }
 
 func (this *Socket)Read() string{
-	buf := make([]byte, 1024)
+	buf := make([]byte, 10240)
 	n, err := this.conn.Read(buf)
 	if err != nil {
 		return ""

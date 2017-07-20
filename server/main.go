@@ -10,7 +10,7 @@ import (
 
 func main() {
 	//gin.SetMode(gin.ReleaseMode)
-	go socket.ServerInit(4000)
+	go socket.ServerInit(1234)
 	webRouter := createRouter()
 	webRouter.Run(":3000")
 }
