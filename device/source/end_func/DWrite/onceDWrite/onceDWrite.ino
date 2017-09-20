@@ -27,7 +27,7 @@ typedef struct{
 } RESULT_DATA;
 
 /* プロトタイプ宣言 */
-short simpleDWrite( CONTEXT_DATA *c_data, RESULT_DATA *r_data );
+short onceDWrite( CONTEXT_DATA *c_data, RESULT_DATA *r_data );
 
 CONTEXT_DATA context;
 RESULT_DATA result;
