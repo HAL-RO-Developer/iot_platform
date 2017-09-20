@@ -6,17 +6,17 @@
  typedef struct{
     short port[2];   // ポート情報 [0]は今の入出力の状態、[2]はポート番号
     short value;   // データ
-}c_d;
+}CONTEXT_DATA;
 
 
  typedef struct{
      short value;   // データ
      short result;  // 実行結果(OK/NG)
-}r_d;
-c_d context;
-r_d  result;
+}RESULT_DATA;
+CONTEXT_DATA context;
+RESULT_DATA  result;
 
-short onceAWrite( c_d *cdata,r_d *rdata);//プロトタイプ宣言しないとエラーを起こす
+short onceAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata);//プロトタイプ宣言しないとエラーを起こす
 
 //定数定義
 #define LED_Pin 5
@@ -47,8 +47,8 @@ delay(1000); //シリアルを見やすくする
 }
 
 //onceAWrite
-short onceAWrite( c_d *cdata,r_d *rdata){
-  short rtn = RESULT_NG;
+short onceAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
+  short rtn = RESULT_OK;
 //INPUTになっていたらOUTPUTに
  if(cdata->port[0] != OUTPUT){
 Digital::SetMode(cdata->port[1], OUTPUT);
@@ -56,8 +56,7 @@ Digital::SetMode(cdata->port[1], OUTPUT);
 //出力する
 Analog::Write(cdata->port[1],cdata->value);
 rdata->value = cdata->value;
-rdata->result = RESULT_OK;
-rtn = RESULT_OK;
+rdata->result = rtn;
 return rtn;
 }
 
