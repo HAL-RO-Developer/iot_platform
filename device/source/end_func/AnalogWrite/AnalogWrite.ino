@@ -1,9 +1,8 @@
-// Created 2017/07/15	
+// Created 2017/09/20	
 // By Riku Hashimoto
 
 // include
 #include <DeviceControl.h>
-#define Pin INPUT
  typedef struct{
     short port[2];   // ポート情報 [0]は今の入出力の状態、[2]はポート番号
     short value;   // データ
@@ -32,8 +31,8 @@ void setup() {
 //loop
 void loop() {
 //必要情報(ポート番号等を構造体に格納)
-context.port[0] = Pin;
-context.port[1] = 5;
+context.port[0] = PIN_Mode;
+context.port[1] = LED_Pin;
 context.value = 255;
 onceAWrite( context,&result );
 //結果を表示
