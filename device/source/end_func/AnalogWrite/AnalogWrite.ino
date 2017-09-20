@@ -1,4 +1,4 @@
-// Created 2017/09/20	
+// Created 2017/07/15	
 // By Riku Hashimoto
 
 // include
@@ -11,17 +11,18 @@
 
  typedef struct{
      short value;   // データ
-     String result;  // 実行結果(OK/NG)
+     short result;  // 実行結果(OK/NG)
 }r_d;
-
 c_d context;
 r_d  result;
-void onceAWrite( c_d cdata,r_d *rdata);//プロトタイプ宣言しないとエラーを起こす
+
+short onceAWrite( c_d *cdata,r_d *rdata);//プロトタイプ宣言しないとエラーを起こす
 
 //定数定義
 #define LED_Pin 5
 #define PIN_Mode INPUT
-
+#define RESULT_OK 1
+#define RESULT_NG 0
 
 //setup
 void setup() {
@@ -34,7 +35,7 @@ void loop() {
 context.port[0] = PIN_Mode;
 context.port[1] = LED_Pin;
 context.value = 255;
-onceAWrite( context,&result );
+onceAWrite( &context,&result );
 //結果を表示
 Serial.println("Result");
 Serial.println(context.port[1] );
@@ -46,14 +47,16 @@ delay(1000); //シリアルを見やすくする
 }
 
 //onceAWrite
-void onceAWrite( c_d cdata,r_d *rdata){
+short onceAWrite( c_d *cdata,r_d *rdata){
+  short rtn = RESULT_OK;
 //INPUTになっていたらOUTPUTに
- if(cdata.port[0] != OUTPUT){
-Digital::SetMode(cdata.port[1], OUTPUT);
+ if(cdata->port[0] != OUTPUT){
+Digital::SetMode(cdata->port[1], OUTPUT);
  }
 //出力する
-Analog::Write(cdata.port[1],cdata.value);
-rdata->value = cdata.value;
-rdata->result = "OK";
+Analog::Write(cdata->port[1],cdata->value);
+rdata->value = cdata->value;
+rdata->result = RESULT_OK;
+return rtn;
 }
 
