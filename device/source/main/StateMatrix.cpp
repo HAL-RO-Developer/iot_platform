@@ -12,14 +12,14 @@
 #include "State.h"      /* 状態に関する定義ヘッダ       */
 
 /* --- 副状態テーブル --- */
-// 副状態テーブル [主：セットアップ状態]
+/* 副状態テーブル [主：セットアップ状態] */
 const SUB_STATE_TABLE gSetupStateTable[] = {
 	{ STATE_SETUP_AP, setupStateAp },		                /* ＡＰモード */
 	{ STATE_SETUP_ACTION, setupStateAction },	            /* 動作モード */
     { NULL, NULL }                  			            /* ストッパ   */
 };
 
-// 副状態テーブル [主：動作状態]
+/* 副状態テーブル [主：動作状態] */
 const SUB_STATE_TABLE gActionStateTable[] = {
 	{ STATE_ACTION_REGIST, actionStateRegist },	            /* 関数登録状態 */
     { STATE_ACTION_EXECUTE, actionStateExecute },           /* 関数実行状態 */
@@ -27,7 +27,7 @@ const SUB_STATE_TABLE gActionStateTable[] = {
     { NULL , NULL }                 			            /* ストッパ     */
 };
 
-// 副状態テーブル [主：エラー状態]
+/* 副状態テーブル [主：エラー状態] */
 const SUB_STATE_TABLE gErrorStateTable[] = {
 	{ STATE_ERROR_CONNECT, errorStateConnect },	            /* WiFi接続エラー状態     */
     { STATE_ERROR_COMMUNICATE, errorStateCommunicate },     /* サーバー通信エラー状態 */

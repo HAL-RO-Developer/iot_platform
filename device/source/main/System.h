@@ -20,9 +20,9 @@ typedef int            SINT;		/* signed   int型 */
 typedef unsigned int   UINT;		/* unsigned int型 */	
 
 /* --- 定数定義 --- */
-#define SYSTEM_OK       (    0 )	// 正常終了
-#define SYSTEM_NG       (   -1 )	// システムエラー
-#define SYSTEM_PARAM    (   -2 ) 	// 引数エラー		
+#define SYSTEM_OK       (    0 )	/* 正常終了 */
+#define SYSTEM_NG       (   -1 )	/* システムエラー */
+#define SYSTEM_PARAM    (   -2 ) 	/* 引数エラー */	
 
 #endif  /* __SYSTEM_H__ */
 

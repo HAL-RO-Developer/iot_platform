@@ -65,7 +65,6 @@ SSHT callFunction( STATE_TABLE* state, void* object )
     /* --- 状態遷移先関数Call --- */
     return ( *function )( state, object );
 
-
 }
 
 /*
