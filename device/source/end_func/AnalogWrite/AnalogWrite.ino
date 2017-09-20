@@ -48,7 +48,7 @@ delay(1000); //シリアルを見やすくする
 
 //onceAWrite
 short onceAWrite( c_d *cdata,r_d *rdata){
-  short rtn = RESULT_OK;
+  short rtn = RESULT_NG;
 //INPUTになっていたらOUTPUTに
  if(cdata->port[0] != OUTPUT){
 Digital::SetMode(cdata->port[1], OUTPUT);
@@ -57,6 +57,7 @@ Digital::SetMode(cdata->port[1], OUTPUT);
 Analog::Write(cdata->port[1],cdata->value);
 rdata->value = cdata->value;
 rdata->result = RESULT_OK;
+rtn = RESULT_OK;
 return rtn;
 }
 
