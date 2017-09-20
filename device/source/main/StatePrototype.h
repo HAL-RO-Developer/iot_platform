@@ -32,5 +32,4 @@ SSHT errorStateConnect( STATE_TABLE* state, void* object );
 SSHT errorStateCommunicate( STATE_TABLE* state, void* object );
 SSHT errorStateOther( STATE_TABLE* state, void* object );
 
-
-#endif  /* __STATE_PROTOTYPE_H__ */ 
+#endif  /* __STATE_PROTOTYPE_H__ */

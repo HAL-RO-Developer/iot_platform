@@ -13,7 +13,6 @@
 
 /* --- extern宣言 --- */
 extern MAIN_STATE_TABLE gMainStateTable[];                  /* 主状態テーブル */
-extern SSHT ( *function( STATE_TABLE*, void* object ) );
 
 /* --- プロトタイプ宣言 --- */
 SUB_STATE_TABLE* getSubState( USHT mainState );

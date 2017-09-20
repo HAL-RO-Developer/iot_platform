@@ -7,6 +7,9 @@
     By Shogo Tanaka
 */
 
+#ifndef __STATE_DEFINE_H__
+#define __STATE_DEFINE_H__
+
 /* --- 定数定義 --- */
 #define STATE_OK                (    0 )	// 正常終了
 #define STATE_NG                (   -1 )	// システムエラー
@@ -30,9 +33,6 @@
 #define STATE_ERROR_COMMUNICATE ( 0x32 )    // サーバー通信エラー状態
 #define STATE_ERROR_OTHER       ( 0x33 )    // その他各種エラー状態
 
+#endif  /* __STATE_STRUCT_H__ */ 
 
 /* Copyright HAL College of Technology & Design */
-
-
-
-
