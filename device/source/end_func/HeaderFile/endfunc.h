@@ -1,6 +1,8 @@
 /*
-    endfunc.h
-    ––’[ŠÖ”‹¤’Êƒf[ƒ^’è‹`ƒwƒbƒ_
+    Endfunc.h
+    
+    æœ«ç«¯é–¢æ•°å…±é€šãƒ‡ãƒ¼ã‚¿å®šç¾©ãƒ˜ãƒƒãƒ€
+    
     Created 2017/09/20
     By Hirotaka Nagaoka
 */
@@ -8,19 +10,31 @@
 #ifndef __ENDFUNC_H__
 #define __ENDFUNC_H__
 
-/* \‘¢‘ÌéŒ¾ */
+/* --- typedefå®£è¨€ --- */
+typedef char           SCHR;		/* signed   charå‹  */
+typedef unsigned char  UCHR;		/* unsigned charå‹  */		
+typedef short          SSHT;		/* signed   shortå‹ */
+typedef unsigned short USHT;		/* unsigned shortå‹ */
+typedef long           SLNG;		/* signed   longå‹  */
+typedef unsigned long  ULNG;		/* unsigned longå‹  */
+typedef int            SINT;		/* signed   intå‹   */			
+typedef unsigned int   UINT;		/* unsigned intå‹   */	
+
+/* --- æ§‹é€ ä½“å®£è¨€ --- */
 typedef struct{
-  short port[2];  // ƒ|[ƒgî•ñ
-  short value;    // ƒf[ƒ^
+  SSHT port[2];  /* ãƒãƒ¼ãƒˆæƒ…å ± */
+  SSHT value;		 /* ãƒ‡ãƒ¼ã‚¿ */
 } CONTEXT_DATA;
 
 typedef struct{
-  short value;    // ƒf[ƒ^
-  short result;   // OK(0)/NG(1)
+  SSHT value;      /* ãƒ‡ãƒ¼ã‚¿ */
+  SSHT result;   	 /* å®Ÿè¡Œçµæœ(OK(0)/NG(1)) */
 } RESULT_DATA;
 
-/* ’è”’è‹` */
-#define RESULT_OK	( 0 )
-#define RESULT_NG	( -1 )
+/* --- å®šæ•°å®šç¾© --- */
+#define RESULT_OK	(   0 )
+#define RESULT_NG	(  -1 )
 
-#endif
+#endif	/* __ENDFUNC_H__ */ 
+
+/* Copyright HAL College of Technology & Design */
