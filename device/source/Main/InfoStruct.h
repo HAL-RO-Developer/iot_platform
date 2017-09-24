@@ -15,10 +15,10 @@
 /* --- 情報管理構造体 --- */
 
 typedef struct{
-    string ssid;    /* 接続ルーターSSID      */
-    string pass;    /* 接続ルーターパスワード */
-    string host;    /* 接続サーバーIPアドレス */
-    string port;    /* 接続サーバーポート番号 */
+    String ssid;    /* 接続ルーターSSID      */
+    String pass;    /* 接続ルーターパスワード */
+    String host;    /* 接続サーバーIPアドレス */
+    String port;    /* 接続サーバーポート番号 */
 } WIFICONFIG;
 
 /* 入力データ関係 */

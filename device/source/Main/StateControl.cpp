@@ -10,10 +10,9 @@
 /* --- includeファイル --- */
 #include "System.h"     /* システム共通データ定義ヘッダ */
 #include "State.h"      /* 状態に関する定義ヘッダ       */
-#include "InfoStruct.h"
 
 /* --- extern宣言 --- */
-extern MAIN_STATE_TABLE gMainStateTable[];                  /* 主状態テーブル */
+extern const MAIN_STATE_TABLE gMainStateTable[];                  /* 主状態テーブル */
 
 /* --- プロトタイプ宣言 --- */
 SUB_STATE_TABLE* getSubState( USHT mainState );
@@ -41,24 +40,24 @@ SSHT ( *getFunction( SUB_STATE_TABLE* subState, USHT id ))( STATE_TABLE*, INFO_C
 */
 SSHT callFunction( STATE_TABLE* state, INFO_COMMON* common )
 {
-    SUB_STATE_TABLE* table = null;
-    SSHT ( *function )( STATE_TABLE*, INFO_COMMON* ) = null;
+    SUB_STATE_TABLE* table = NULL;
+    SSHT ( *function )( STATE_TABLE*, INFO_COMMON* ) = NULL;
 
     /* --- 引数チェック --- */
-    if(( state == null ) || ( common == null )) {
+    if(( state == NULL ) || ( common == NULL )) {
 	    return STATE_PARAM;
     }
     
     /* --- 副状態の取得 --- */
     table = getSubState( state->MainState );
-    if( table = null ){
+    if( table = NULL ){
         /* 副状態取得失敗 */
         return STATE_NG;
     }
 
     /* --- 状態遷移先関数ポインタの取得 --- */
     function = getFunction( table, state->SubState );
-    if( function == null ){
+    if( function == NULL ){
         /* 関数ポインタ取得失敗 */
         return STATE_NG;
     }
@@ -79,8 +78,8 @@ SSHT callFunction( STATE_TABLE* state, INFO_COMMON* common )
     USHT                mainState          主状態
 
     戻り値:
-    SUB_STATE_TABLE*    other than  null   副状態関数テーブルの先頭アドレス
-                                    null   システムエラー       
+    SUB_STATE_TABLE*    other than  NULL   副状態関数テーブルの先頭アドレス
+                                    NULL   システムエラー       
 
     Created 2017/09/14
     By Shogo Tanaka
@@ -88,15 +87,17 @@ SSHT callFunction( STATE_TABLE* state, INFO_COMMON* common )
 SUB_STATE_TABLE* getSubState( USHT mainState )
 {
     USHT index = 0;
-    SUB_STATE_TABLE* table = null;
+    SUB_STATE_TABLE* table = NULL;
 
     /* --- 引数チェック --- */
-    if( MainState == null ){
+    /*
+    if( mainState == NULL ){
 	    return STATE_PARAM;
     }
+    */
 
     /* --- 検索ループ --- */
-    for( index = 0; gMainStateTable[index].SubState != null; index++ ){
+    for( index = 0; gMainStateTable[index].SubState != NULL; index++ ){
         if( mainState == gMainStateTable[index].MainState ){
             /* 副状態取得 */
             table = gMainStateTable[index].SubState;
@@ -120,8 +121,8 @@ SUB_STATE_TABLE* getSubState( USHT mainState )
     USHT                id                 検索する副状態
 
     戻り値:
-    USHT*               other than  null   状態遷移先関数ポインタ
-                                    null   システムエラー       
+    USHT*               other than  NULL   状態遷移先関数ポインタ
+                                    NULL   システムエラー       
                                        
     Created 2017/09/14
     By Shogo Tanaka
@@ -129,15 +130,17 @@ SUB_STATE_TABLE* getSubState( USHT mainState )
 SSHT ( *getFunction( SUB_STATE_TABLE* subState, USHT id ))( STATE_TABLE*, INFO_COMMON* )
 {
     USHT index = 0;
-    SSHT (*function)( STATE_TABLE*, INFO_COMMON* ) = null;
+    SSHT (*function)( STATE_TABLE*, INFO_COMMON* ) = NULL;
 
     /* --- 引数チェック --- */
-    if( subState == null ){
+    /*
+    if( subState == NULL ){
 	    return STATE_PARAM;
     }
+    */
 
     /* --- 検索ループ --- */
-    for( index = 0; subState[index].Function != null; index++ ){
+    for( index = 0; subState[index].Function != NULL; index++ ){
         if( subState[index].SubState == id ){
             /* 関数ポインタ取得 */
             function = subState[index].Function;

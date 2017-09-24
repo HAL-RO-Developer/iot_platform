@@ -49,7 +49,7 @@ void handleRootPost();
 SSHT setupStateAp( STATE_TABLE* state, INFO_COMMON* common )
 {
     /* --- 引数チェック --- */
-    if(( state == null ) || ( common == null )) {
+    if(( state == NULL ) || ( common == NULL )) {
 	    return STATE_PARAM;
     }
 
@@ -105,7 +105,7 @@ SSHT setupStateAction( STATE_TABLE* state, INFO_COMMON* common )
 {
 
     /* --- 引数チェック --- */
-    if(( state == null ) || ( common == null )) {
+    if(( state == NULL ) || ( common == NULL )) {
 	    return STATE_PARAM;
     }
 
@@ -130,7 +130,7 @@ SSHT setupStateAction( STATE_TABLE* state, INFO_COMMON* common )
 
 void handleRootGet()
 {
-    string html = "";
+    String html = "";
     html += "<h1>WiFi Settings</h1>";
     html += "<form method='post'>";
     html += "  <input type='text' name='ssid' placeholder='SSID'><br>";
@@ -145,10 +145,10 @@ void handleRootGet()
 
 void handleRootPost()
 {
-    string  ssid = server.arg("ssid");
-    string  pass = server.arg("pass");
-    string  host = server.arg("host");
-    string  port = server.arg("port");
+    String  ssid = server.arg("ssid");
+    String  pass = server.arg("pass");
+    String  host = server.arg("host");
+    String  port = server.arg("port");
     
     File    file = SPIFFS.open( settings, "w" );
     file.println( ssid );
@@ -157,7 +157,7 @@ void handleRootPost()
     file.println( port );
     file.close();
     
-    string html = "";
+    String html = "";
     html += "<h1>WiFi Settings</h1>";
 	html += "<p>Settings changed</p>";
 	server.send( 200, "text/html", html );
