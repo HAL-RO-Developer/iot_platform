@@ -16,6 +16,8 @@
 #include <ESP8266WebServer.h>
 #include <FS.h>
 #include <Wire.h>
+#include <Ticker.h>
+
 
 #endif  /* __ARDUINO_LIBRARY_H__ */
 

@@ -13,6 +13,13 @@
 #include "State.h"              /* 状態に関する定義ヘッダ       */
 #include "constants.h"
 
+//#define MSEC2CLOCK(ms)    (ms * 80000L)
+
+Ticker tickerLED;
+static int output = HIGH;
+
+void flash();
+
 SSHT errorStateConnect( STATE_TABLE* state, INFO_COMMON* common )
 {
     digitalWrite( SLPR, HIGH );
@@ -27,8 +34,27 @@ SSHT errorStateCommunicate( STATE_TABLE* state, INFO_COMMON* common )
 
 SSHT errorStateOther( STATE_TABLE* state, INFO_COMMON* common )
 {
-    digitalWrite( SLPR, HIGH );
+    Serial.println("<<errorStateOther>>");
+    switch(state->PieceState){
+        case INIT:
+            digitalWrite( SLPG, LOW );
+            tickerLED.attach_ms(1000, flash);
+            state->PieceState = EXECUTE;
+            break;
+        case EXECUTE:
+            Serial.println(output);
+            digitalWrite( SLPR, output );
+            break;
+        case FIN:
+            break;
+    }
     return STATE_OK;
 }
+
+void flash()
+{
+    output = !output;
+}
+
 
 /* Copyright HAL College of Technology & Design */

@@ -51,9 +51,20 @@ void setup(){
     // WDT処理
     // HWリセット関連処理  
 
+    stateTable.MainState = STATE_ERROR;
+    stateTable.SubState = STATE_ERROR_OTHER;
+    stateTable.PieceState = INIT;
 }
 
 void loop(){
+    Serial.println("----------------");
+    Serial.print("MainState=");
+    Serial.println(stateTable.MainState);
+    Serial.print("SubState=");
+    Serial.println(stateTable.SubState);
+    Serial.print("PieceState=");
+    Serial.println(stateTable.PieceState);
+    Serial.println("----------------");
     ret = callFunction( &stateTable, &common );
     if( ret == SYSTEM_NG ){
         stateTable.MainState = STATE_ERROR;     /* 主状態を【エラー】にする */
@@ -72,6 +83,9 @@ void a_init(){
     Serial.begin( 115200 );
 
     Wire.begin();
+
+    digitalWrite( SLPG, HIGH );
+    digitalWrite( SLPR, HIGH );
 }
 
 /* Copyright HAL College of Technology & Design */

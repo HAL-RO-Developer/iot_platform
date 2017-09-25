@@ -38,7 +38,6 @@
 #define EXECUTE                 ( 0x02 )    /* 実行処理 */
 #define FIN                     ( 0x04 )    /* 終了処理 */
 
-
 #endif  /* __STATE_STRUCT_H__ */ 
 
 /* Copyright HAL College of Technology & Design */
