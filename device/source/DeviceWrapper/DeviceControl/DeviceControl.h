@@ -36,8 +36,10 @@ class UART
 		static int Write( char* string );
 		static int Write( unsigned char* buffer, int length );
 		static int print( int value );
+		static int print( char* string );
 		static int print( int value, int format );
 		static int println( int value );
+		static int println( char* string );
 		static int println( int value, int format );
 	private:
 		UART( );

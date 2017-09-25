@@ -51,6 +51,11 @@ int UART::print( int value )
     return Serial.print( value );
 }
 
+int UART::print( char* string )
+{
+    return Serial.print( string );
+}
+
 int UART::print( int value, int format )
 {
     return Serial.print( value, format );
@@ -59,6 +64,11 @@ int UART::print( int value, int format )
 int UART::println( int value )
 {
     return Serial.println( value );
+}
+
+int UART::println( char* string )
+{
+    return Serial.print( string );
 }
 
 int UART::println( int value, int format )
