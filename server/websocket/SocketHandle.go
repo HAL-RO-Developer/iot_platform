@@ -1,8 +1,9 @@
 package websocket
 
 import (
-	"github.com/trevex/golem"
 	"net/http"
+
+	"github.com/trevex/golem"
 )
 
 type joinModel struct {
