@@ -7,12 +7,9 @@
 #include "Endfunc.h"
 
 /* 定数定義 */
-#define BAUDRATE ( 115200 )   // 　ボーレート
+#define BAUDRATE ( 115200 )   // ボーレート
 
 RESULT_DATA result;
-
-SCHR input[256];  // 文字列格納用
-SINT cnt = 0;     // 文字数のカウンタ
 
 void setup() {
   UART::begin( BAUDRATE );     // ボーレート
@@ -42,4 +39,3 @@ SSHT UARTstart( RESULT_DATA* rdata ){
   rdata->result = rtn;
   return rtn;
 }
-
