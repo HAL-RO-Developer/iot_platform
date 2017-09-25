@@ -10,9 +10,12 @@
 /* --- includeファイル --- */
 #include "System.h"     /* システム共通データ定義ヘッダ */
 #include "State.h"      /* 状態に関する定義ヘッダ       */
+#include "StateMatrix.h"
+
 
 /* --- extern宣言 --- */
-extern const MAIN_STATE_TABLE gMainStateTable[];                  /* 主状態テーブル */
+//extern const MAIN_STATE_TABLE gMainStateTable[];                  /* 主状態テーブル */
+//extern const MAIN_STATE_TABLE gMainStateTable[];
 
 /* --- プロトタイプ宣言 --- */
 SUB_STATE_TABLE* getSubState( USHT mainState );

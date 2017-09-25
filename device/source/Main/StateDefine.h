@@ -42,4 +42,3 @@
 #endif  /* __STATE_STRUCT_H__ */ 
 
 /* Copyright HAL College of Technology & Design */
-

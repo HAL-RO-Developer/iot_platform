@@ -13,4 +13,5 @@
 #include "StateStruct.h"		/* 状態遷移構造体ヘッダ     */
 #include "StatePrototype.h"		/* 状態遷移プロトタイプ宣言 */
 
+
 /* Copyright HAL College of Technology & Design */

@@ -13,15 +13,14 @@
 #include "System.h"             /* システム共通データ定義ヘッダ */
 #include "State.h"              /* 状態に関する定義ヘッダ       */
 #include "InfoStruct.h"         /* 情報管理構造体定義ヘッダ     */
-
-#define APSWT (14)
+#include "constants.h"
 
 STATE_TABLE stateTable;
 SSHT ret = STATE_NG;
 INFO_COMMON common;
 
 /* --- プロトタイプ宣言 --- */
-void init();
+void a_init();
 
 void setup(){
     //WIFICONFIG config;
@@ -31,7 +30,7 @@ void setup(){
     memset( &stateTable, 0, sizeof( STATE_TABLE ) );
     memset( &common, 0, sizeof( INFO_COMMON ) );
 
-    init();
+    a_init();
 
     /* --- 初期状態設定 --- */
 
@@ -65,8 +64,10 @@ void loop(){
 // 入力系タイマー割り込み
 
 // 各種初期設定
-void init(){
+void a_init(){
     pinMode( APSWT, INPUT );
+    pinMode( SLPR, OUTPUT );
+    pinMode( SLPG, OUTPUT );
     SPIFFS.begin();
     Serial.begin( 115200 );
 

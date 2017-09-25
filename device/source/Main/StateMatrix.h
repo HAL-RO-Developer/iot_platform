@@ -44,4 +44,3 @@ const MAIN_STATE_TABLE gMainStateTable[] = {
 };
 
 /* Copyright HAL College of Technology & Design */
-

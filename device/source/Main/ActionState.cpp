@@ -18,7 +18,7 @@ SSHT actionStateRegist( STATE_TABLE* state, INFO_COMMON* common )
     return STATE_OK;
 }
 
-SSHT actionStateExeceute( STATE_TABLE* state, INFO_COMMON* common )
+SSHT actionStateExecute( STATE_TABLE* state, INFO_COMMON* common )
 {
     return STATE_OK;
 }
