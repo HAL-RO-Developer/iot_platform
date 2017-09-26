@@ -1,11 +1,9 @@
 #include "arduino.h"
 #include "DeviceControl.h"
 
-void I2C::Slavebegin(int address)
-{
-	Wire.begin(address);
-}
-void I2C::Masterbegin(int SDA,int SCL)
+
+
+void I2C::begin(int SDA,int SCL)
 {
 	Wire.begin(SDA,SCL);
 }
