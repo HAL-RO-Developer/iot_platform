@@ -48,7 +48,8 @@ class UART
 class I2C
 {
 	public:
-		static void begin( int address );
+		static void Slavebegin( int address );
+                static void Masterbegin(int SDA,int SCL); 
 		static int reqFrom( int address, int count );
 		static void beginTransmission( int address );
 		static int endTransmission( );
