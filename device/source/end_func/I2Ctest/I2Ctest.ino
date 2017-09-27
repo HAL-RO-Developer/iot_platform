@@ -1,29 +1,27 @@
+//Slaveから受信を行う
 #include <DeviceControl.h>
 #include"endfunc.h"
 
 CONTEXT_DATA context;
 RESULT_DATA  result;  
+SSHT I2CSetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata);
+SSHT I2CRequestonebyte( SINT SlaveID,RESULT_DATA *rdata);
+SSHT I2CRead(RESULT_DATA *rdata);
 
-SSHT I2Csetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata);
 void setup() {
+  context.port[0] = 4; //SDA
+  context.port[1] = 5;//SCL
+  I2CSetup( &context,&result );
   Serial.begin(9600);
 }
 
 void loop() {
-  SSHT rtn;
-  context.port[0] = 4; //SDA
-  context.port[1] = 5;//SCL
-  rtn = I2Csetup( &context,&result );
-  if(rtn == RESULT_OK){
-     Serial.println("I2C setup OK");
-    }
+ I2CRequestonebyte(8,&result );
+ I2CRead(&result);
+ Serial.println(result.value);
+ delay(500);
 }
+  
 
-SSHT I2Csetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
-    SSHT rtn = RESULT_OK;
-    I2C::begin(cdata->port[0],cdata->port[1]);
-     rdata->result = rtn;
-     return rtn;
-  }
 
 
