@@ -10,8 +10,8 @@
 #include"endfunc.h"
 
 SSHT I2CSetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
-　　 rdata->result = rtn;　//結果を格納
-    I2C::begin(cdata->port[0],cdata->port[1]);//マスターとして設定
-    rdata->result = rtn;　//結果を格納
+  SSHT rtn = RESULT_OK;
+    rdata->result = rtn;
+    I2C::begin(cdata->port[0],cdata->port[1]); //マスターとして設定
      return rtn;
   }

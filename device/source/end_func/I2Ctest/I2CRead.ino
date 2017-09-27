@@ -12,6 +12,6 @@
 SSHT I2CRead(RESULT_DATA *rdata) {
   SSHT rtn = RESULT_OK; //結果
   rdata->value = I2C::Read();//データを受け取る
-  rdata->result = rtn;　//結果を格納
+  rdata->result = rtn;
   return rtn;
 }
