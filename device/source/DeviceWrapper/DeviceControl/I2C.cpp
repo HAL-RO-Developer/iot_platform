@@ -1,42 +1,43 @@
 #include "arduino.h"
 #include "DeviceControl.h"
 
-void I2C::begin( int address )
+
+
+void I2C::begin(int SDA,int SCL)
 {
-	Wire.begin( address );
+	Wire.begin(SDA,SCL);
+}
+int I2C::reqFrom(int address, int count)
+{
+	return Wire.requestFrom(address, count);
 }
 
-int I2C::reqFrom( int address, int count )
+void I2C::beginTransmission(int address)
 {
-	return Wire.requestFrom( address, count );
+	Wire.beginTransmission(address);
 }
 
-void I2C::beginTransmission( int address )
+int I2C::endTransmission()
 {
-	Wire.beginTransmission( address );
+	return Wire.endTransmission();
 }
 
-int I2C::endTransmission( )
+int I2C::Write(int value)
 {
-	return Wire.endTransmission( );
+    return Wire.write(value);
 }
 
-int I2C::Write( int value )
+int I2C::Write(char* string)
 {
-    return Wire.write( value );
+    return Wire.write(string);
 }
 
-int I2C::Write( char* string )
+int I2C::Read()
 {
-    return Wire.write( string );
+	return Wire.read();
 }
 
-int I2C::Read( )
+int I2C::available()
 {
-	return Wire.read( );
-}
-
-int I2C::available( )
-{
-    return Wire.available( );
+    return Wire.available();
 }
