@@ -8,7 +8,7 @@
 */
 
 #include <DeviceControl.h>
-#include "Endfunc.h"
+#include "EndFunc.h"
 
 SSHT SoftwareSerialSetup( CONTEXT_DATA* cdata, RESULT_DATA* rdata ){
   SoftwareSerial mySerial( cdata->port[0], cdata->port[1] );
