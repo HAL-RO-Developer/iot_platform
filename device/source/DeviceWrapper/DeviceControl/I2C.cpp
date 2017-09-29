@@ -24,12 +24,12 @@ int I2C::endTransmission()
 
 int I2C::Write(int value)
 {
-    return Wire.write(value);
+	return Wire.write(value);
 }
 
 int I2C::Write(char* string)
 {
-    return Wire.write(string);
+	return Wire.write(string);
 }
 
 int I2C::Read()
@@ -39,5 +39,5 @@ int I2C::Read()
 
 int I2C::available()
 {
-    return Wire.available();
+	return Wire.available();
 }
