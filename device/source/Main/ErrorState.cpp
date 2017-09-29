@@ -22,13 +22,40 @@ void flash();
 
 SSHT errorStateConnect( STATE_TABLE* state, INFO_COMMON* common )
 {
-    digitalWrite( SLPR, HIGH );
+    Serial.println("<<errorStateOther>>");
+    switch(state->PieceState){
+        case INIT:
+            digitalWrite( SLPG, LOW );
+            tickerLED.attach_ms(250, flash);
+            state->PieceState = EXECUTE;
+            break;
+        case EXECUTE:
+            Serial.println(output);
+            digitalWrite( SLPR, output );
+            break;
+        case FIN:
+            break;
+    }
+    return STATE_OK;digitalWrite( SLPR, HIGH );
     return STATE_OK;
 }
 
 SSHT errorStateCommunicate( STATE_TABLE* state, INFO_COMMON* common )
 {
-    digitalWrite( SLPR, HIGH );
+    Serial.println("<<errorStateCommunicate>>");
+    switch(state->PieceState){
+        case INIT:
+            digitalWrite( SLPG, LOW );
+            tickerLED.attach_ms(500, flash);
+            state->PieceState = EXECUTE;
+            break;
+        case EXECUTE:
+            Serial.println(output);
+            digitalWrite( SLPR, output );
+            break;
+        case FIN:
+            break;
+    }
     return STATE_OK;
 }
 

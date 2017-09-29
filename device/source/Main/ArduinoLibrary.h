@@ -18,7 +18,6 @@
 #include <Wire.h>
 #include <Ticker.h>
 
-
 #endif  /* __ARDUINO_LIBRARY_H__ */
 
 /* Copyright HAL College of Technology & Design */

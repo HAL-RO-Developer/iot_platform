@@ -73,7 +73,6 @@ SSHT callFunction( STATE_TABLE* state, INFO_COMMON* common )
 
     Serial.println("[RTN]function");
     
-
     /* --- 状態遷移先関数Call --- */
     return ( *function )( state, common );
 }
