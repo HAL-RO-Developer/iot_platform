@@ -1,5 +1,5 @@
 /*
-    Endfunc.h
+    EndFunc.h
     
     末端関数共通データ定義ヘッダ
     
