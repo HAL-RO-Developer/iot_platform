@@ -52,7 +52,7 @@ void setup(){
     // HWリセット関連処理  
 
     stateTable.MainState = STATE_ERROR;
-    stateTable.SubState = STATE_ERROR_OTHER;
+    stateTable.SubState = STATE_ERROR_CONNECT;
     stateTable.PieceState = INIT;
 }
 
