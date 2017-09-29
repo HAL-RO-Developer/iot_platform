@@ -1,32 +1,22 @@
 /*
 onceDRead.ino
-アナログ入力を行う
-Created 2017/8/5
- By Riku Hashimoto
+
+デジタル入力を行う
+
+Created 2017/9/29
+By Riku Hashimoto
 */
 
 
 #include <DeviceControl.h>
-
-String onceDRead(int Pin,int Pin_Mode){
-  int Val;
- if(Pin_Mode != INPUT){
-     Digital::SetMode(Pin, INPUT);
+#include "EndFunc.h"
+SSHT onceDRead( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
+    SSHT rtn = RESULT_OK;
+  if(cdata->port[0] != INPUT){
+Digital::SetMode(cdata->port[1], INPUT);
  }
-Val = digitalRead(Pin);//アナログ値取得
-  String ResultData = "OK";
-  String PinData = String(Pin); //使用したポート
- String ValueData = String(Val);//取得値
- String Return = "{\"result\":\"" + ResultData +
-                 "\",\"pin\":\"" +PinData +
-                 "\",\"value\":\"" +ValueData + 
-                 "\"}";
- taskkill();//タスクの終了(ダミー)                 
-return Return;
+rdata->value = Digital::Read(cdata->port[1]);//アナログ値取得
+rdata->result = rtn;
+return rtn;
 }
 
-String taskkill(){
-  String taskend = "TaskEND";
- return taskend;
- }
- 

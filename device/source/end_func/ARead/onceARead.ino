@@ -1,5 +1,5 @@
 /*
-onceDRead.ino
+onceARead.ino
 
 アナログ入力を行う
 
