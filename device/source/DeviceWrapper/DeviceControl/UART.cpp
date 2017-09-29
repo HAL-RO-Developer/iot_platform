@@ -23,12 +23,12 @@ int UART::Read( )
 
 int UART::peek( )
 {
-    return Serial.peek( );
+	return Serial.peek( );
 }
 
 void UART::flush( )
 {
-    Serial.flush( );
+	Serial.flush( );
 }
 
 int UART::Write( int value )
@@ -48,30 +48,30 @@ int UART::Write( unsigned char* buffer, int length )
 
 int UART::print( int value )
 {
-    return Serial.print( value );
+	return Serial.print( value );
 }
 
 int UART::print( char* string )
 {
-    return Serial.print( string );
+	return Serial.print( string );
 }
 
 int UART::print( int value, int format )
 {
-    return Serial.print( value, format );
+	return Serial.print( value, format );
 }
 
 int UART::println( int value )
 {
-    return Serial.println( value );
+	return Serial.println( value );
 }
 
 int UART::println( char* string )
 {
-    return Serial.print( string );
+	return Serial.print( string );
 }
 
 int UART::println( int value, int format )
 {
-    return Serial.println( value, format );
+	return Serial.println( value, format );
 }
