@@ -1,6 +1,6 @@
 //Slaveから受信を行う
 #include <DeviceControl.h>
-#include"endfunc.h"
+#include"EndFunc.h"
 
 CONTEXT_DATA context;
 RESULT_DATA  result;  
@@ -11,7 +11,7 @@ SSHT I2CRead(RESULT_DATA *rdata);
 void setup() {
   context.port[0] = 4; //SDA
   context.port[1] = 5;//SCL
-  I2CSetup( &context,&result );
+ I2CSetup( &context,&result );
   Serial.begin(9600);
 }
 

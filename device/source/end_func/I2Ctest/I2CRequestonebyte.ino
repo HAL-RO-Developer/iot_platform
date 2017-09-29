@@ -7,7 +7,7 @@
    By Riku Hashimoto
    */
 #include <DeviceControl.h>
-#include"endfunc.h"
+#include"EndFunc.h"
 
 SSHT I2CRequestonebyte( SINT SlaveID,RESULT_DATA *rdata) {
  SSHT rtn = RESULT_OK;//結果

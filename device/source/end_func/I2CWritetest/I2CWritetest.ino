@@ -1,6 +1,6 @@
 //Slaveへ送信を行う
 #include <DeviceControl.h>
-#include"endfunc.h"
+#include"EndFunc.h"
 char b='b';
 CONTEXT_DATA context;
 RESULT_DATA  result;  

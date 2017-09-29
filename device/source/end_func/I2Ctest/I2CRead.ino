@@ -7,7 +7,7 @@
    By Riku Hashimoto
    */
 #include <DeviceControl.h>
-#include"endfunc.h"
+#include"EndFunc.h"
 
 SSHT I2CRead(RESULT_DATA *rdata) {
   SSHT rtn = RESULT_OK; //結果

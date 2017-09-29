@@ -7,7 +7,7 @@
    By Riku Hashimoto
    */
 #include <DeviceControl.h>
-#include"endfunc.h"
+#include"EndFunc.h"
 SSHT I2CWrite( SINT SleaveID, SINT data, RESULT_DATA *rdata) {
   SSHT rtn = RESULT_OK;
   rdata->result = rtn;
