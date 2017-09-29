@@ -8,7 +8,7 @@
 */
 
 #include <DeviceControl.h>
-#include "Endfunc.h"
+#include "EndFunc.h"
 
 SSHT UARTSetup( RESULT_DATA* rdata ){
   SSHT rtn = RESULT_OK;
