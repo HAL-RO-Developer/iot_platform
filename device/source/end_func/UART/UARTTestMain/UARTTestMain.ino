@@ -7,12 +7,12 @@
    By Hirotaka Nagaoka
 */
 #include <DeviceControl.h>
-#include "Endfunc.h"
+#include "EndFunc.h"
 
 /* 定数定義 */
-#define BAUDRATE  ( 115200 )    // ボーレート
-#define SEND_RX   (      4 )   // 受信側RX
-#define SEND_TX   (      5 )   // 受信側TX
+#define BAUDRATE  ( 115200 )     // ボーレート
+#define SEND_RX   (      4 )     // 受信側RX
+#define SEND_TX   (      5 )     // 受信側TX
 
 CONTEXT_DATA context;
 RESULT_DATA result;
