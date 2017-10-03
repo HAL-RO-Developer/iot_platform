@@ -13,7 +13,7 @@
 SSHT SoftwareSerialSetup( CONTEXT_DATA* cdata, RESULT_DATA* rdata ){
   SoftwareSerial mySerial( cdata->port[0], cdata->port[1] );
   SSHT rtn = RESULT_OK;
-  mySerial.begin( BAUDRATE );
+  mySerial.begin( 115200 );
   rdata->result = rtn;
   return rtn;
 }
