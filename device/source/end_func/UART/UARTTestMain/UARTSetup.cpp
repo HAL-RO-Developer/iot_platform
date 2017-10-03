@@ -11,10 +11,10 @@
 #include "EndFunc.h"
 
 SSHT UARTSetup( RESULT_DATA* rdata ){
-  SSHT rtn = RESULT_OK;
-  UART::begin( BAUDRATE );
-  rdata->result = rtn;
-  return rtn;
+     SSHT rtn = RESULT_OK;
+     UART::begin( 115200 );
+     rdata->result = rtn;
+     return rtn;
 }
 
 /* Copyright HAL College of Technology & Design */
