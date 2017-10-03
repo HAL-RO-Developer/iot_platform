@@ -36,7 +36,6 @@ SSHT errorStateConnect( STATE_TABLE* state, INFO_COMMON* common )
         case FIN:
             break;
     }
-    return STATE_OK;digitalWrite( SLPR, HIGH );
     return STATE_OK;
 }
 
