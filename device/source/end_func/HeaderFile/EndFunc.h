@@ -10,6 +10,9 @@
 #ifndef __ENDFUNC_H__
 #define __ENDFUNC_H__
 
+/* --- ヘッダーファイル --- */
+#include "ArduinoLibrary.h"
+
 /* --- typedef宣言 --- */
 typedef char           SCHR;		/* signed   char型  */
 typedef unsigned char  UCHR;		/* unsigned char型  */		
@@ -22,20 +25,20 @@ typedef unsigned int   UINT;		/* unsigned int型   */
 
 /* --- 構造体宣言 --- */
 typedef struct{
-	USHT id;             /* ID情報 */
-	USHT pin1;           /* PIN1 */
-	USHT pin2;          /* PIN2 */
-	USHT mode;	/* モード */
+	USHT Id;        /* ID情報 */
+	USHT Pin1;      /* PIN1 */
+	USHT Pin2;      /* PIN2 */
+	USHT Mode;	/* モード */
 } PORT_MANAGER;
 
 typedef struct{
-    PORT_MANAGER port;   	/* ポート情報 */
-    SSHT* value;		/* データ */
+    PORT_MANAGER Port;   /* ポート情報 */
+    SSHT* Value;	 /* データ */
 } CONTEXT_DATA;
 
 typedef struct{
-    SSHT value;          	/* データ */
-    SSHT result;         	/* 実行結果(OK(0)/NG(1)) */
+    SSHT* Value;         /* データ */
+    SSHT Result;         /* 実行結果(OK(0)/NG(1)) */
 } RESULT_DATA;
 
 /* --- 定数定義 --- */
