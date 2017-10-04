@@ -24,18 +24,18 @@ typedef unsigned int   UINT;		/* unsigned int型   */
 typedef struct{
 	USHT id;             /* ID情報 */
 	USHT pin1;           /* PIN1 */
-	USHT pin2;           /* PIN2 */
-	USHT mode;			 /* モード */
+	USHT pin2;          /* PIN2 */
+	USHT mode;	/* モード */
 } PORT_MANAGER;
 
 typedef struct{
-    PORT_MANAGER port;   /* ポート情報 */
-    SSHT* value;		 /* データ */
+    PORT_MANAGER port;   	/* ポート情報 */
+    SSHT* value;		/* データ */
 } CONTEXT_DATA;
 
 typedef struct{
-    SSHT value;          /* データ */
-    SSHT result;         /* 実行結果(OK(0)/NG(1)) */
+    SSHT value;          	/* データ */
+    SSHT result;         	/* 実行結果(OK(0)/NG(1)) */
 } RESULT_DATA;
 
 /* --- 定数定義 --- */
