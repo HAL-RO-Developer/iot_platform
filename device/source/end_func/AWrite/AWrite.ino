@@ -5,15 +5,17 @@
 #include "EndFunc.h"
 //onceAWrite
 short onceAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
+  
   short rtn = RESULT_OK;
-//INPUTになっていたらOUTPUTに
- if(cdata->port[0] != OUTPUT){
-Digital::SetMode(cdata->port[1], OUTPUT);
+ if(cdata->port.mode != OUTPUT){
+Digital::SetMode(cdata->port.pin1, OUTPUT);
  }
-//出力する
-Analog::Write(cdata->port[1],cdata->value);
-rdata->value = cdata->value;
+
+
+Analog::Write(cdata->port.pin1,*cdata->value);
+rdata->value = *cdata->value;
 rdata->result = rtn;
 return rtn;
 }
+
 
