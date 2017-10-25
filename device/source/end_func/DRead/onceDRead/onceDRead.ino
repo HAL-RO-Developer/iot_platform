@@ -11,11 +11,11 @@ By Riku Hashimoto
 #include <DeviceControl.h>
 #include "EndFunc.h"
 SSHT onceDRead( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
-    SSHT rtn = RESULT_OK;
-  if(cdata->port[0] != INPUT){
-Digital::SetMode(cdata->port[1], INPUT);
+  short rtn = RESULT_OK;
+ if(cdata->port.mode != INPUT){
+Digital::SetMode(cdata->port.pin1, INPUT);
  }
-rdata->value = Digital::Read(cdata->port[1]);//アナログ値取得
+rdata->value = Digital::Read(cdata->port.pin1);
 rdata->result = rtn;
 return rtn;
 }
