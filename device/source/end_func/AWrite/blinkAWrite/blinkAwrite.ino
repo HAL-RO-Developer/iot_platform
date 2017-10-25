@@ -4,7 +4,7 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-short simpleAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata,int ms){
+short blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata,int ms){
  short rtn = RESULT_OK;
  if(cdata->port.mode != OUTPUT){
 Digital::SetMode(cdata->port.pin1, OUTPUT);

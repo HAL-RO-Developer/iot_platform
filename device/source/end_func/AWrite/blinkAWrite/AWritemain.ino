@@ -7,7 +7,7 @@
 CONTEXT_DATA context;
 RESULT_DATA  result;
 
-short simpleAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata,int ms);//プロトタイプ宣言しないとエラーを起こす
+short blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata,int ms);//プロトタイプ宣言しないとエラーを起こす
 //定数定義
 #define LED_Pin 4
 #define PIN_Mode INPUT
@@ -23,7 +23,7 @@ SSHT Value = 200;
 context.port.mode = PIN_Mode;
 context.port.pin1 = LED_Pin;
 context.value = &Value;
-simpleAWrite( &context,&result,1000 );
+blinkAWrite( &context,&result,1000 );
 //結果を表示
 
 Serial.println("_____");
