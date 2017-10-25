@@ -7,9 +7,9 @@
 CONTEXT_DATA context;
 RESULT_DATA  result;
 
-short onceAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata);//プロトタイプ宣言しないとエラーを起こす
+
 //定数定義
-#define LED_Pin 3
+#define LED_Pin 4
 #define PIN_Mode INPUT
 
 void setup() {

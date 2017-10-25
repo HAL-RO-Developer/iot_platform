@@ -3,11 +3,9 @@
 
 // include
 #include "EndFunc.h"
-#include <Ticker.h>
 CONTEXT_DATA context;
 RESULT_DATA  result;
 
-short simpleAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata,int ms);//プロトタイプ宣言しないとエラーを起こす
 //定数定義
 #define LED_Pin 4
 #define PIN_Mode INPUT
