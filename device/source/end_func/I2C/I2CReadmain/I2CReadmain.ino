@@ -9,8 +9,8 @@ SSHT I2CRequestonebyte( SINT SlaveID,RESULT_DATA *rdata);
 SSHT I2CRead(RESULT_DATA *rdata);
 
 void setup() {
-  context.port[0] = 4; //SDA
-  context.port[1] = 5;//SCL
+  context.port.pin1 = 4; //SDA
+  context.port.pin2 = 5;//SCL
  I2CSetup( &context,&result );
   Serial.begin(9600);
 }
