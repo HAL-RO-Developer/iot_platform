@@ -10,13 +10,14 @@ RESULT_DATA  result;
 SSHT onceDWrite( CONTEXT_DATA*, RESULT_DATA* );
 
 // 定数定義(テスト用)
-#define LED_PIN   ( 13 )
-#define PIN_MODE  ( INPUT )
-#define VALUE     ( HIGH )
+#define OUTPUT_PIN   ( 13     )
+#define PIN_MODE     ( INPUT  )
+#define VALUE        ( HIGH   )
+#define SERIAL_TIME  ( 115200 )
 
 // setup
 void setup( ){
-  Serial.begin( 115200 );
+  Serial.begin( SIRIAL_TIME );
 }
 
 // loop
@@ -25,14 +26,14 @@ SSHT Value = VALUE;
 
 // 必要情報(ポート番号等を構造体に格納)
 context.port.mode = PIN_MODE;
-context.port.pin1 = LED_PIN;
+context.port.pin1 = OUTPUT_PIN;
 context.value = &Value;
 onceDWrite( &context, &result );
 
 // 確認用
 Serial.println( "_____" );
 Serial.print( result.value );
-if(result.result == 0){
+if( result.result == 0 ){
   Serial.println( " OK" );
   Serial.println( "-----" );
   }
