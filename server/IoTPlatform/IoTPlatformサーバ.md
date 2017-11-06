@@ -1,6 +1,6 @@
 # IoTPlatformサーバ
 
-##環境構築
+## 環境構築
 - プロジェクト取得
 
 ``` 
@@ -22,4 +22,4 @@ git clone git@github.com:HAL-RO-Developer/iot_platform.git
 - jwt-go
 
 ## 動作イメージ
-![サーバ動作イメージ](iot_platform/images/serverImages.jpeg)
+![サーバ動作イメージ](images/serverImage.jpeg)
