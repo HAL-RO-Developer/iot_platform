@@ -23,3 +23,6 @@ git clone git@github.com:HAL-RO-Developer/iot_platform.git
 
 ## 動作イメージ
 ![サーバ動作イメージ](images/serverImage.jpeg)
+＊赤字は未実装
+
+## 
