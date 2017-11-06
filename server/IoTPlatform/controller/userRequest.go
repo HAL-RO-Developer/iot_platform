@@ -45,10 +45,10 @@ func UserRequestController(c *gin.Context) {
 	}
 
 	if len(portInfo) != 0 {
-		ret := model.ExistDeviceById(deviceID)
+		ret := model.ExistDevice(res, deviceID)
 		if !ret {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"err": "デバイスが見つかりません。"})
+				"err": "デバイス名が不正です。"})
 			return
 		} else {
 			for i := 0; i < len(portInfo); i++ {
@@ -120,4 +120,25 @@ func LoginController(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{
 		"fail": "ユーザー名またはパスワードが間違っています"})
 	return
+}
+
+func CreateNewProject(c *gin.Context) {
+	res := model.AuthorityCheck(c)
+
+	if res == "error" {
+		c.JSON(401, gin.H{"error": "ログイン出来ません"})
+		return
+	}
+
+	deviceID := model.CreateDeviceID()
+
+	mac := "00000"
+	err := model.CreateDevice(res, deviceID, mac)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "データベースエラー"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": "登録完了"})
 }
