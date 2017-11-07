@@ -19,7 +19,7 @@ var secretKey = "75c92a074c341e9964329c0550c2673730ed8479c885c43122c90a2843177d5
 /*
 	トークンの作成
 */
-func CreateTokenString(name string) string {
+func CreateTokenString(name string) (string, error) {
 	/*
 		アルゴリズムの指定
 	*/
@@ -33,18 +33,13 @@ func CreateTokenString(name string) string {
 	/*
 	  トークンに対して署名の付与
 	*/
-	tokenString, err := token.SignedString([]byte(secretKey))
-	if err == nil {
-		return tokenString
-	}
-
-	return "error"
+	return token.SignedString([]byte(secretKey))
 }
 
 /*
 	トークンの検証
 */
-func AuthorityCheck(c *gin.Context) string {
+func AuthorityCheck(c *gin.Context) (string, bool) {
 	token, err := request.ParseFromRequest(c.Request, request.OAuth2Extractor, func(token *jwt.Token) (interface{}, error) {
 		b := []byte(secretKey)
 		return b, nil
@@ -52,8 +47,8 @@ func AuthorityCheck(c *gin.Context) string {
 
 	if err == nil {
 		claims := token.Claims.(jwt.MapClaims)
-		return claims["user"].(string)
+		return claims["user"].(string), true
 	} else {
-		return "error"
+		return "", false
 	}
 }
