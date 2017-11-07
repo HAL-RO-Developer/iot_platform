@@ -11,10 +11,15 @@ func main() {
 	model.DB.AutoMigrate(&model.Device{})
 
 	r := gin.Default()
-	r.POST("/account", controller.CreateUserController)
-	r.POST("/login", controller.LoginController)
-	r.POST("/project", controller.CreateNewProject)
-	r.POST("/function", controller.UserRequestController)
-	r.POST("/receive", controller.DeviceRequestController)
+	api := r.Group("/api")
+
+	api.POST("/signup", controller.CreateUserController)
+	api.POST("/signin", controller.LoginController)
+	api.POST("/device", controller.CreateNewProject)
+	api.POST("/function", controller.UserRequestController)
+
+	device := r.Group("/device")
+	device.POST("/receive", controller.DeviceRequestController)
+
 	r.Run()
 }

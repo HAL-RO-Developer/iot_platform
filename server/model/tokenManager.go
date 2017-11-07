@@ -19,7 +19,7 @@ var secretKey = "75c92a074c341e9964329c0550c2673730ed8479c885c43122c90a2843177d5
 /*
 	トークンの作成
 */
-func CreateTokenString(name string) string {
+func CreateTokenString(name string) (string, error) {
 	/*
 		アルゴリズムの指定
 	*/
@@ -33,12 +33,7 @@ func CreateTokenString(name string) string {
 	/*
 	  トークンに対して署名の付与
 	*/
-	tokenString, err := token.SignedString([]byte(secretKey))
-	if err == nil {
-		return tokenString
-	}
-
-	return "error"
+	return token.SignedString([]byte(secretKey))
 }
 
 /*

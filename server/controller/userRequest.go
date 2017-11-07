@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
+	"github.com/gin-gonic/gin"
 )
 
 func UserRequestController(c *gin.Context) {
@@ -75,33 +75,36 @@ func UserRequestController(c *gin.Context) {
 }
 
 func CreateUserController(c *gin.Context) {
-
+	// リクエストパラメーター取得
 	name := c.PostForm("name")
-	ret := model.ExistUserByName(name)
-	if ret {
+	pass := model.ToHash(c.PostForm("password"))
+
+	// 作成済みユーザーか？
+	if model.ExistUserByName(name) {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "登録済みのユーザーネームです"})
+			"err": "登録済みのユーザーネームです",
+		})
 		return
 	}
 
-	pass := c.PostForm("password")
-	pass = model.ToHash(pass)
-
+	//DBinsert
 	err := model.CreateUser(name, pass)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "データベースエラー"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": "データベースエラー",
+		})
 		return
 	}
 
-	token := model.CreateTokenString(name)
-	if token == "error" {
-		c.JSON(500, gin.H{"err": "アクセストークンを作成できませんでした"})
+	token, err := model.CreateTokenString(name)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": "アクセストークンを作成できませんでした"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"success": token})
+		"success": token,
+	})
 }
 
 func LoginController(c *gin.Context) {
