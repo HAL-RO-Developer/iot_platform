@@ -4,9 +4,9 @@
 
 CONTEXT_DATA context;
 RESULT_DATA  result;  
-SSHT I2CSetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata);
-SSHT I2CRequestonebyte( SINT SlaveID,RESULT_DATA *rdata);
-SSHT I2CRead(RESULT_DATA *rdata);
+SSHT I2CSetup( CONTEXT_DATA*,RESULT_DATA*);
+SSHT I2CRequestonebyte( SINT,RESULT_DATA*);
+SSHT I2CRead(RESULT_DATA*);
 
 void setup() {
   context.port.pin1 = 4; //SDA
