@@ -4,6 +4,9 @@
 - コード取得
 ``` 
 git clone git@github.com:HAL-RO-Developer/iot_platform.git
+
+cd iot_platform.git 
+cp server/model/config.go.sample server/model/config.go 
 ```
 
 - go言語環境構築<br>
