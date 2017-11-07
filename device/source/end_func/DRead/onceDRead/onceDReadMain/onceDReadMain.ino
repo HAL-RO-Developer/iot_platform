@@ -7,7 +7,6 @@
 
 CONTEXT_DATA context;
 RESULT_DATA  result;
-SSHT onceDRead( CONTEXT_DATA*, RESULT_DATA* );
 
 // 定数定義(テスト用)
 #define INPUT_PIN   ( 5      )

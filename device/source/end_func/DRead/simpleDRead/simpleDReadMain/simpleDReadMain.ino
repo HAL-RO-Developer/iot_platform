@@ -7,7 +7,7 @@
 
 CONTEXT_DATA context;
 RESULT_DATA  result;
-SSHT simpleDRead( CONTEXT_DATA*, RESULT_DATA*, SINT );
+SSHT simpleDRead( CONTEXT_DATA*, RESULT_DATA* );
 
 // 定数定義(テスト用)
 #define INPUT_PIN   ( 5      )
@@ -22,16 +22,20 @@ void setup( ){
 
 // loop
 void loop( ){
-// 必要情報(ポート番号等を構造体に格納)
-context.port.mode = PIN_MODE;
-context.port.pin1 = INPUT_PIN;
-simpleDRead( &context, &result, MS_TIME );
-
-// 確認用
-Serial.println( "_____" );
-Serial.print( result.value );
-if( result.result == 0 ){
-  Serial.println( " OK" );
-  Serial.println( "-----" );
-  }
+  SSHT Value[2] = { MS_TIME };
+  
+  // 必要情報(ポート番号等を構造体に格納)
+  context.port.mode = PIN_MODE;
+  context.port.pin1 = INPUT_PIN;
+  context.value = Value;
+  
+  simpleDRead( &context, &result );
+  
+  // 確認用
+  Serial.println( "_____" );
+  Serial.print( result.value );
+  if( result.result == 0 ){
+    Serial.println( " OK" );
+    Serial.println( "-----" );
+    }
 }

@@ -7,12 +7,11 @@
 
 CONTEXT_DATA context;
 RESULT_DATA  result;
-SSHT blinkDWrite( CONTEXT_DATA*, RESULT_DATA*, SINT );
 
 // 定数定義(テスト用)
 #define OUTPUT_PIN   ( 13     )
 #define PIN_MODE     ( INPUT  )
-#define VALUE        ( HIGH   )
+#define T_VALUE      ( HIGH   )
 #define SERIAL_TIME  ( 115200 )
 #define MS_TIME      ( 1000   )
 
@@ -23,13 +22,14 @@ void setup( ){
 
 // loop
 void loop( ){
-SSHT Value = VALUE;
+SSHT Value[2] = { T_VALUE, MS_TIME };
 
 // 必要情報(ポート番号等を構造体に格納)
 context.port.mode = PIN_MODE;
 context.port.pin1 = OUTPUT_PIN;
-context.value = &Value;
-blinkDWrite( &context, &result, MS_TIME );
+context.value = Value;
+
+blinkDWrite( &context, &result);
 
 // 確認用
 Serial.println( "_____" );

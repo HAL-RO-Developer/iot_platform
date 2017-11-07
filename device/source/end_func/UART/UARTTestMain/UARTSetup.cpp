@@ -10,9 +10,11 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT UARTSetup( RESULT_DATA *rdata ){
+#define BAUDRATE  ( 1 )     // ボーレート
+
+SSHT UARTSetup( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
      SSHT rtn = RESULT_OK;
-     UART::begin( 115200 );
+     UART::begin( cdata->value[BAUDRATE] );
      rdata->result = rtn;
      return rtn;
 }
