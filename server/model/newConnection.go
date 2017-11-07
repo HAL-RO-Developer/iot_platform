@@ -11,7 +11,7 @@ import (
 var DB = newConnection()
 
 func newConnection() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:@/iotplatform?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", dbResource)
 	if err != nil {
 		panic(err)
 	}

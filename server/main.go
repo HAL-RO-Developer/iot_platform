@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Komei1009/IoTPlatform/controller"
-	"github.com/Komei1009/IoTPlatform/model"
+	"github.com/HAL-RO-Developer/iot_platform/server/controller"
+	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
 )
 

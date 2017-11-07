@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Komei1009/IoTPlatform/model"
 	"github.com/gin-gonic/gin"
+	"github.com/HAL-RO-Developer/iot_platform/server/model"
 )
 
 func UserRequestController(c *gin.Context) {
