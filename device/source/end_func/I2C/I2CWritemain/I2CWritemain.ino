@@ -1,7 +1,7 @@
 //Slaveへ送信を行う
 #include <DeviceControl.h>
 #include"EndFunc.h"
-int a = 0;
+SINT a = 0;
 CONTEXT_DATA context;
 RESULT_DATA  result;
 SSHT I2CSetup( CONTEXT_DATA*, RESULT_DATA*);

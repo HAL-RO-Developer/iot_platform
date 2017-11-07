@@ -5,11 +5,11 @@
 #include "EndFunc.h"
 
 SSHT blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata,SINT ms){
- short rtn = RESULT_OK;
+SSHT rtn = RESULT_OK;
  if(cdata->port.mode != OUTPUT){
 Digital::SetMode(cdata->port.pin1, OUTPUT);
  }
- static int Time = millis();
+ static SINT Time = millis();
 if(millis()-Time >= ms ){
 Analog::Write(cdata->port.pin1,*cdata->value);
 rdata->value = *cdata->value;

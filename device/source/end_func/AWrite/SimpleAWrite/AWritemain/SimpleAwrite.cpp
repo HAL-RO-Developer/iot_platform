@@ -9,7 +9,7 @@ SSHT rtn = RESULT_OK;
  if(cdata->port.mode != OUTPUT){
 Digital::SetMode(cdata->port.pin1, OUTPUT);
  }
- static int Time = millis();
+ static SINT Time = millis();
 if(millis()-Time <= ms ){
 Analog::Write(cdata->port.pin1,*cdata->value);
 rdata->value = *cdata->value;

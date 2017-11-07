@@ -15,7 +15,7 @@ SSHT simpleARead( CONTEXT_DATA *cdata,RESULT_DATA *rdata,SINT ms){
   if(cdata->port.pin1 != INPUT){
 Digital::SetMode(cdata->port.pin1, INPUT);
  }
- static int Time = millis();
+ static SINT Time = millis();
 if(millis()-Time >= ms ){
 rdata->value = Analog::Read(cdata->port.pin1);//アナログ値取得
 Time = millis();
