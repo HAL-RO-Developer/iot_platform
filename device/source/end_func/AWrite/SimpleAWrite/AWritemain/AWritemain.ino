@@ -3,10 +3,10 @@
 
 // include
 #include "EndFunc.h"
-
 CONTEXT_DATA context;
 RESULT_DATA  result;
 
+SSHT simpleAWrite( CONTEXT_DATA *,RESULT_DATA *,SINT);
 
 //定数定義
 #define LED_Pin 4
@@ -23,14 +23,13 @@ SSHT Value = 200;
 context.port.mode = PIN_Mode;
 context.port.pin1 = LED_Pin;
 context.value = &Value;
-onceAWrite( &context,&result );
+simpleAWrite( &context,&result,5000 );
 //結果を表示
 
 Serial.println("_____");
 Serial.print(result.value );
 if(result.result == 0)Serial.println(" OK");
 Serial.println("-----");
-delay(500); //シリアルを見やすくする
 }
 
 

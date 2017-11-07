@@ -9,6 +9,7 @@
 #define PIN_Mode OUTPUT
 CONTEXT_DATA context;
 RESULT_DATA result;
+SSHT simpleARead( CONTEXT_DATA *,RESULT_DATA *,SINT);
 //setup
 void setup() {
 
