@@ -10,14 +10,14 @@ RESULT_DATA  result;
 SSHT onceDWrite( CONTEXT_DATA*, RESULT_DATA* );
 
 // 定数定義(テスト用)
-#define OUTPUT_PIN   ( 13     )
+#define OUTPUT_PIN   ( 16     )
 #define PIN_MODE     ( INPUT  )
 #define VALUE        ( HIGH   )
 #define SERIAL_TIME  ( 115200 )
 
 // setup
 void setup( ){
-  Serial.begin( SIRIAL_TIME );
+  Serial.begin( SERIAL_TIME );
 }
 
 // loop
