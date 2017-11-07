@@ -10,9 +10,9 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT UARTWrite( CONTEXT_DATA* cdata, RESULT_DATA* rdata ){
+SSHT UARTWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
   SSHT rtn = RESULT_OK;
-  rdata->value = UART::Write( cdata->value );
+  rdata->value = UART::Write( *cdata->value );
   rdata->result =rtn;
   return rtn;
 }

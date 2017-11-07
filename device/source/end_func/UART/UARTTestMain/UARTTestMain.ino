@@ -13,14 +13,10 @@
 #define BAUDRATE  ( 115200 )     // ボーレート
 #define SEND_RX   (      4 )     // 受信側RX
 #define SEND_TX   (      5 )     // 受信側TX
+#define VALUE     (     40 )
 
 CONTEXT_DATA context;
 RESULT_DATA result;
-
-SSHT UARTSetup( RESULT_DATA* );
-SSHT SoftwareSerialSetup( CONTEXT_DATA*, RESULT_DATA* );
-SSHT UARTRead( RESULT_DATA* );
-SSHT UARTWrite( CONTEXT_DATA*, RESULT_DATA* );
 
 void setup( ){
   SSHT SetupRtn = 0;
@@ -34,9 +30,11 @@ void loop( ){
   SSHT SSSetupRtn = 0;
   SSHT ReadRtn = 0;
   SSHT WriteRtn = 0;
-  context.port[0] = SEND_RX;  // RX
-  context.port[1] = SEND_TX;  // TX
-  context.value = 45;         // 45byte
+  SSHT Value = VALUE;
+  
+  context.port.pin1 = SEND_RX;  // RX
+  context.port.pin2 = SEND_TX;  // TX
+  context.value = &Value;       // 45byte
   SSSetupRtn = SoftwareSerialSetup( &context, &result );
   ReadRtn = UARTRead( &result );
   WriteRtn = UARTWrite( &context, &result );

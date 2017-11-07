@@ -5,17 +5,20 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT simpleDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata, SINT ms ){
+#define VALUE        ( 0 )
+#define TIME         ( 1 )
+
+SSHT simpleDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 	SSHT rtn = RESULT_OK;
 	if( cdata->port.mode != OUTPUT ){
 	Digital::SetMode( cdata->port.pin1, OUTPUT );
   }
 	
-  static int Time = millis();
+  static int Time = millis( );
 
-  if( millis( ) - Time <= ms ){
-  	Digital::Write( cdata->port.pin1, *cdata->value );
-  	rdata->value = *cdata->value;
+  if( millis( ) - Time <= cdata->value[TIME] ){
+  	Digital::Write( cdata->port.pin1, cdata->value[VALUE] );
+  	rdata->value = cdata->value[VALUE];
   	rdata->result = rtn;
     } 
   else {

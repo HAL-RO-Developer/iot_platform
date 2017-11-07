@@ -10,7 +10,7 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT UARTSetup( RESULT_DATA* rdata ){
+SSHT UARTSetup( RESULT_DATA *rdata ){
      SSHT rtn = RESULT_OK;
      UART::begin( 115200 );
      rdata->result = rtn;

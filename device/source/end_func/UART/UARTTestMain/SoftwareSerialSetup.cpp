@@ -10,8 +10,8 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT SoftwareSerialSetup( CONTEXT_DATA* cdata, RESULT_DATA* rdata ){
-  SoftwareSerial mySerial( cdata->port[0], cdata->port[1] );
+SSHT SoftwareSerialSetup( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+  SoftwareSerial mySerial( cdata->port.pin1, cdata->port.pin2 );
   SSHT rtn = RESULT_OK;
   mySerial.begin( 115200 );
   rdata->result = rtn;

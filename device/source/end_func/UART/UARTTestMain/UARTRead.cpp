@@ -10,7 +10,7 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT UARTRead( RESULT_DATA* rdata ){
+SSHT UARTRead( RESULT_DATA *rdata ){
   SSHT rtn = RESULT_OK;
   rdata->value = UART::Read();
   rdata->result = rtn;
