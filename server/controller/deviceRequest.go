@@ -13,7 +13,9 @@ func DeviceRequestController(c *gin.Context) {
 	userName, ok := model.AuthorityCheck(c)
 
 	if !ok {
-		c.JSON(401, gin.H{"error": "ログイン出来ません"})
+		c.JSON(401, gin.H{
+			"err": "ログイン出来ません",
+		})
 		return
 	}
 
@@ -24,7 +26,8 @@ func DeviceRequestController(c *gin.Context) {
 	ret := model.ExistDevice(userName, deviceID)
 	if !ret {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "デバイスが見つかりません。"})
+			"err": "デバイスが見つかりません。",
+		})
 		return
 	}
 
@@ -34,12 +37,14 @@ func DeviceRequestController(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
 				"args": portInfo[i].Args,
 				"func": function,
-				"port": portInfo[i].Port})
+				"port": portInfo[i].Port,
+			})
 			return
 		}
 	}
 
 	c.JSON(http.StatusBadRequest, gin.H{
-		"err": "命令が見つかりません。"})
+		"err": "命令が見つかりません。",
+	})
 	return
 }
