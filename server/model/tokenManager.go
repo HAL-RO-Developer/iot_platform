@@ -39,7 +39,7 @@ func CreateTokenString(name string) (string, error) {
 /*
 	トークンの検証
 */
-func AuthorityCheck(c *gin.Context) string {
+func AuthorityCheck(c *gin.Context) (string, bool) {
 	token, err := request.ParseFromRequest(c.Request, request.OAuth2Extractor, func(token *jwt.Token) (interface{}, error) {
 		b := []byte(secretKey)
 		return b, nil
@@ -47,8 +47,8 @@ func AuthorityCheck(c *gin.Context) string {
 
 	if err == nil {
 		claims := token.Claims.(jwt.MapClaims)
-		return claims["user"].(string)
+		return claims["user"].(string), true
 	} else {
-		return "error"
+		return "", false
 	}
 }

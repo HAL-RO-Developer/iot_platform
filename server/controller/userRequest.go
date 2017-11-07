@@ -12,8 +12,8 @@ func UserRequestController(c *gin.Context) {
 	var err error
 	var index []Information
 
-	res := model.AuthorityCheck(c)
-	if res == "error" {
+	userName, ok := model.AuthorityCheck(c)
+	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "ログイン出来ません"})
 		return
 	}
@@ -45,7 +45,7 @@ func UserRequestController(c *gin.Context) {
 	}
 
 	if len(portInfo) != 0 {
-		ret := model.ExistDevice(res, deviceID)
+		ret := model.ExistDevice(userName, deviceID)
 		if !ret {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"err": "デバイス名が不正です。"})
@@ -108,40 +108,50 @@ func CreateUserController(c *gin.Context) {
 }
 
 func LoginController(c *gin.Context) {
+	// リクエストパラメータチェック
 	name := c.PostForm("name")
-	pass := c.PostForm("password")
+	pass := model.ToHash(c.PostForm("password"))
 
-	pass = model.ToHash(pass)
-
-	if model.CheckLogin(name, pass) {
-		token := model.CreateTokenString(name)
-		c.JSON(http.StatusOK, gin.H{
-			"success": token})
-
+	// ログインチェック
+	if !model.CheckLogin(name, pass) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"fail": "ユーザー名またはパスワードが間違っています",
+		})
 		return
 	}
-	c.JSON(http.StatusBadRequest, gin.H{
-		"fail": "ユーザー名またはパスワードが間違っています"})
-	return
+
+	// トークンを
+	token, err := model.CreateTokenString(name)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+	})
 }
 
 func CreateNewProject(c *gin.Context) {
-	res := model.AuthorityCheck(c)
+	userName, ok := model.AuthorityCheck(c)
 
-	if res == "error" {
+	if !ok {
 		c.JSON(401, gin.H{"error": "ログイン出来ません"})
 		return
 	}
 
 	deviceID := model.CreateDeviceID()
 
+	//TODO macアドレスの処理後で書く
 	mac := "00000"
-	err := model.CreateDevice(res, deviceID, mac)
+	err := model.CreateDevice(userName, deviceID, mac)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "データベースエラー"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"success": "登録完了"})
+		"success": "登録完了",
+	})
 }

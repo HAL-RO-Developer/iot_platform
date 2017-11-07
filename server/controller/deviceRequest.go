@@ -10,9 +10,9 @@ import (
 )
 
 func DeviceRequestController(c *gin.Context) {
-	res := model.AuthorityCheck(c)
+	userName, ok := model.AuthorityCheck(c)
 
-	if res == "error" {
+	if !ok {
 		c.JSON(401, gin.H{"error": "ログイン出来ません"})
 		return
 	}
@@ -21,7 +21,7 @@ func DeviceRequestController(c *gin.Context) {
 		デバイスIDチェック
 	*/
 	deviceID := c.PostForm("device_id")
-	ret := model.ExistDevice(res, deviceID)
+	ret := model.ExistDevice(userName, deviceID)
 	if !ret {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "デバイスが見つかりません。"})
