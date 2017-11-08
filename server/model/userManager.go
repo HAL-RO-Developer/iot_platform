@@ -13,7 +13,9 @@ type User struct {
 	Password string
 }
 
-/* ユーザー情報登録 */
+/*
+	ユーザー情報登録
+*/
 func CreateUser(name string, password string) error {
 	user := User{
 		Name:     name,
@@ -22,6 +24,9 @@ func CreateUser(name string, password string) error {
 	return DB.Create(&user).Error
 }
 
+/*
+	DBからユーザーネームを探す
+ */
 func ExistUserByName(name string) bool {
 
 	users := []User{}
@@ -30,6 +35,9 @@ func ExistUserByName(name string) bool {
 	return (len(users) != 0)
 }
 
+/*
+
+ */
 func CheckLogin(name string, password string) bool {
 
 	users := []User{}

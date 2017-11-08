@@ -11,9 +11,8 @@ import (
 
 func UserRequestController(c *gin.Context) {
 	var err error
-	var index []Information
 
-	userName, ok := model.AuthorityCheck(c)
+	_, ok := model.AuthorityCheck(c)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"err": "ログイン出来ません",
@@ -21,9 +20,13 @@ func UserRequestController(c *gin.Context) {
 		return
 	}
 
-	/*
-		デバイスIDチェック
-	*/
+	/*  関数への値が不正な時 */
+	if !validation.ToFunction(c) {
+		return
+	}
+
+	/* デバイスIDサーチ */
+
 	deviceID := c.PostForm("device_id")
 	args := c.PostForm("args")
 	function, err := strconv.ParseUint(c.PostForm("func"), 0, 16)
@@ -51,30 +54,6 @@ func UserRequestController(c *gin.Context) {
 		return
 	}
 
-	if len(portInfo) != 0 {
-		ret := model.ExistDevice(userName, deviceID)
-		if !ret {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"err": "デバイス名が不正です。",
-			})
-			return
-		} else {
-			for i := 0; i < len(portInfo); i++ {
-				if deviceID == portInfo[i].DeviceID {
-					index = portInfo[i : i+1]
-					index[0].DeviceID = deviceID
-					index[0].Args = args
-					index[0].Func = function
-					index[0].Port = port
-
-					c.JSON(http.StatusOK, gin.H{
-						"success": "",
-					})
-					return
-				}
-			}
-		}
-	}
 	portInfo = append(portInfo, Information{deviceID, args, function, port})
 
 	c.JSON(http.StatusOK, gin.H{
@@ -98,7 +77,7 @@ func CreateUserController(c *gin.Context) {
 		return
 	}
 
-	//DBinsert
+	// DBinsert
 	err := model.CreateUser(user.Name, user.Pass)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -160,8 +139,8 @@ func CreateNewProject(c *gin.Context) {
 
 	deviceID := model.CreateDeviceID()
 
-	//TODO macアドレスの処理後で書く
-	mac := "00000"
+	// macアドレス仮登録
+	mac := "0"
 	err := model.CreateDevice(userName, deviceID, mac)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
