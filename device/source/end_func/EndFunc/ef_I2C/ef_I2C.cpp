@@ -33,7 +33,7 @@ SSHT I2CRead(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
 	return rtn;
 }
 
-SSHT I2CRequestonebyte(CONTEXT_DATA *cdata, , RESULT_DATA *rdata) {
+SSHT I2CRequestonebyte(CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
 	SSHT rtn = RESULT_OK;//結果
 	I2C::reqFrom(cdata->value[ID], 1);//Slaveに1バイトの送信をリクエスト
 	rdata->result = rtn;
