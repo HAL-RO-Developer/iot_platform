@@ -24,7 +24,7 @@ rdata->result = rtn;
 return rtn;
 }
 
-SHT simpleARead(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
+SSHT simpleARead(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
 	SSHT rtn = RESULT_OK;
 	if (cdata->port.pin1 != INPUT) {
 		Digital::SetMode(cdata->port.pin1, INPUT);
@@ -37,3 +37,4 @@ SHT simpleARead(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
 		return rtn;
 	}
 }
+/* Copyright HAL College of Technology & Design */
