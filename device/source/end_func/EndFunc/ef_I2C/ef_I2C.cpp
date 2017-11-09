@@ -39,3 +39,4 @@ SSHT I2CRequestonebyte(CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
 	rdata->result = rtn;
 	return rtn;
 }
+/* Copyright HAL College of Technology & Design */
