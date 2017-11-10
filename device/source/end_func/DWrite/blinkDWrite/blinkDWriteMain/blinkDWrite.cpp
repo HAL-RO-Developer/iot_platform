@@ -5,7 +5,10 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata, SINT ms ){
+#define VALUE        ( 0 )
+#define TIME         ( 1 )
+
+SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 	SSHT rtn = RESULT_OK;
 	if( cdata->port.mode != OUTPUT ){
 	Digital::SetMode( cdata->port.pin1, OUTPUT );
@@ -13,12 +16,12 @@ SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata, SINT ms ){
 	
   static int Time = millis();
 
-  if( millis( ) - Time >= ms ){
-  	Digital::Write( cdata->port.pin1, *cdata->value );
-  	rdata->value = *cdata->value;
+  if( millis( ) - Time >= cdata->value[TIME] ){
+  	Digital::Write( cdata->port.pin1, cdata->value[VALUE] );
+  	rdata->value = cdata->value[VALUE];
   	rdata->result = rtn;
   }
-  if( millis( )-Time >= ms * 2 ){
+  if( millis( )-Time >= cdata->value[TIME] * 2 ){
   	Digital::Write( cdata->port.pin1, LOW );
   	rdata->value = LOW;
   	rdata->result = rtn;
