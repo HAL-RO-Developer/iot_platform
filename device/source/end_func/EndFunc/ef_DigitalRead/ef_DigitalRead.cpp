@@ -10,10 +10,9 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-#define TIME	( 1 )
-
 /* onceDRead */
 SSHT onceDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+	const SSHT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	
 	if( cdata->port.mode != INPUT ){
@@ -27,6 +26,7 @@ SSHT onceDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 
 /* simpleDRead */
 SSHT simpleDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+	const SSHT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	
 	if( cdata->port.mode != INPUT ){
