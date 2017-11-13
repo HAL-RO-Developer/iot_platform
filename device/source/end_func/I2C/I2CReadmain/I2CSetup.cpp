@@ -8,7 +8,8 @@
    */
 #include <DeviceControl.h>
 #include"EndFunc.h"
-
+#define DATA (0)
+#define ID  (1)
 SSHT I2CSetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
   SSHT rtn = RESULT_OK;
     rdata->result = rtn;

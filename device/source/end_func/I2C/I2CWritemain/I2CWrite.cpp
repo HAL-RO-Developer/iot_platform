@@ -8,11 +8,15 @@
    */
 #include <DeviceControl.h>
 #include"EndFunc.h"
-SSHT I2CWrite( SINT SleaveID, SINT data, RESULT_DATA *rdata) {
+#define DATA (0)
+#define ID  (1)
+
+SSHT I2CWrite(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
   SSHT rtn = RESULT_OK;
   rdata->result = rtn;
-  I2C::beginTransmission(SleaveID);
-  I2C::Write(data);
+  I2C::beginTransmission(cdata->value[ID]);
+  I2C::Write(cdata->value[DATA]);
   I2C::endTransmission();
-   return  rtn;
-  }
+  return  rtn;
+}
+

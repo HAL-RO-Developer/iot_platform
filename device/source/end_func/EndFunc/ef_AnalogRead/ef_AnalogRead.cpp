@@ -16,7 +16,7 @@ By  Riku Hashimoto
 
 SSHT onceARead( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
     SSHT rtn = RESULT_OK;
-  if(cdata->port.pin1 != INPUT){
+  if(cdata->port.mode != INPUT){
 Digital::SetMode(cdata->port.pin1, INPUT);
  }
 rdata->value = Analog::Read(cdata->port.pin1);//アナログ値取得
@@ -26,7 +26,7 @@ return rtn;
 
 SSHT simpleARead(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
 	SSHT rtn = RESULT_OK;
-	if (cdata->port.pin1 != INPUT) {
+	if (cdata->port.mode != INPUT) {
 		Digital::SetMode(cdata->port.pin1, INPUT);
 	}
 	static SINT Time = millis();

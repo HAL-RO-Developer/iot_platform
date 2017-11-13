@@ -19,11 +19,11 @@ void setup() {
 
 //loop
 void loop() {
-SSHT Value = 255;
+SSHT Value[2] = {255,0};
 //必要情報(ポート番号等を構造体に格納)
 context.port.mode = PIN_Mode;
 context.port.pin1 = LED_Pin;
-context.value = &Value;
+context.value = Value;
 blinkAWrite( &context,&result,1000 );
 //結果を表示
 /*

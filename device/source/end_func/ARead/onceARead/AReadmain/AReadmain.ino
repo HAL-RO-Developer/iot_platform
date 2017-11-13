@@ -9,8 +9,8 @@
 #define PIN_Mode OUTPUT
 CONTEXT_DATA context;
 RESULT_DATA result;
+SSHT value[2] = {0,5000};
 
-SSHT onceARead( CONTEXT_DATA*,RESULT_DATA*);
 //setup
 void setup() {
 
@@ -22,6 +22,7 @@ void loop() {
 //必要情報(ポート番号等を構造体に格納)
 context.port.mode = PIN_Mode;
 context.port.pin1 = Sensor_Pin;
+context.value = value;
 onceARead( &context,&result);
 //結果を表示
 

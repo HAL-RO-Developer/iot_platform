@@ -4,11 +4,10 @@
 
 CONTEXT_DATA context;
 RESULT_DATA  result;  
-SSHT I2CSetup( CONTEXT_DATA*,RESULT_DATA*);
-SSHT I2CRequestonebyte( SINT,RESULT_DATA*);
-SSHT I2CRead(RESULT_DATA*);
 
+  SSHT Value[2] = {0,8};
 void setup() {
+  context.value = Value;
   context.port.pin1 = 4; //SDA
   context.port.pin2 = 5;//SCL
  I2CSetup( &context,&result );
@@ -16,12 +15,12 @@ void setup() {
 }
 
 void loop() {
- I2CRequestonebyte(8,&result );
- I2CRead(&result);
+ I2CRequestonebyte( &context,&result );
+ I2CRead( &context,&result );
  Serial.println(result.value);
  delay(500);
 }
-  
 
+/* Copyright HAL College of Technology & Design */
 
 
