@@ -8,8 +8,7 @@
 #include "System.h"
 #include "Function.h"
 
-#define DATA (0)
-#define ID  (1)
+
 
 SSHT I2CSetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
   SSHT rtn = RESULT_OK;
@@ -19,6 +18,8 @@ SSHT I2CSetup( CONTEXT_DATA *cdata,RESULT_DATA *rdata){
   }
 
 SSHT I2CWrite(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
+	const SINT DATA = 0;
+	const SINT ID = 1;
 	SSHT rtn = RESULT_OK;
 	rdata->Result = rtn;
 	I2C::beginTransmission(cdata->Value[ID]);
@@ -35,6 +36,7 @@ SSHT I2CRead(CONTEXT_DATA *cdata, RESULT_DATA *rdata) {
 }
 
 SSHT I2CRequestonebyte(CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
+	const SINT ID = 1;
 	SSHT rtn = RESULT_OK;//結果
 	I2C::reqFrom(cdata->Value[ID], 1);//Slaveに1バイトの送信をリクエスト
 	rdata->Result = rtn;

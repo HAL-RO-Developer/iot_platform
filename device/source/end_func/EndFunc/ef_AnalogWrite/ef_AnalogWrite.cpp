@@ -20,12 +20,12 @@ SSHT blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
 	 
 	static SINT Time = millis();
 	if(millis()-Time >= cdata->Value[TIME]) {
-		Analog::Write(cdata->Port.Pin1, cdata->Value[VALUE]);
+		Analog::Write(cdata->Port.Pin1, HIGH);
 		rdata->Value = HIGH;
 		rdata->Result = rtn;
 	 }
 	if(millis()-Time >= cdata->Value[TIME] *2){
-		Analog::Write(cdata->Port.Pin1,0);
+		Analog::Write(cdata->Port.Pin1,LOW);
 		rdata->Value = LOW;
 		rdata->Result = rtn;
 		Time = millis();
