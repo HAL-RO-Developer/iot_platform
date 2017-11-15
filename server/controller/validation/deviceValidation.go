@@ -3,39 +3,38 @@ package validation
 import (
 	"net/http"
 
+	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
-	"fmt"
 )
 
-type Device struct {
-	Name     string
-	DeviceID string
-	Mac      string
+func SearchMyDevice(c *gin.Context) (string, bool) {
+	deviceID := c.PostForm("device_id")
+	res := model.ExistDeviceByIam(deviceID, "")
+	if !res {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "デバイスが見つかりません。",
+		})
+		return "", false
+	}
+
+	return deviceID, true
 }
 
-func SearchMyFunction(c *gin.Context) {
+func SearchMyFunction(c *gin.Context) (*SetFunc, bool) {
 	/*
 		デバイスIDチェック
 	*/
 	deviceID := c.PostForm("device_id")
-
-	fmt.Println(len(portInfo))
-	fmt.Println(portInfo[0].DeviceID)
-	for i := 0; i < len(portInfo); i++ {
-		if deviceID == portInfo[i].DeviceID {
-			c.JSON(http.StatusOK, portInfo)
-			//function := strconv.FormatUint(portInfo[i].Port.Func, 16)
-			//c.JSON(http.StatusOK, gin.H{
-			//	"args": portInfo[i].Port.Args,
-			//	"func": function,
-			//	"port": portInfo[i].Port.Id,
-			//})
-			return
-		}
+	res := model.ExistDeviceById(deviceID)
+	if !res {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "デバイスが見つかりません。",
+		})
+		return nil, false
 	}
 
-	c.JSON(http.StatusBadRequest, gin.H{
-		"err": "命令が見つかりません。",
-	})
-	return
+	return &SetFunc{
+		DeviceID: deviceID,
+		Port:     []model.PortTask{},
+	}, true
 }
