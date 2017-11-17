@@ -9,16 +9,23 @@ import (
 )
 
 func DeviceRegistration(c *gin.Context) {
+	var req model.GetDevice
+	err := c.BindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": err,
+		})
+		return
+	}
 	_, ok := validation.SearchMyDevice(c)
 	if !ok {
 		return
 	}
 
-	macaddr := c.PostForm("mac")
-	model.AdditionalDevice(macaddr)
+	model.AdditionalDevice(req.MacAddr)
 
 	c.JSON(http.StatusOK, gin.H{
-		"success": "",
+		"success": true,
 	})
 	return
 }

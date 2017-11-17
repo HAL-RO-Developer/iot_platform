@@ -56,6 +56,7 @@ func ToFunction(c *gin.Context, user string) (*SetFunc, bool) {
 		return nil, false
 	}
 
+	// DeviceID確認
 	if !model.ExistDevice(user, req.DeviceID) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "デバイスが見つかりません",

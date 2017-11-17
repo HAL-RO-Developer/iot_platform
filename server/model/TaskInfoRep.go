@@ -15,6 +15,11 @@ type PortTask struct {
 	Args   []string `json:"args"`
 }
 
+type GetDevice struct {
+	DeviceID string `json:"device_id"`
+	MacAddr  string `json:"mac"`
+}
+
 var taskInfo = []TaskInfo{}
 var portInfoM = new(sync.Mutex)
 

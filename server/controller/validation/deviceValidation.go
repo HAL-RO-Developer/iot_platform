@@ -8,8 +8,15 @@ import (
 )
 
 func SearchMyDevice(c *gin.Context) (string, bool) {
-	deviceID := c.PostForm("device_id")
-	res := model.ExistDeviceByIam(deviceID, "")
+	var req model.GetDevice
+	err := c.BindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": err,
+		})
+		return "", false
+	}
+	res := model.ExistDeviceByIam(req.DeviceID, "")
 	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "デバイスが見つかりません。",
@@ -17,15 +24,22 @@ func SearchMyDevice(c *gin.Context) (string, bool) {
 		return "", false
 	}
 
-	return deviceID, true
+	return req.DeviceID, true
 }
 
 func SearchMyFunction(c *gin.Context) (*SetFunc, bool) {
+	var req model.GetDevice
+	err := c.BindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": err,
+		})
+		return nil, false
+	}
 	/*
 		デバイスIDチェック
 	*/
-	deviceID := c.PostForm("device_id")
-	res := model.ExistDeviceById(deviceID)
+	res := model.ExistDeviceById(req.DeviceID)
 	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "デバイスが見つかりません。",
@@ -34,7 +48,7 @@ func SearchMyFunction(c *gin.Context) (*SetFunc, bool) {
 	}
 
 	return &SetFunc{
-		DeviceID: deviceID,
+		DeviceID: req.DeviceID,
 		Port:     []model.PortTask{},
 	}, true
 }
