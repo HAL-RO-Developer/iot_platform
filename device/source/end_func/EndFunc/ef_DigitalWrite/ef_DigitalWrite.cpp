@@ -10,9 +10,11 @@
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
+#define VALUE	( 0 )
+#define TIME	( 1 )
+
 /* onceDWrite */
 SSHT onceDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
-	const  SSHT VALUE = 0;
 	SSHT rtn = RESULT_OK;
 	if( cdata->port.mode != OUTPUT ){
 		Digital::SetMode( cdata->port.pin1, OUTPUT );
@@ -26,37 +28,33 @@ SSHT onceDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 
 /* simpleDWrite */
 SSHT simpleDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
-	const SSHT VALUE = 0;
-	const SSHT TIME = 1;
-	SSHT rtn = RESULT_OK;
-	if( cdata->port.mode != OUTPUT ){
-	Digital::SetMode( cdata->port.pin1, OUTPUT );
-  }
-	
-  static SINT Time = millis( );
+  const SINT VALUE = 0;
+  const SINT TIME = 1;
   static SINT Flag = 0;
-
-  if( Flag == 0 ){
-	Time = millis( );
-	Flag = 1;
+  static SINT Time;
+  SSHT rtn = RESULT_OK;
+  if( cdata->Port.Mode != OUTPUT ){
+  Digital::SetMode( cdata->Port.Pin1, OUTPUT );
   }
-  if( millis( ) - Time <= cdata->value[TIME] ){
-	Digital::Write( cdata->port.pin1, cdata->value[VALUE] );
-	rdata->value = cdata->value[VALUE];
-	rdata->result = rtn;
+  if(Flag == 0){
+ Time = millis( );
+  Flag = 1;
+}
+  if( millis( ) - Time <= cdata->Value[TIME] ){
+  Digital::Write( cdata->Port.Pin1, cdata->Value[VALUE] );
+  rdata->Value = cdata->Value[VALUE];
+  rdata->Result = rtn;
   } else {
-	Digital::Write( cdata -> port.pin1, LOW );
-	Flag = 0;
-	rdata->value = 0;
-	rdata->result = rtn;
-	}
-	return rtn;
+  Digital::Write( cdata->Port.Pin1, !(cdata->Value[VALUE]) );
+  Flag = 0;
+  rdata->Value = !(cdata->Value[VALUE]);
+  rdata->Result = rtn;
+  }
+  return rtn;
 }
 
 /* blinkDWrite */
 SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
-	const SSHT VALUE = 0;
-	const SSHT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	if( cdata->port.mode != OUTPUT ){
 		Digital::SetMode( cdata->port.pin1, OUTPUT );
