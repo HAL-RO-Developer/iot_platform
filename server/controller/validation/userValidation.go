@@ -3,8 +3,6 @@ package validation
 import (
 	"net/http"
 
-	"strconv"
-
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +10,11 @@ import (
 type User struct {
 	Name string
 	Pass string
+}
+
+type SetFunc struct {
+	DeviceID string           `json:"device_id"`
+	Port     []model.PortTask `json:"port"`
 }
 
 /*
@@ -43,78 +46,22 @@ func ToUser(c *gin.Context) (*User, bool) {
 /*
 	関数への入力情報チェック
 */
-func ToFunction(c *gin.Context) bool {
-
-	function, err := strconv.ParseUint(c.PostForm("func"), 0, 16)
+func ToFunction(c *gin.Context, user string) (*SetFunc, bool) {
+	var req SetFunc
+	err := c.BindJSON(&req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "数字を入力してください。",
+			"err": err,
 		})
-		return false
-	} else if model.FunctionCheck(function) == false {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "関数IDが不正です。",
-		})
-		return false
+		return nil, false
 	}
 
-	port, err := strconv.Atoi(c.PostForm("port"))
-	if err != nil {
+	// DeviceID確認
+	if !model.ExistDevice(user, req.DeviceID) {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "数字を入力してください。",
+			"err": "デバイスが見つかりません",
 		})
-		return false
-	} else if port < portID_MIN || port > portID_MAX {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "ポートIDが不正です。",
-		})
-		return false
+		return nil, false
 	}
-	res := searchDevice(c)
-	return res
-}
-
-/*
-	デバイスID探し
-*/
-func searchDevice(c *gin.Context) bool {
-	deviceID := c.PostForm("device_id")
-	args, _ := strconv.Atoi(c.PostForm("args"))
-	function, _ := strconv.ParseUint(c.PostForm("func"), 0, 16)
-	port, _ := strconv.Atoi(c.PostForm("port"))
-	userName, _ := model.AuthorityCheck(c)
-
-	var index []Information
-	if len(portInfo) != 0 {
-		ret := model.ExistDevice(userName, deviceID)
-
-		if !ret {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"err": "デバイスIDが見つかりません",
-			})
-			return false
-		} else {
-			for i := 0; i < len(portInfo); i++ {
-				if deviceID == portInfo[i].DeviceID {
-					index[0].DeviceID = deviceID
-					index = portInfo[i : i+1]
-					index[0].Port.Args = args
-					index[0].Port.Func = function
-					index[0].Port.Id = port
-
-					c.JSON(http.StatusOK, gin.H{
-						"success": "上書き",
-					})
-					return true
-				}
-			}
-		}
-	}
-	portInfo = append(portInfo, Information{DeviceID: deviceID, Port: Port{port, function, args}})
-
-	c.JSON(http.StatusOK, gin.H{
-		"success": "新規",
-	})
-	return true
-
+	return &req, true
 }

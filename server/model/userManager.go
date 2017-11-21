@@ -26,7 +26,7 @@ func CreateUser(name string, password string) error {
 
 /*
 	DBからユーザーネームを探す
- */
+*/
 func ExistUserByName(name string) bool {
 
 	users := []User{}
@@ -44,15 +44,6 @@ func CheckLogin(name string, password string) bool {
 	DB.Find(&users, "name = ?", name)
 	if len(users) != 0 {
 		if password == users[0].Password {
-			return true
-		}
-	}
-	return false
-}
-
-func FunctionCheck(function uint64) bool {
-	for i := 0; i < len(funcID); i++ {
-		if function == funcID[i] {
 			return true
 		}
 	}

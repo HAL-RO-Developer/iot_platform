@@ -10,9 +10,14 @@ type TaskInfo struct {
 }
 
 type PortTask struct {
-	PortNo int    `json:"port_no"`
-	Func   uint64 `json:"function"`
-	Args   int    `json:"args"`
+	PortNo int      `json:"port_no"`
+	Func   uint64   `json:"function"`
+	Args   []string `json:"args"`
+}
+
+type GetDevice struct {
+	DeviceID string `json:"device_id"`
+	MacAddr  string `json:"mac"`
 }
 
 var taskInfo = []TaskInfo{}
@@ -32,6 +37,7 @@ func SetTaskInfo(device_id string, task []PortTask) {
 	}
 	portInfoM.Unlock()
 }
+
 func GetTaskInfo(device_id string) *TaskInfo {
 	for _, value := range taskInfo {
 		if value.DeviceID == device_id {

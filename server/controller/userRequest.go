@@ -8,8 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Task struct {
+	PortNo int    `json:"port_no"`
+	Func   uint64 `json:"function"`
+	Args   int    `json:"args"`
+}
+
 func UserRequestController(c *gin.Context) {
-	_, ok := model.AuthorityCheck(c)
+	user, ok := model.AuthorityCheck(c)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"err": "ログイン出来ません",
@@ -18,8 +24,15 @@ func UserRequestController(c *gin.Context) {
 	}
 
 	/* デバイスIDサーチ */
-	validation.ToFunction(c)
+	setFunc, ok := validation.ToFunction(c, user)
+	if !ok {
+		return
+	}
+	model.SetTaskInfo(setFunc.DeviceID, setFunc.Port)
 
+	c.JSON(http.StatusOK, gin.H{
+		"success": "",
+	})
 	return
 
 }
@@ -101,7 +114,7 @@ func CreateNewProject(c *gin.Context) {
 	deviceID := model.CreateDeviceID()
 
 	// macアドレス仮登録
-	mac := "0"
+	mac := ""
 	err := model.CreateDevice(userName, deviceID, mac)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
