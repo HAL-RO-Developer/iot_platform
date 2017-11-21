@@ -19,6 +19,7 @@ func main() {
 	api.POST("/function", controller.UserRequestController)
 
 	device := r.Group("/device")
+	device.POST("/iam", controller.DeviceRegistration)
 	device.POST("/receive", controller.DeviceRequestController)
 
 	r.Run()

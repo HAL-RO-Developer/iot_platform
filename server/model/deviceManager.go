@@ -34,13 +34,13 @@ func CreateDeviceID() string {
 
 	for res {
 		deviceID = base64.URLEncoding.EncodeToString(random)
-		res = existDeviceById(deviceID)
+		res = ExistDeviceById(deviceID)
 	}
 
 	return deviceID
 }
 
-func existDeviceById(id string) bool {
+func ExistDeviceById(id string) bool {
 
 	device := []Device{}
 	DB.Find(&device, "device_id = ?", id)
@@ -60,4 +60,19 @@ func ExistDevice(name string, id string) bool {
 	}
 
 	return false
+}
+
+func ExistDeviceByIam(deviceid string, macaddr string) bool {
+	device := []Device{}
+	DB.Find(&device, "device_id = ? and mac = ?", deviceid, macaddr)
+	if len(device) != 0 {
+		return true
+	}
+
+	return false
+}
+
+func AdditionalDevice(mac string) {
+	device := []Device{}
+	DB.Model(&device).Update("mac", mac)
 }
