@@ -17,10 +17,6 @@ func DeviceRegistration(c *gin.Context) {
 		})
 		return
 	}
-	_, ok := validation.SearchMyDevice(c)
-	if !ok {
-		return
-	}
 
 	model.AdditionalDevice(req.MacAddr)
 

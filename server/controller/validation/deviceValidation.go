@@ -27,6 +27,7 @@ func SearchMyDevice(c *gin.Context) (string, bool) {
 	return req.DeviceID, true
 }
 
+// TODO なんとかしろ
 func SearchMyFunction(c *gin.Context) (*SetFunc, bool) {
 	var req model.GetDevice
 	err := c.BindJSON(&req)
