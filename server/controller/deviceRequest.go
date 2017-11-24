@@ -10,14 +10,19 @@ import (
 
 func DeviceRegistration(c *gin.Context) {
 	var req model.GetDevice
-	err := c.BindJSON(&req)
-	if err != nil {
+	var ok bool
+
+	req.DeviceID, ok = validation.PermissionMyDevice(c)
+	if !ok {
+		return
+	}
+	res := model.ExistDeviceByIam(req.DeviceID, "")
+	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": err,
+			"err": "デバイスが見つかりません。",
 		})
 		return
 	}
-
 	model.AdditionalDevice(req.MacAddr)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -30,14 +35,40 @@ func DeviceRequestController(c *gin.Context) {
 
 	setFunc, ok := validation.SearchMyFunction(c)
 	if !ok {
+		return
+	}
+	/*
+		デバイスIDチェック
+	*/
+	res := model.ExistDeviceByIam(setFunc.DeviceID, setFunc.MacAddr)
+	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "失敗",
+			"err": "デバイスが見つかりません。",
 		})
 		return
 	}
 
 	value := model.GetTaskInfo(setFunc.DeviceID)
 	c.JSON(http.StatusOK, value)
+
+	return
+}
+
+func DeviceSend(c *gin.Context) {
+
+	req, ok := validation.SearchMe(c)
+	if !ok {
+		return
+	} /*
+		デバイスIDチェック
+	*/
+	res := model.ExistDeviceByIam(req.DeviceID, req.MacAddr)
+	if !res {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "デバイスが見つかりません。",
+		})
+		return
+	}
 
 	return
 }

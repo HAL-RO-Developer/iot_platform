@@ -30,8 +30,15 @@ func UserRequestController(c *gin.Context) {
 	}
 	model.SetTaskInfo(setFunc.DeviceID, setFunc.Port)
 
+	res := model.ExistDeviceById(setFunc.DeviceID)
+	if !res {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": "",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"success": "",
+		"success": validation.Message{},
 	})
 	return
 
