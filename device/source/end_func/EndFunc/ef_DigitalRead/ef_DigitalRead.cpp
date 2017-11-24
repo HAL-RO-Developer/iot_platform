@@ -8,7 +8,8 @@
 */
 
 #include <DeviceControl.h>
-#include "EndFunc.h"
+#include "System.h"
+#include "Function.h"
 
 
 
@@ -41,7 +42,6 @@ SSHT simpleDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 	}
 }
 SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
-	const SINT VALUE = 0;
 	const SINT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	if( cdata->Port.Mode != OUTPUT ){
