@@ -15,12 +15,12 @@
 /* onceDRead */
 SSHT onceDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 	SSHT rtn = RESULT_OK;
-	if( cdata->port.mode != INPUT ){
-		Digital::SetMode( cdata->port.pin1, INPUT );
+	if( cdata->Port.Mode != INPUT ){
+		Digital::SetMode( cdata->Port.Pin1, INPUT );
 	}
 	
-	rdata->value = Digital::Read( cdata->port.pin1 ); // 値取得
-	rdata->result = rtn;
+	rdata->Value = Digital::Read( cdata->Port.Pin1 ); // 値取得
+	rdata->Result = rtn;
 	return rtn;
 }
 
@@ -28,15 +28,15 @@ SSHT onceDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 SSHT simpleDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 	SSHT rtn = RESULT_OK;
 	const SINT TIME = 1;
-	if( cdata->port.mode != INPUT ){
-	Digital::SetMode( cdata->port.pin1, INPUT );
+	if( cdata->Port.Mode != INPUT ){
+	Digital::SetMode( cdata->Port.Pin1, INPUT );
 	}
 	
 	static SINT Time = millis( );
 	
-	if( millis( ) - Time >= cdata->value[TIME] ){
-		rdata->value = Digital::Read( cdata->port.pin1 ); // 値取得
-		rdata->result = rtn;
+	if( millis( ) - Time >= cdata->Value[TIME] ){
+		rdata->Value = Digital::Read( cdata->Port.Pin1 ); // 値取得
+		rdata->Result = rtn;
 		return rtn; 
 	}
 }
