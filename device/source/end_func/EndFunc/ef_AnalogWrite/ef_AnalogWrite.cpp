@@ -1,7 +1,6 @@
 /*
 ef_AnalogWrite.cpp
 末端関数 AnalogWrite
-
 Created 2017/10/07
 By  Riku Hashimoto
 */
@@ -12,7 +11,8 @@ By  Riku Hashimoto
 #include "Function.h"
 
 SSHT blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
-	const SINT TIME = 0;
+	const SINT VALUE = 0;
+	const SINT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	if(cdata->Port.Mode != OUTPUT){
 		Digital::SetMode(cdata->Port.Pin1, OUTPUT);
