@@ -3,15 +3,14 @@
    
    末端関数 DigitalWrite
    
-   Created 2017/09/27
-   By Hirotaka Nagaoka
+   Created 2017/10/21
+   By Riku Hashimoto
 */
 
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-#define VALUE	( 0 )
-#define TIME	( 1 )
+
 
 /* onceDWrite */
 SSHT onceDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
@@ -55,6 +54,8 @@ SSHT simpleDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 
 /* blinkDWrite */
 SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+	const SINT VALUE = 0;
+  const SINT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	if( cdata->port.mode != OUTPUT ){
 		Digital::SetMode( cdata->port.pin1, OUTPUT );
