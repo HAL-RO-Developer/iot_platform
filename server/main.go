@@ -18,15 +18,15 @@ func main() {
 	api.POST("/signup", controller.CreateUserController)
 	api.POST("/signin", controller.LoginController)
 	api.POST("/device", controller.CreateNewProject)
-	api.POST("/function", func(c *gin.Context){
-		m.HandleRequest(c.Writer,c.Request)
-		controller.UserRequestController(c)
+	api.POST("/function", controller.UserRequestController)
+	api.GET("/ws/:token", func(c *gin.Context) {
+		m.HandleRequest(c.Writer, c.Request)
+		controller.UserWebSocketController(c, m)
 	})
 
 	device := r.Group("/device")
 	device.POST("/iam", controller.DeviceRegistration)
-	device.POST("/receive", controller.DeviceRequestController)
-	device.POST("/send",controller.DeviceSend)
+	device.POST("/receive", controller.DeviceReceiveController)
 
 	r.Run()
 }
