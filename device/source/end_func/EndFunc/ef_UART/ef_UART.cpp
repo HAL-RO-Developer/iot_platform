@@ -3,46 +3,48 @@
    
    末端関数 UART
    
-   Created 2017/09/27
-   By Hirotaka Nagaoka
+   Created 2017/11/22
+   By Riku Hashimoto
 */
-
 #include <DeviceControl.h>
 #include "EndFunc.h"
 
-#define VALUE		( 0 )
-#define BAUDRATE  	( 1 )     /* ボーレート */
+
 
 /* UARTSetup */
 SSHT UARTSetup( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+const SINT BAUDRATE = 	1;/* ボーレート */
 	 SSHT rtn = RESULT_OK;
-	 UART::begin( cdata->value[BAUDRATE] );
-	 rdata->result = rtn;
+	 UART::begin( cdata->Value[BAUDRATE] );
+	 rdata->Result = rtn;
 	 return rtn;
 }
 
 /* UARTRead */
 SSHT UARTRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+	const SINT VALUE		= 0; 
 	SSHT rtn = RESULT_OK;
-	rdata->value = UART::Read();
-	rdata->result = rtn;
+	rdata->Value = UART::Read();
+	rdata->Result = rtn;
 	return rtn;
 }
 
 /* UARTWrite */
 SSHT UARTWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+	const SINT VALUE		= 0; 
 	SSHT rtn = RESULT_OK;
-	rdata->value = UART::Write( cdata->value[VALUE] );
-	rdata->result =rtn;
+	rdata->Value = UART::Write( cdata->Value[VALUE] );
+	rdata->Result =rtn;
 	return rtn;
 }
 
 /* SoftwareSerialSetup */
 SSHT SoftwareSerialSetup( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
-	SoftwareSerial mySerial( cdata->port.pin1, cdata->port.pin2 );
+	const SINT BAUDRATE = 	1;/* ボーレート */
+	SoftwareSerial mySerial( cdata->Port.Pin1, cdata->Port.Pin2 );
 	SSHT rtn = RESULT_OK;
-	mySerial.begin( cdata->value[BAUDRATE] );
-	rdata->result = rtn;
+	mySerial.begin( cdata->Value[BAUDRATE] );
+	rdata->Result = rtn;
 	return rtn;
 }
 

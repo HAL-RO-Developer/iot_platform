@@ -19,9 +19,14 @@ func main() {
 	api.POST("/signin", controller.LoginController)
 	api.POST("/device", controller.CreateNewProject)
 	api.POST("/function", controller.UserRequestController)
-	api.GET("/ws/:token", func(c *gin.Context) {
-		m.HandleRequest(c.Writer, c.Request)
+	api.GET("/ws/:device_id", func(c *gin.Context) {
 		controller.UserWebSocketController(c, m)
+		m.HandleRequest(c.Writer, c.Request)
+	})
+
+	m.HandleMessage(func(s *melody.Session, msg []byte) {
+		//controller.UserWebSocketController(c, m)
+		m.Broadcast(msg)
 	})
 
 	device := r.Group("/device")

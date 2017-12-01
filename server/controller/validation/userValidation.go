@@ -3,6 +3,8 @@ package validation
 import (
 	"net/http"
 
+	"fmt"
+
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +16,7 @@ type User struct {
 
 type SetFunc struct {
 	DeviceID string           `json:"device_id"`
-	MacAddr  string			  `json:"mac"`
+	MacAddr  string           `json:"mac"`
 	Port     []model.PortTask `json:"port"`
 }
 
@@ -60,6 +62,24 @@ func ToFunction(c *gin.Context, user string) (*SetFunc, bool) {
 	deviceId := c.PostForm("device_id")
 	// DeviceID確認
 	if !model.ExistDevice(user, deviceId) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "デバイスが見つかりません",
+		})
+		return nil, false
+	}
+	return &req, true
+}
+
+/*
+	デバイスから結果返却
+*/
+func ToReturn(c *gin.Context) (*model.Message, bool) {
+	var req model.Message
+
+	deviceId := c.Param("device_id")
+	fmt.Println(deviceId)
+	// DeviceID確認
+	if !model.ExistDeviceById(deviceId) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "デバイスが見つかりません",
 		})

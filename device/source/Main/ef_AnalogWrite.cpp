@@ -12,8 +12,7 @@ By  Riku Hashimoto
 #include "Function.h"
 
 SSHT blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
-	const SINT VALUE = 0;
-  const SINT TIME = 1;
+	const SINT TIME = 0;
 	SSHT rtn = RESULT_OK;
 	if(cdata->Port.Mode != OUTPUT){
 		Digital::SetMode(cdata->Port.Pin1, OUTPUT);
@@ -21,7 +20,7 @@ SSHT blinkAWrite( CONTEXT_DATA *cdata,RESULT_DATA *rdata) {
 	 
 	static SINT Time = millis();
 	if(millis()-Time >= cdata->Value[TIME]) {
-		Analog::Write(cdata->Port.Pin1, cdata->Value[VALUE]);
+		Analog::Write(cdata->Port.Pin1, HIGH);
 		rdata->Value = HIGH;
 		rdata->Result = rtn;
 	 }

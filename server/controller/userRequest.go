@@ -3,8 +3,6 @@ package controller
 import (
 	"net/http"
 
-	"encoding/json"
-
 	"time"
 
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
@@ -137,15 +135,10 @@ func CreateNewProject(c *gin.Context) {
 }
 
 func UserWebSocketController(c *gin.Context, m *melody.Melody) {
-	var returnMessage = Result{}
-	user, ok := model.AuthorityCheck(c)
-	if !ok {
-		m.Close()
-		return
-	}
+	//var returnMessage = Result{}
 
 	/* デバイスIDサーチ */
-	setFunc, ok := validation.ToFunction(c, user)
+	setFunc, ok := validation.ToReturn(c)
 	if !ok {
 		m.Close()
 		return
@@ -156,16 +149,16 @@ func UserWebSocketController(c *gin.Context, m *melody.Melody) {
 		m.Close()
 		return
 	}
-	model.SetTaskInfo(setFunc.DeviceID, setFunc.Port)
-
-	returnMessage.Time = time.Now()
-	returnMessage.Message = *model.GetValueInfo(setFunc.DeviceID)
-	// jsonエンコード
-	outputJson, err := json.Marshal(&returnMessage)
-	if err != nil {
-		panic(err)
-	}
-	m.Broadcast(outputJson)
+	/*
+		returnMessage.Time = time.Now()
+		returnMessage.Message = *model.GetValueInfo(setFunc.DeviceID)
+		// jsonエンコード
+		outputJson, err := json.Marshal(&returnMessage)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(returnMessage)
+	*/
+	//m.Broadcast(outputJson)
 	return
-
 }

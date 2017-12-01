@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
@@ -64,6 +65,7 @@ func DeviceReceiveController(c *gin.Context) {
 		"success": value,
 	})
 
+	fmt.Println(req.Value)
 	// センサー値等の一時保存
 	model.ReturnValueInfo(req.DeviceID, req.Value)
 
