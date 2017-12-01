@@ -41,7 +41,7 @@ SSHT simpleDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 		return rtn; 
 	}
 }
-SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
+SSHT blinkDRead( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
 	const SINT TIME = 1;
 	SSHT rtn = RESULT_OK;
 	if( cdata->Port.Mode != OUTPUT ){
@@ -51,15 +51,13 @@ SSHT blinkDWrite( CONTEXT_DATA *cdata, RESULT_DATA *rdata ){
   static int Time = millis();
 
   if( millis( ) - Time >= cdata->value[TIME] ){
-  	Digital::Write( cdata->Port.Pin1, cdata->Value[VALUE] );
+    rdata->Value = Digital::Read( cdata->Port.Pin1 ); // 値取得
   	rdata->Value = cdata->Value[VALUE];
   	rdata->Result = rtn;
   }
   if( millis( )-Time >= cdata->Value[TIME] * 2 ){
-  	Digital::Write( cdata->Port.Pin1, LOW );
-  	rdata->Value = LOW;
-  	rdata->Result = rtn;
   	Time = millis( );
+  	data->Result = rtn;
   	}
   return rtn;
 }
