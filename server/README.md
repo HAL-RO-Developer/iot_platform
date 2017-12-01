@@ -56,4 +56,7 @@ go run main.go
 ![サーバ動作イメージ](images/receive.png)
 
 
+## deviceの生成
+`go run cmd/createDevice.go`
+
 
