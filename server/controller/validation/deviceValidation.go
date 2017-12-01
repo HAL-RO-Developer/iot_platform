@@ -33,7 +33,7 @@ func SearchMyFunction(c *gin.Context) (*SetFunc, bool) {
 	err := c.BindJSON(&req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": err,
+			"err": "ここでえらー01",
 		})
 		return nil, false
 	}

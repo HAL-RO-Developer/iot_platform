@@ -30,9 +30,6 @@ func DeviceRequestController(c *gin.Context) {
 
 	setFunc, ok := validation.SearchMyFunction(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "失敗",
-		})
 		return
 	}
 
