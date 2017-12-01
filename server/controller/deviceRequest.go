@@ -17,18 +17,21 @@ func DeviceRegistration(c *gin.Context) {
 	if !ok {
 		return
 	}
-	res := model.ExistDeviceByIam(req.DeviceID, "")
+	res := model.ExistDeviceByPin(req.Pin)
 	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "デバイスIDが不正です。",
+			"err": "pinが不正です",
 		})
 		return
 	}
 
-	model.AdditionalDevice(req.MacAddr)
+	device, err := model.UpdateDeviceMacById(req.Pin, req.MacAddr)
+	if err != nil {
+		panic(err)
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"success": true,
+		"device_id": device.DeviceID,
 	})
 	return
 }

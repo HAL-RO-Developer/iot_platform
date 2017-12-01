@@ -1,8 +1,9 @@
 package model
 
 import (
-	"crypto/rand"
-	"encoding/base64"
+	"math/rand"
+
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -12,34 +13,60 @@ type Device struct {
 	gorm.Model
 	Name     string
 	DeviceID string
+	Pin      string
 	Mac      string
 }
 
-func CreateDevice(name string, deviceID string, mac string) error {
+func CreateDevice(name string) (Device, error) {
+	deviceID := CreateDeviceID()
+	pin := CreateDevicePin()
+
 	device := Device{
 		Name:     name,
 		DeviceID: deviceID,
-		Mac:      mac,
+		Mac:      "",
+		Pin:      pin,
 	}
-	return DB.Create(&device).Error
+	err := DB.Create(&device).Error
+	return device, err
+}
+
+func CreateDevicePin() string {
+	var pin string
+	for {
+		pin = CreateUuid(4, []rune("0123456789"))
+		if !ExistDeviceByPin(pin) {
+			break
+		}
+	}
+	return pin
+}
+
+func ExistDeviceByPin(pin string) bool {
+	var device []Device
+	DB.Where("pin = ?", pin).Find(&device)
+	return len(device) > 0
 }
 
 func CreateDeviceID() string {
-	len := 15
-	random := make([]byte, len)
-	rand.Read(random)
-
-	deviceID := "sample"
-	var res bool = true
-
-	for res {
-		deviceID = base64.URLEncoding.EncodeToString(random)
-		res = ExistDeviceById(deviceID)
+	var deviceID string
+	for {
+		deviceID = CreateUuid(32, []rune("ABCDEFGHRJKLNMOPQRSTUPWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
+		if !ExistDeviceById(deviceID) {
+			break
+		}
 	}
-
 	return deviceID
 }
 
+func CreateUuid(length int, letters []rune) string {
+	rand.Seed(time.Now().UnixNano())
+	b := make([]rune, length)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
+}
 func ExistDeviceById(id string) bool {
 
 	device := []Device{}
@@ -72,7 +99,14 @@ func ExistDeviceByIam(deviceid string, macaddr string) bool {
 	return false
 }
 
-func AdditionalDevice(mac string) {
-	device := []Device{}
-	DB.Model(&device).Update("mac", mac)
+func UpdateDeviceMacById(pin string, mac string) (*Device, error) {
+	device := Device{}
+	err := DB.Where("pin = ?", pin).First(&device).Error
+	if err != nil {
+		panic(err)
+		return nil, err
+	}
+	device.Mac = mac
+	err = DB.Model(&device).Update(&device).Update("pin", "").Error
+	return &device, err
 }

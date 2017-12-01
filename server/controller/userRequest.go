@@ -118,19 +118,14 @@ func CreateNewProject(c *gin.Context) {
 		})
 		return
 	}
-
-	deviceID := model.CreateDeviceID()
-
-	// macアドレス仮登録
-	mac := ""
-	err := model.CreateDevice(userName, deviceID, mac)
+	device, err := model.CreateDevice(userName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "データベースエラー"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"success": deviceID,
+		"pin": device.Pin,
 	})
 }
 

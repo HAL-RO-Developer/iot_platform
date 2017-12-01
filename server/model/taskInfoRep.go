@@ -18,8 +18,8 @@ type PortTask struct {
 }
 
 type GetDevice struct {
-	DeviceID string `json:"device_id"`
-	MacAddr  string `json:"mac"`
+	Pin     string `json:"pin"`
+	MacAddr string `json:"mac"`
 }
 
 type Message struct {
