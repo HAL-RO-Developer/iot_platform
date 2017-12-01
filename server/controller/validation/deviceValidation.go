@@ -7,49 +7,46 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SearchMyDevice(c *gin.Context) (string, bool) {
+func PermissionMyDevice(c *gin.Context) (model.GetDevice, bool) {
 	var req model.GetDevice
 	err := c.BindJSON(&req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": err,
 		})
-		return "", false
-	}
-	res := model.ExistDeviceByIam(req.DeviceID, "")
-	if !res {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "デバイスが見つかりません。",
-		})
-		return "", false
+		return req, false
 	}
 
-	return req.DeviceID, true
+	return req, true
 }
 
-// TODO なんとかしろ
-func SearchMyFunction(c *gin.Context) (*SetFunc, bool) {
-	var req model.GetDevice
+/*
+	デバイス側
+*/
+func SearchMyFunction(c *gin.Context) (model.Message, bool) {
+	var req model.Message
 	err := c.BindJSON(&req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "ここでえらー01",
 		})
-		return nil, false
-	}
-	/*
-		デバイスIDチェック
-	*/
-	res := model.ExistDeviceById(req.DeviceID)
-	if !res {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "デバイスが見つかりません。",
-		})
-		return nil, false
+		return req, false
 	}
 
-	return &SetFunc{
-		DeviceID: req.DeviceID,
-		Port:     []model.PortTask{},
-	}, true
+	req.DeviceID = req.DeviceID
+	req.MacAddr = req.MacAddr
+
+	return req, true
+}
+
+func SearchMe(c *gin.Context) ([]model.ReturnValue, bool) {
+	var res model.Message
+	var req []model.ReturnValue
+
+	err := c.BindJSON(&res)
+	if err != nil {
+		return req, false
+	}
+
+	return req, true
 }

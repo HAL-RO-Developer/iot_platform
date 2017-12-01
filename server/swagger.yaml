@@ -1,0 +1,224 @@
+swagger: '2.0'
+info:
+  description: IoTPlatformに関するAPIです。
+  version: 1.0.0
+  title: IoTPlatform API
+tags:
+  - name: api
+  - name: device
+schemes:
+  - http
+paths:
+  /api/signup:
+    post:
+      tags:
+        - api
+      summary: アカウント作成
+      description: 新規アカウントの作成を行います。
+      parameters:
+        - name: user
+          in: query
+          description: 取得したいユーザーネーム
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: 登録したいログインパスワード
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              token:
+                type: integer
+                format: int64
+  /api/signin:
+    post:
+      tags:
+        - api
+      summary: ログイン
+      description: 取得したアカウントを用いてログインします。
+      parameters:
+        - name: user
+          in: query
+          description: 取得したユーザーネーム
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: 登録したログインパスワード
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              token:
+                type: integer
+                format: int64
+  /api/device:
+    post:
+      tags:
+        - api
+      summary: デバイスID取得
+      description: デバイスIDを取得します。
+      parameters:
+        - name: Authorization
+          in: header
+          description: 取得したアクセストークン
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              success:
+                type: string
+                example: doggie
+  /api/function:
+    post:
+      tags:
+        - api
+      summary: 命令送信
+      description: IoTプラットフォームに命令を送信します。
+      parameters:
+        - name: Authorization
+          in: header
+          description: 取得したアクセストークン
+          required: true
+          type: string
+        - name: port_no
+          in: query
+          description: 命令を実行したいポート
+          required: true
+          type: string
+        - name: args
+          in: query
+          description: 命令の引数
+          required: true
+          type: string
+        - name: function
+          in: query
+          description: 命令のID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+              name:
+                type: string
+                example: doggie
+  /device/iam:
+    post:
+      tags:
+        - device
+      summary: デバイス登録
+      description: IoTプラットフォームのmacアドレスをサーバーに登録
+      parameters:
+        - name: body
+          in: body
+          description: ''
+          required: true
+          schema:
+            type: object
+            properties:
+              device_id:
+                type: string
+                example: sample
+              mac:
+                type: string
+                example: sample
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              success:
+                type: string
+                example: true
+  /device/receive:
+    post:
+      tags:
+        - device
+      summary: 命令受信
+      description: ユーザーからの命令の取得
+      parameters:
+        - name: body
+          in: body
+          description: ''
+          required: true
+          schema:
+            type: object
+            properties:
+              device_id:
+                type: string
+                example: sample
+              mac:
+                type: string
+                example: sample
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              err:
+                type: string
+                example: ''
+              succsess:
+                type: string
+                example: ''
+              port:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    port_no:
+                      type: integer
+                      format: int64
+                      example: 1
+                    function:
+                      type: string
+                      example: doggie
+                    args:
+                      type: string
+                      example: sample
+  /device/send:
+    post:
+      tags:
+        - device
+      summary: 命令送信
+      description: 実行結果をサーバーに送信
+      parameters:
+        - name: petId
+          in: body
+          description: 取得したいペットのID
+          required: true
+          schema:
+            type: object
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+              name:
+                type: string
+                example: doggie

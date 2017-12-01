@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
@@ -10,10 +11,16 @@ import (
 
 func DeviceRegistration(c *gin.Context) {
 	var req model.GetDevice
-	err := c.BindJSON(&req)
-	if err != nil {
+	var ok bool
+
+	req, ok = validation.PermissionMyDevice(c)
+	if !ok {
+		return
+	}
+	res := model.ExistDeviceByIam(req.DeviceID, "")
+	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": err,
+			"err": "デバイスIDが不正です。",
 		})
 		return
 	}
@@ -26,15 +33,41 @@ func DeviceRegistration(c *gin.Context) {
 	return
 }
 
-func DeviceRequestController(c *gin.Context) {
+func DeviceReceiveController(c *gin.Context) {
 
-	setFunc, ok := validation.SearchMyFunction(c)
+	// デバイスへの命令検索
+	req, ok := validation.SearchMyFunction(c)
 	if !ok {
 		return
 	}
 
-	value := model.GetTaskInfo(setFunc.DeviceID)
-	c.JSON(http.StatusOK, value)
+	// デバイスの登録チェック(未登録時エラーを返す)
+	ret := model.ExistDeviceByIam(req.DeviceID, "")
+	if ret {
+		c.JSON(http.StatusForbidden, gin.H{
+			"err": "デバイスが登録されていません。",
+		})
+		return
+	}
+
+	// デバイスIDチェック
+	res := model.ExistDeviceByIam(req.DeviceID, req.MacAddr)
+	if !res {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "デバイスIDが使用済みです。",
+		})
+		return
+	}
+
+	// 命令取得
+	value := model.GetTaskInfo(req.DeviceID)
+	c.JSON(http.StatusOK, gin.H{
+		"success": value,
+	})
+
+	fmt.Println(req.Value)
+	// センサー値等の一時保存
+	model.ReturnValueInfo(req.DeviceID, req.Value)
 
 	return
 }

@@ -3,10 +3,19 @@ package controller
 import (
 	"net/http"
 
+	"time"
+
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/olahol/melody.v1"
 )
+
+type Result struct {
+	Result  string        `json:"result"`
+	Time    time.Time     `json:"time"`
+	Message model.Message `json:"message"`
+}
 
 type Task struct {
 	PortNo int    `json:"port_no"`
@@ -34,7 +43,6 @@ func UserRequestController(c *gin.Context) {
 		"success": "",
 	})
 	return
-
 }
 
 func CreateUserController(c *gin.Context) {
@@ -124,4 +132,33 @@ func CreateNewProject(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": deviceID,
 	})
+}
+
+func UserWebSocketController(c *gin.Context, m *melody.Melody) {
+	//var returnMessage = Result{}
+
+	/* デバイスIDサーチ */
+	setFunc, ok := validation.ToReturn(c)
+	if !ok {
+		m.Close()
+		return
+	}
+
+	res := model.ExistDeviceById(setFunc.DeviceID)
+	if !res {
+		m.Close()
+		return
+	}
+	/*
+		returnMessage.Time = time.Now()
+		returnMessage.Message = *model.GetValueInfo(setFunc.DeviceID)
+		// jsonエンコード
+		outputJson, err := json.Marshal(&returnMessage)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(returnMessage)
+	*/
+	//m.Broadcast(outputJson)
+	return
 }
