@@ -127,11 +127,12 @@ func (x decDriverNoopContainerReader) CheckBreak() (v bool)    { return }
 // DecodeOptions captures configuration options during decode.
 type DecodeOptions struct {
 	// MapType specifies type to use during schema-less decoding of a map in the stream.
-	// If nil, we use map[interface{}]interface{}
+	// If nil (unset), we default to map[string]interface{} iff json handle and MapStringAsKey=true,
+	// else map[interface{}]interface{}.
 	MapType reflect.Type
 
 	// SliceType specifies type to use during schema-less decoding of an array in the stream.
-	// If nil, we use []interface{}
+	// If nil (unset), we default to []interface{} for all formats.
 	SliceType reflect.Type
 
 	// MaxInitLen defines the maxinum initial length that we "make" a collection (string, slice, map, chan).
@@ -950,7 +951,16 @@ func (d *Decoder) kInterfaceNaked(f *codecFnInfo) (rvn reflect.Value) {
 	// var useRvn bool
 	switch n.v {
 	case valueTypeMap:
-		if d.mtid == 0 || d.mtid == mapIntfIntfTypId {
+		// if json, default to a map type with string keys
+		mtid := d.mtid
+		if mtid == 0 {
+			if d.jsms {
+				mtid = mapStrIntfTypId
+			} else {
+				mtid = mapIntfIntfTypId
+			}
+		}
+		if mtid == mapIntfIntfTypId {
 			if n.lm < arrayCacheLen {
 				n.ma[n.lm] = nil
 				rvn = n.rr[decNakedMapIntfIntfIdx*arrayCacheLen+n.lm]
@@ -962,7 +972,7 @@ func (d *Decoder) kInterfaceNaked(f *codecFnInfo) (rvn reflect.Value) {
 				d.decode(&v2)
 				rvn = reflect.ValueOf(&v2).Elem()
 			}
-		} else if d.mtid == mapStrIntfTypId { // for json performance
+		} else if mtid == mapStrIntfTypId { // for json performance
 			if n.ln < arrayCacheLen {
 				n.na[n.ln] = nil
 				rvn = n.rr[decNakedMapStrIntfIdx*arrayCacheLen+n.ln]
@@ -1118,7 +1128,7 @@ func (d *Decoder) kInterface(f *codecFnInfo, rv reflect.Value) {
 func (d *Decoder) kStruct(f *codecFnInfo, rv reflect.Value) {
 	fti := f.ti
 	dd := d.d
-	elemsep := d.hh.hasElemSeparators()
+	elemsep := d.esep
 	sfn := structFieldNode{v: rv, update: true}
 	ctyp := dd.ContainerType()
 	if ctyp == valueTypeMap {
@@ -1418,7 +1428,7 @@ func (d *Decoder) kSlice(f *codecFnInfo, rv reflect.Value) {
 func (d *Decoder) kMap(f *codecFnInfo, rv reflect.Value) {
 	dd := d.d
 	containerLen := dd.ReadMapStart()
-	elemsep := d.hh.hasElemSeparators()
+	elemsep := d.esep
 	ti := f.ti
 	if rv.IsNil() {
 		rv.Set(makeMapReflect(ti.rt, containerLen))
@@ -1672,6 +1682,87 @@ type rtid2rv struct {
 	rv   reflect.Value
 }
 
+// --------------
+
+type decReaderSwitch struct {
+	rb bytesDecReader
+	// ---- cpu cache line boundary?
+	ri       ioDecReader
+	mtr, str bool // whether maptype or slicetype are known types
+
+	be    bool // is binary encoding
+	bytes bool // is bytes reader
+	js    bool // is json handle
+	jsms  bool // is json handle, and MapKeyAsString
+	esep  bool // has elem separators
+}
+
+// TODO: Uncomment after mid-stack inlining enabled in go 1.10
+//
+// func (z *decReaderSwitch) unreadn1() {
+// 	if z.bytes {
+// 		z.rb.unreadn1()
+// 	} else {
+// 		z.ri.unreadn1()
+// 	}
+// }
+// func (z *decReaderSwitch) readx(n int) []byte {
+// 	if z.bytes {
+// 		return z.rb.readx(n)
+// 	}
+// 	return z.ri.readx(n)
+// }
+// func (z *decReaderSwitch) readb(s []byte) {
+// 	if z.bytes {
+// 		z.rb.readb(s)
+// 	} else {
+// 		z.ri.readb(s)
+// 	}
+// }
+// func (z *decReaderSwitch) readn1() uint8 {
+// 	if z.bytes {
+// 		return z.rb.readn1()
+// 	}
+// 	return z.ri.readn1()
+// }
+// func (z *decReaderSwitch) numread() int {
+// 	if z.bytes {
+// 		return z.rb.numread()
+// 	}
+// 	return z.ri.numread()
+// }
+// func (z *decReaderSwitch) track() {
+// 	if z.bytes {
+// 		z.rb.track()
+// 	} else {
+// 		z.ri.track()
+// 	}
+// }
+// func (z *decReaderSwitch) stopTrack() []byte {
+// 	if z.bytes {
+// 		return z.rb.stopTrack()
+// 	}
+// 	return z.ri.stopTrack()
+// }
+// func (z *decReaderSwitch) skip(accept *bitset256) (token byte) {
+// 	if z.bytes {
+// 		return z.rb.skip(accept)
+// 	}
+// 	return z.ri.skip(accept)
+// }
+// func (z *decReaderSwitch) readTo(in []byte, accept *bitset256) (out []byte) {
+// 	if z.bytes {
+// 		return z.rb.readTo(in, accept)
+// 	}
+// 	return z.ri.readTo(in, accept)
+// }
+// func (z *decReaderSwitch) readUntil(in []byte, stop byte) (out []byte) {
+// 	if z.bytes {
+// 		return z.rb.readUntil(in, stop)
+// 	}
+// 	return z.ri.readUntil(in, stop)
+// }
+
 // A Decoder reads and decodes an object from an input stream in the codec format.
 type Decoder struct {
 	// hopefully, reduce derefencing cost by laying the decReader inside the Decoder.
@@ -1684,38 +1775,29 @@ type Decoder struct {
 	hh Handle
 	h  *BasicHandle
 
-	mtr, str bool // whether maptype or slicetype are known types
-
-	be    bool // is binary encoding
-	bytes bool // is bytes reader
-	js    bool // is json handle
-
 	// ---- cpu cache line boundary?
-
-	rb bytesDecReader
-	ri ioDecReader
+	decReaderSwitch
+	// ---- cpu cache line boundary?
 	bi bufioDecReader
-
-	// cr containerStateRecv
-
-	n   *decNaked
-	nsp *sync.Pool
-
 	// ---- cpu cache line boundary?
-
+	cf codecFner
+	// ---- cpu cache line boundary?
+	// cr containerStateRecv
 	is map[string]string // used for interning strings
-
 	// cache the mapTypeId and sliceTypeId for faster comparisons
 	mtid uintptr
 	stid uintptr
-
-	b [scratchByteArrayLen]byte
 	// _  uintptr // for alignment purposes, so next one starts from a cache line
 
+	// ---- writable fields during execution --- *try* to keep in sep cache line
+
+	// ---- cpu cache line boundary?
+	b   [scratchByteArrayLen]byte
+	n   *decNaked
+	nsp *sync.Pool
 	err error
 	// ---- cpu cache line boundary?
 
-	cf codecFner
 	// _ [64]byte // force alignment???
 }
 
@@ -1740,11 +1822,15 @@ func NewDecoderBytes(in []byte, h Handle) *Decoder {
 var defaultDecNaked decNaked
 
 func newDecoder(h Handle) *Decoder {
-	d := &Decoder{hh: h, h: h.getBasicHandle(), be: h.isBinary()}
-
+	d := &Decoder{hh: h, h: h.getBasicHandle()}
+	d.be = h.isBinary()
 	// NOTE: do not initialize d.n here. It is lazily initialized in d.naked()
-
-	_, d.js = h.(*JsonHandle)
+	var jh *JsonHandle
+	jh, d.js = h.(*JsonHandle)
+	if d.js {
+		d.jsms = jh.MapKeyAsString
+	}
+	d.esep = d.hh.hasElemSeparators()
 	if d.h.InternString {
 		d.is = make(map[string]string, 32)
 	}
@@ -1793,6 +1879,10 @@ func (d *Decoder) resetCommon() {
 // Reset the Decoder with a new Reader to decode from,
 // clearing all state from last run(s).
 func (d *Decoder) Reset(r io.Reader) {
+	if r == nil {
+		return
+	}
+	d.bytes = false
 	if d.h.ReaderBufferSize > 0 {
 		d.bi.buf = make([]byte, 0, d.h.ReaderBufferSize)
 		d.bi.reset(r)
@@ -1809,6 +1899,9 @@ func (d *Decoder) Reset(r io.Reader) {
 // ResetBytes resets the Decoder with a new []byte to decode from,
 // clearing all state from last run(s).
 func (d *Decoder) ResetBytes(in []byte) {
+	if in == nil {
+		return
+	}
 	d.bytes = true
 	d.rb.reset(in)
 	d.r = &d.rb
@@ -1885,14 +1978,13 @@ func (d *Decoder) MustDecode(v interface{}) {
 	} else {
 		d.decode(v)
 	}
-	if d.nsp != nil {
-		if d.n != nil {
-			d.nsp.Put(d.n)
-			d.n = nil
-		}
+	if d.n != nil {
+		// if d.n != nil { }
+		// if nsp != nil, then n != nil (they are always set together)
+		d.nsp.Put(d.n)
+		d.n = nil
 		d.nsp = nil
 	}
-	d.n = nil
 	// xprintf(">>>>>>>> >>>>>>>> num decFns: %v\n", d.cf.sn)
 }
 
@@ -1908,7 +2000,7 @@ func (d *Decoder) swallow() {
 	if dd.TryDecodeAsNil() {
 		return
 	}
-	elemsep := d.hh.hasElemSeparators()
+	elemsep := d.esep
 	switch dd.ContainerType() {
 	case valueTypeMap:
 		containerLen := dd.ReadMapStart()
@@ -2074,7 +2166,7 @@ func (d *Decoder) decode(iv interface{}) {
 		*v = d.rawBytes()
 
 	case *interface{}:
-		d.decodeValue(reflect.ValueOf(iv).Elem(), nil, true) // TODO: consider recognize here
+		d.decodeValue(reflect.ValueOf(iv).Elem(), nil, true)
 		// d.decodeValueNotNil(reflect.ValueOf(iv).Elem())
 
 	default:
@@ -2270,12 +2362,13 @@ type decSliceHelper struct {
 func (d *Decoder) decSliceHelperStart() (x decSliceHelper, clen int) {
 	dd := d.d
 	ctyp := dd.ContainerType()
-	if ctyp == valueTypeArray {
+	switch ctyp {
+	case valueTypeArray:
 		x.array = true
 		clen = dd.ReadArrayStart()
-	} else if ctyp == valueTypeMap {
+	case valueTypeMap:
 		clen = dd.ReadMapStart() * 2
-	} else {
+	default:
 		d.errorf("only encoded map or array can be decoded into a slice (%d)", ctyp)
 	}
 	// x.ct = ctyp
@@ -2294,12 +2387,10 @@ func (x decSliceHelper) End() {
 func (x decSliceHelper) ElemContainerState(index int) {
 	if x.array {
 		x.d.d.ReadArrayElem()
+	} else if index%2 == 0 {
+		x.d.d.ReadMapElemKey()
 	} else {
-		if index%2 == 0 {
-			x.d.d.ReadMapElemKey()
-		} else {
-			x.d.d.ReadMapElemValue()
-		}
+		x.d.d.ReadMapElemValue()
 	}
 }
 

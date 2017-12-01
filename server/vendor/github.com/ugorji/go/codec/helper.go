@@ -379,13 +379,23 @@ type Selfer interface {
 	CodecDecodeSelf(*Decoder)
 }
 
-// MapBySlice represents a slice which should be encoded as a map in the stream.
+// MapBySlice is a tag interface that denotes a slice which should be encoded as a map in the stream.
 // The slice contains a sequence of key-value pairs.
 // This affords storing a map in a specific sequence in the stream.
+//
+// Example usage:
+//    type T1 []string         // or []int or []Point or any other "slice" type
+//    func (_ T1) MapBySlice{} // T1 now implements MapBySlice, and will be encoded as a map
+//    type T2 struct { KeyValues T1 }
+//
+//    var kvs = []string{"one", "1", "two", "2", "three", "3"}
+//    var v2 = T2{ KeyValues: T1(kvs) }
+//    // v2 will be encoded like the map: {"KeyValues": {"one": "1", "two": "2", "three": "3"} }
 //
 // The support of MapBySlice affords the following:
 //   - A slice type which implements MapBySlice will be encoded as a map
 //   - A slice can be decoded from a map in the stream
+//   - It MUST be a slice type (not a pointer receiver) that implements MapBySlice
 type MapBySlice interface {
 	MapBySlice()
 }
@@ -402,6 +412,7 @@ type BasicHandle struct {
 	extHandle
 	EncodeOptions
 	DecodeOptions
+	RPCOptions
 	noBuiltInTypeChecker
 }
 
@@ -590,10 +601,11 @@ func (z bigenHelper) writeUint64(v uint64) {
 }
 
 type extTypeTagFn struct {
-	rtid uintptr
-	rt   reflect.Type
-	tag  uint64
-	ext  Ext
+	rtid    uintptr
+	rtidptr uintptr
+	rt      reflect.Type
+	tag     uint64
+	ext     Ext
 }
 
 type extHandle []extTypeTagFn
@@ -620,24 +632,37 @@ func (o *extHandle) AddExt(
 // Deprecated: Use SetBytesExt or SetInterfaceExt on the Handle instead.
 func (o *extHandle) SetExt(rt reflect.Type, tag uint64, ext Ext) (err error) {
 	// o is a pointer, because we may need to initialize it
-	if rt.PkgPath() == "" || rt.Kind() == reflect.Interface {
-		err = fmt.Errorf("codec.Handle.AddExt: Takes named type, not a pointer or interface: %T",
-			reflect.Zero(rt).Interface())
-		return
+	rk := rt.Kind()
+	for rk == reflect.Ptr {
+		rt = rt.Elem()
+		rk = rt.Kind()
+	}
+
+	if rt.PkgPath() == "" || rk == reflect.Interface { // || rk == reflect.Ptr {
+		return fmt.Errorf("codec.Handle.SetExt: Takes named type, not a pointer or interface: %v", rt)
 	}
 
 	rtid := rt2id(rt)
-	for _, v := range *o {
-		if v.rtid == rtid {
-			v.tag, v.ext = tag, ext
-			return
+	switch rtid {
+	case timeTypId, rawTypId, rawExtTypId:
+		// all natively supported type, so cannot have an extension
+		return // TODO: should we silently ignore, or return an error???
+	}
+	o2 := *o
+	if o2 == nil {
+		o2 = make([]extTypeTagFn, 0, 4)
+		*o = o2
+	} else {
+		for i := range o2 {
+			v := &o2[i]
+			if v.rtid == rtid {
+				v.tag, v.ext = tag, ext
+				return
+			}
 		}
 	}
-
-	if *o == nil {
-		*o = make([]extTypeTagFn, 0, 4)
-	}
-	*o = append(*o, extTypeTagFn{rtid, rt, tag, ext})
+	rtidptr := rt2id(reflect.PtrTo(rt))
+	*o = append(o2, extTypeTagFn{rtid, rtidptr, rt, tag, ext})
 	return
 }
 
@@ -645,7 +670,7 @@ func (o extHandle) getExt(rtid uintptr) *extTypeTagFn {
 	var v *extTypeTagFn
 	for i := range o {
 		v = &o[i]
-		if v.rtid == rtid {
+		if v.rtid == rtid || v.rtidptr == rtid {
 			return v
 		}
 	}
@@ -996,7 +1021,9 @@ func (x *TypeInfos) get(rtid uintptr, rt reflect.Type) (pti *typeInfo) {
 	ti.jm, ti.jmp = implIntf(rt, jsonMarshalerTyp)
 	ti.ju, ti.jup = implIntf(rt, jsonUnmarshalerTyp)
 	ti.cs, ti.csp = implIntf(rt, selferTyp)
-	ti.mbs, _ = implIntf(rt, mapBySliceTyp)
+	if rt.Kind() == reflect.Slice {
+		ti.mbs, _ = implIntf(rt, mapBySliceTyp)
+	}
 
 	if rk == reflect.Struct {
 		var omitEmpty bool
@@ -1615,6 +1642,14 @@ func isNaN(f float64) bool { return f != f }
 
 type ioFlusher interface {
 	Flush() error
+}
+
+type ioPeeker interface {
+	Peek(int) ([]byte, error)
+}
+
+type ioBuffered interface {
+	Buffered() int
 }
 
 // -----------------------

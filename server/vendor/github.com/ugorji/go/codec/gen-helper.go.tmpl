@@ -18,15 +18,15 @@ const GenVersion = {{ .Version }}
 // This file is used to generate helper code for codecgen. 
 // The values here i.e. genHelper(En|De)coder are not to be used directly by 
 // library users. They WILL change continuously and without notice.
-// 
+//
 // To help enforce this, we create an unexported type with exported members.
 // The only way to get the type is via the one exported type that we control (somewhat).
-// 
+//
 // When static codecs are created for types, they will use this value
 // to perform encoding or decoding of primitives or known slice or map types.
 
 // GenHelperEncoder is exported so that it can be used externally by codecgen.
-// 
+//
 // Library users: DO NOT USE IT DIRECTLY. IT WILL CHANGE CONTINOUSLY WITHOUT NOTICE.
 func GenHelperEncoder(e *Encoder) (ge genHelperEncoder, ee encDriver) {
 	ge = genHelperEncoder{e:e}
@@ -35,7 +35,7 @@ func GenHelperEncoder(e *Encoder) (ge genHelperEncoder, ee encDriver) {
 }
 
 // GenHelperDecoder is exported so that it can be used externally by codecgen.
-// 
+//
 // Library users: DO NOT USE IT DIRECTLY. IT WILL CHANGE CONTINOUSLY WITHOUT NOTICE.
 func GenHelperDecoder(d *Decoder) (gd genHelperDecoder, dd decDriver) {
 	gd = genHelperDecoder{d:d}
@@ -59,7 +59,6 @@ type genHelperDecoder struct {
 func (f genHelperEncoder) EncBasicHandle() *BasicHandle {
 	return f.e.h
 }
-
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperEncoder) EncBinary() bool {
 	return f.e.cf.be // f.e.hh.isBinaryEncoding()
@@ -103,18 +102,30 @@ func (f genHelperEncoder) IsJSONHandle() bool {
 	return f.e.cf.js
 }
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+func (f genHelperEncoder) I2Rtid(v interface{}) uintptr {
+	return i2rtid(v)
+}
+// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+func (f genHelperEncoder) Extension(rtid uintptr) (xfn *extTypeTagFn) {
+	return f.e.h.getExt(rtid)
+}
+// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+func (f genHelperEncoder) EncExtension(v interface{}, xfFn *extTypeTagFn) {
+	f.e.e.EncodeExt(v, xfFn.tag, xfFn.ext, f.e)
+}
+// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+//
+// Deprecated: No longer used,
+// but leave in-place so that old generated files continue to work without regeneration.
 func (f genHelperEncoder) HasExtensions() bool {
 	return len(f.e.h.extHandle) != 0
 }
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+//
+// Deprecated: No longer used,
+// but leave in-place so that old generated files continue to work without regeneration.
 func (f genHelperEncoder) EncExt(v interface{}) (r bool) {
-	rt := reflect.TypeOf(v)
-	if rt.Kind() == reflect.Ptr {
-		rt = rt.Elem()
-	}
-	rtid := rt2id(rt)
-	xfFn := f.e.h.getExt(rtid)
-	if xfFn != nil {
+	if xfFn := f.e.h.getExt(i2rtid(v)); xfFn != nil {
 		f.e.e.EncodeExt(v, xfFn.tag, xfFn.ext, f.e)
 		return true
 	}
@@ -202,15 +213,30 @@ func (f genHelperDecoder) IsJSONHandle() bool {
 	return f.d.js 
 }
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+func (f genHelperDecoder) I2Rtid(v interface{}) uintptr {
+	return i2rtid(v)
+}
+// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+func (f genHelperDecoder) Extension(rtid uintptr) (xfn *extTypeTagFn) {
+	return f.d.h.getExt(rtid)
+}
+// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+func (f genHelperDecoder) DecExtension(v interface{}, xfFn *extTypeTagFn) {
+	f.d.d.DecodeExt(v, xfFn.tag, xfFn.ext)
+}
+// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+//
+// Deprecated: No longer used,
+// but leave in-place so that old generated files continue to work without regeneration.
 func (f genHelperDecoder) HasExtensions() bool {
 	return len(f.d.h.extHandle) != 0
 }
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
+//
+// Deprecated: No longer used,
+// but leave in-place so that old generated files continue to work without regeneration.
 func (f genHelperDecoder) DecExt(v interface{}) (r bool) {
-	rt := reflect.TypeOf(v).Elem()
-	rtid := rt2id(rt)
-	xfFn := f.d.h.getExt(rtid)
-	if xfFn != nil {
+	if xfFn := f.d.h.getExt(i2rtid(v)); xfFn != nil {
 		f.d.d.DecodeExt(v, xfFn.tag, xfFn.ext)
 		return true
 	}
