@@ -23,15 +23,11 @@ type GetDevice struct {
 }
 
 type Message struct {
-	DeviceID string        `json:"device_id"`
-	MacAddr  string        `json:"mac"`
-	Value    []ReturnValue `json:"return"`
-}
-
-type ReturnValue struct {
-	PortNo int    `json:"port_no"`
-	Func   uint64 `json:"function"`
-	Res    int    `json:"res"`
+	DeviceID string `json:"device_id"`
+	MacAddr  string `json:"mac"`
+	PortNo   string `json:"port_no"`
+	Func     string `json:"function"`
+	Res      string `json:"res"`
 }
 
 var taskInfo = []TaskInfo{}
@@ -64,24 +60,6 @@ func GetTaskInfo(device_id string) []PortTask {
 		}
 	}
 	return nil
-}
-
-/*
-	センサー値の保管
-*/
-func ReturnValueInfo(device_id string, returnValue []ReturnValue) {
-	returnValueM.Lock()
-	flg := true
-	for _, value := range message {
-		if value.DeviceID == device_id {
-			flg = false
-			value.Value = returnValue
-		}
-	}
-	if flg {
-		message = append(message, Message{DeviceID: device_id, Value: returnValue})
-	}
-	returnValueM.Unlock()
 }
 
 /*
