@@ -8,7 +8,6 @@ import (
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/olahol/melody.v1"
 )
 
 type Result struct {
@@ -129,31 +128,17 @@ func CreateNewProject(c *gin.Context) {
 	})
 }
 
-func UserWebSocketController(c *gin.Context, m *melody.Melody) {
-	//var returnMessage = Result{}
+func UserWebSocketController(c *gin.Context) bool {
 
 	/* デバイスIDサーチ */
 	setFunc, ok := validation.ToReturn(c)
 	if !ok {
-		m.Close()
-		return
+		return false
 	}
 
 	res := model.ExistDeviceById(setFunc.DeviceID)
 	if !res {
-		m.Close()
-		return
+		return false
 	}
-	/*
-		returnMessage.Time = time.Now()
-		returnMessage.Message = *model.GetValueInfo(setFunc.DeviceID)
-		// jsonエンコード
-		outputJson, err := json.Marshal(&returnMessage)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println(returnMessage)
-	*/
-	//m.Broadcast(outputJson)
-	return
+	return true
 }

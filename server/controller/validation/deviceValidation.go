@@ -28,7 +28,7 @@ func SearchMyFunction(c *gin.Context) (model.Message, bool) {
 	err := c.BindJSON(&req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "ここでえらー01",
+			"err": "JSONデータが空です。",
 		})
 		return req, false
 	}

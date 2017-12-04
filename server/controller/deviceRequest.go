@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
@@ -57,7 +56,7 @@ func DeviceReceiveController(c *gin.Context) {
 	res := model.ExistDeviceByIam(req.DeviceID, req.MacAddr)
 	if !res {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "デバイスIDが使用済みです。",
+			"err": "デバイスIDが不正です。",
 		})
 		return
 	}
@@ -68,9 +67,7 @@ func DeviceReceiveController(c *gin.Context) {
 		"success": value,
 	})
 
-	fmt.Println(req.Value)
-	// センサー値等の一時保存
-	model.ReturnValueInfo(req.DeviceID, req.Value)
+	MessageSend(req)
 
 	return
 }

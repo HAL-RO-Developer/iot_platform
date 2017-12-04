@@ -15,7 +15,7 @@ func main() {
 	r.GET("/@:device_id/:msg", func(c *gin.Context) {
 		deviceID := c.Param("device_id")
 		msg := c.Param("msg")
-		socket.Send(deviceID, msg)
+		go socket.Send(deviceID, msg)
 	})
 	r.Run(":3000")
 }

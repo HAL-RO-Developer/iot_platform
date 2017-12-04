@@ -4,7 +4,6 @@ import (
 	"github.com/HAL-RO-Developer/iot_platform/server/controller"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/olahol/melody.v1"
 )
 
 func main() {
@@ -12,7 +11,7 @@ func main() {
 	model.DB.AutoMigrate(&model.Device{})
 
 	r := gin.Default()
-	m := melody.New()
+	ws := controller.GetHandle()
 
 	api := r.Group("/api")
 	api.POST("/signup", controller.CreateUserController)
@@ -20,13 +19,9 @@ func main() {
 	api.POST("/device", controller.CreateNewProject)
 	api.POST("/function", controller.UserRequestController)
 	api.GET("/ws/:device_id", func(c *gin.Context) {
-		controller.UserWebSocketController(c, m)
-		m.HandleRequest(c.Writer, c.Request)
-	})
-
-	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		//controller.UserWebSocketController(c, m)
-		m.Broadcast(msg)
+		if !controller.UserWebSocketController(c){
+			ws(c.Writer, c.Request)
+		}
 	})
 
 	device := r.Group("/device")
