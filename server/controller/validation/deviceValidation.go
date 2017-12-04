@@ -39,14 +39,13 @@ func SearchMyFunction(c *gin.Context) (model.Message, bool) {
 	return req, true
 }
 
-func SearchMe(c *gin.Context) ([]model.ReturnValue, bool) {
+func SearchMe(c *gin.Context) (model.Message, bool) {
 	var res model.Message
-	var req []model.ReturnValue
 
 	err := c.BindJSON(&res)
 	if err != nil {
-		return req, false
+		return res, false
 	}
 
-	return req, true
+	return res, true
 }

@@ -3,8 +3,6 @@ package validation
 import (
 	"net/http"
 
-	"fmt"
-
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
 )
@@ -77,7 +75,6 @@ func ToReturn(c *gin.Context) (*model.Message, bool) {
 	var req model.Message
 
 	deviceId := c.Param("device_id")
-	fmt.Println(deviceId)
 	// DeviceID確認
 	if !model.ExistDeviceById(deviceId) {
 		c.JSON(http.StatusBadRequest, gin.H{

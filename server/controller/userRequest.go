@@ -8,6 +8,8 @@ import (
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
+
 	"gopkg.in/olahol/melody.v1"
 )
 
@@ -21,6 +23,12 @@ type Task struct {
 	PortNo int    `json:"port_no"`
 	Func   uint64 `json:"function"`
 	Args   int    `json:"args"`
+}
+
+// クライアント
+type Client struct {
+	Socket *websocket.Conn // WebSocketのコネクション
+	Send   chan []byte     // メッセージをブラウザに送信するchannel
 }
 
 func UserRequestController(c *gin.Context) {
@@ -139,21 +147,8 @@ func UserWebSocketController(c *gin.Context, m *melody.Melody) {
 		return
 	}
 
-	res := model.ExistDeviceById(setFunc.DeviceID)
-	if !res {
+	if model.ExistDeviceById(setFunc.DeviceID) {
 		m.Close()
 		return
 	}
-	/*
-		returnMessage.Time = time.Now()
-		returnMessage.Message = *model.GetValueInfo(setFunc.DeviceID)
-		// jsonエンコード
-		outputJson, err := json.Marshal(&returnMessage)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println(returnMessage)
-	*/
-	//m.Broadcast(outputJson)
-	return
 }
