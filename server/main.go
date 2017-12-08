@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/HAL-RO-Developer/iot_platform/server/controller"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
@@ -16,6 +18,9 @@ func main() {
 	r.Static("/css", "./public/css")
 
 	r.LoadHTMLGlob("view/*")
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
 	ws := controller.GetHandle()
 
 	api := r.Group("/api")
