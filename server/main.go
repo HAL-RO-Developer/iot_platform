@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/HAL-RO-Developer/iot_platform/server/controller"
+	"github.com/HAL-RO-Developer/iot_platform/server/logger"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +18,8 @@ func main() {
 	r.Static("/image", "./public/image")
 	r.Static("/css", "./public/css")
 
-	r.LoadHTMLGlob("view/*")
+	//r.LoadHTMLGlob("view/*")
+
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
@@ -35,6 +37,7 @@ func main() {
 	})
 
 	device := r.Group("/device")
+	device.Use(logger.JsonLogger)
 	device.POST("/iam", controller.DeviceRegistration)
 	device.POST("/receive", controller.DeviceReceiveController)
 
