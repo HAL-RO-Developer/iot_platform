@@ -57,27 +57,27 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/trevex/golem"
+  packages = ["."]
+  revision = "8705b20d71c31ef440a815f75585e75fc04cdd76"
+
+[[projects]]
+  branch = "master"
   name = "github.com/ugorji/go"
   packages = ["codec"]
-  revision = "7a1de86227c3a2d8c266c99436d6cf6685d0dc53"
+  revision = "f0aa215a7d653544d39d0e27dfa10fa4b183f397"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "8b4580aae2a0dd0c231a45d3ccb8434ff533b840"
+  revision = "a0f4589a76f1f83070cb9e5613809e1d07b97c13"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
   packages = ["."]
   revision = "5f1438d3fca68893a817e4a66806cea46a9e4ebf"
   version = "v8.18.2"
-
-[[projects]]
-  name = "gopkg.in/olahol/melody.v1"
-  packages = ["."]
-  revision = "d521390733761fe1db13de575c253afd5c743085"
-  version = "v1"
 
 [[projects]]
   branch = "v2"
@@ -88,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e075f7e5d40de7fe49a215eace95b7b0605b6d24f0dc5d125b07fee737f4e6d3"
+  inputs-digest = "de11cef694fe55212f2412283397a09002d195fb587718db93825a30e5c8fa21"
   solver-name = "gps-cdcl"
   solver-version = 1
