@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/HAL-RO-Developer/iot_platform/server/controller"
+	"github.com/HAL-RO-Developer/iot_platform/server/logger"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
 )
@@ -11,11 +14,16 @@ func main() {
 	model.DB.AutoMigrate(&model.Device{})
 
 	r := gin.Default()
-	r.Static("/js", "./public/js")
-	r.Static("/image", "./public/image")
-	r.Static("/css", "./public/css")
+	//r.Static("/js", "./public/js")
+	//r.Static("/image", "./public/image")
+	//r.Static("/css", "./public/css")
+	//
+	//r.LoadHTMLGlob("view/*")
 
-	r.LoadHTMLGlob("view/*")
+	r.POST("/test", func(c *gin.Context) {
+		s, _ := c.GetRawData()
+		fmt.Println(string(s))
+	})
 	ws := controller.GetHandle()
 
 	api := r.Group("/api")
@@ -30,8 +38,9 @@ func main() {
 	})
 
 	device := r.Group("/device")
+	device.Use(logger.JsonLogger)
 	device.POST("/iam", controller.DeviceRegistration)
 	device.POST("/receive", controller.DeviceReceiveController)
 
-	r.Run()
+	r.Run(":3000")
 }
