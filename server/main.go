@@ -11,6 +11,11 @@ func main() {
 	model.DB.AutoMigrate(&model.Device{})
 
 	r := gin.Default()
+	r.Static("/js", "./public/js")
+	r.Static("/image", "./public/image")
+	r.Static("/css", "./public/css")
+
+	r.LoadHTMLGlob("view/*")
 	ws := controller.GetHandle()
 
 	api := r.Group("/api")
@@ -19,7 +24,7 @@ func main() {
 	api.POST("/device", controller.CreateNewProject)
 	api.POST("/function", controller.UserRequestController)
 	api.GET("/ws/:device_id", func(c *gin.Context) {
-		if !controller.UserWebSocketController(c){
+		if !controller.UserWebSocketController(c) {
 			ws(c.Writer, c.Request)
 		}
 	})
