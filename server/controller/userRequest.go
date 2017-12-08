@@ -58,6 +58,8 @@ func CreateUserController(c *gin.Context) {
 		return
 	}
 
+	user.Pass = model.ToHash(user.Pass)
+
 	// DBinsert
 	err := model.CreateUser(user.Name, user.Pass)
 	if err != nil {
@@ -86,6 +88,8 @@ func LoginController(c *gin.Context) {
 	if !ok {
 		return
 	}
+
+	user.Pass = model.ToHash(user.Pass)
 
 	// ログインチェック
 	if !model.CheckLogin(user.Name, user.Pass) {

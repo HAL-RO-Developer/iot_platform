@@ -19,7 +19,7 @@ type SetFunc struct {
 }
 
 /*
-	ユーザー情報入力チェック＆パスワード暗号化
+	ユーザー情報入力チェック
 */
 func ToUser(c *gin.Context) (*User, bool) {
 	name := c.PostForm("name")
@@ -36,7 +36,6 @@ func ToUser(c *gin.Context) (*User, bool) {
 		})
 		return nil, false
 	}
-	pass = model.ToHash(pass)
 
 	return &User{
 		Name: name,
