@@ -1,0 +1,96 @@
+#include "pre.h"
+
+SSHT regist( FunctionManager** fm, FUNCTION_INFO info, String json, String* device_id, String* mac )
+{
+    //demo
+    SSHT test_args[1] = { 1000 };
+    info.PortId = DPORT1;
+    info.FuncId = FUNCTION_BLINK_DWRITE;
+    info.Args = test_args;
+
+    fm[0]->regist(info);
+    
+#if HOGE
+    SCHR regData[JSON_SIZE];
+    json.toCharArray( Data, json.length() + 1 );
+
+    /* --- 登録JSONの作成 --- */
+    StaticJsonBuffer<JSON_BUFFER_SIZE> jsonParseBuffer;
+    JsonObject& root = jsonParseBuffer.parseObject( regData );
+
+    if( !root.success() ){
+        // json parse error
+        return REGIST_NG;
+    }
+		
+		/* --- デバイス情報取得 --- */
+    SCHR* device_id_carray = root["device_id"];
+    SCHR* mac_carray = root["mac"];
+    
+		*device_id = String( device_id_carray );	/* デバイスID */ 
+		*mac = String( mac_carray );							/* MACアドレス */
+
+		/* --- 関数情報取得 --- */
+    JsonArray& port = root["port"];
+    SSHT f_args[PORT_SIZE][FUNC_ARGS_MAX];
+
+    for(int i = 0; i < PORT_SIZE ; i++ ){
+      info.PortId = port[i]["port_no"]; 	/* ポートID */
+      info.FuncId = port[i]["function"];	/* 関数ID */
+      
+			/* 関数の引数 */
+      JsonArray& j_args = port[i]["args"];    
+      for(int j = 0; j < j_args.size(); j++){
+        f_args[i][j] = j_args[j];
+      }
+
+      info.Args = &f_args[i][0];
+			/* --- 関数登録 --- */
+      fm[i]->regist( info );
+    }
+#endif    
+    return REGIST_OK;
+}
+
+/* --- 関数の実行 --- */
+SSHT run( FunctionManager* fm )
+{   
+    return  fm->run();
+}
+
+/* --- 関数結果の送信 --- */
+SSHT send( FunctionManager* fm, String device_id, String mac )
+{   
+    SCHR sndData[JSON_SIZE];
+
+    /* --- 送信可否チェック --- */
+    if( /* 送信するかどうか */ false ){
+        // 送信しない
+        return SEND_OK;
+    }
+
+    /* --- 送信JSONの作成 --- */
+
+    StaticJsonBuffer<JSON_BUFFER_SIZE> jsonCreateBuffer;
+    JsonObject& root = jsonCreateBuffer.createObject();
+
+    /* デバイス情報付加 */
+    root["device_id"] = device_id;
+    root["mac"] = mac;
+
+    /* 実行結果情報付加 */
+    root["port"] = ( fm->getPort() ).Id;
+    root["result"] = ( fm->getResult() ).Result;
+    root["value"] = ( fm->getResult() ).Value;
+
+    root.printTo( sndData, sizeof(sndData) );
+
+    /* --- メインマイコンに送信 --- */
+    Serial.println( sndData );
+
+    return SEND_OK;
+
+}
+
+/* Copyright HAL College of Technology & Design */
+
