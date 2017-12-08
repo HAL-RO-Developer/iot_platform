@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
 
 	"github.com/HAL-RO-Developer/iot_platform/server/controller"
 	"github.com/HAL-RO-Developer/iot_platform/server/logger"
@@ -14,15 +14,14 @@ func main() {
 	model.DB.AutoMigrate(&model.Device{})
 
 	r := gin.Default()
-	//r.Static("/js", "./public/js")
-	//r.Static("/image", "./public/image")
-	//r.Static("/css", "./public/css")
-	//
+	r.Static("/js", "./public/js")
+	r.Static("/image", "./public/image")
+	r.Static("/css", "./public/css")
+
 	//r.LoadHTMLGlob("view/*")
 
-	r.POST("/test", func(c *gin.Context) {
-		s, _ := c.GetRawData()
-		fmt.Println(string(s))
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
 	})
 	ws := controller.GetHandle()
 
@@ -42,5 +41,5 @@ func main() {
 	device.POST("/iam", controller.DeviceRegistration)
 	device.POST("/receive", controller.DeviceReceiveController)
 
-	r.Run(":3000")
+	r.Run()
 }
