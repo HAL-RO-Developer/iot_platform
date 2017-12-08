@@ -71,10 +71,7 @@ input::-webkit-input-placeholder {
    text-align: center;
 }
 
-.sign-in{
-    display: block;
-}
-
-.sign-up{
+#signin,
+#signup{
     display: none;
 }

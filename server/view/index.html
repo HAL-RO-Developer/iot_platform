@@ -23,10 +23,10 @@
 	</head>
 	<body>
 		<!-- Sign in -->
-		<div class="container sign-in">
+		<div id="signin" class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-					<form class="form-horizontal" method="post" action="/api/signin">
+					<form id="signin-form" class="form-horizontal signin-form" method="post" action="/api/signin">
 						<h2>SignIn</h2>
 						<div class="form-group">
 							<label for="username" class="cols-sm-2 control-label">Username</label>
@@ -51,7 +51,7 @@
 							<button type="submit" class="btn btn-primary btn-lg btn-block login-button">SignIn</button>
 						</div>
 						<div class="login-register">
-				            <a href="#" onclick="viewSignUp();">SignUp</a>
+				            <a href="#" onclick="showSignUp();">SignUp</a>
 				        </div>
 					</form>
 				</div>
@@ -59,10 +59,10 @@
 		</div>
 
 		<!-- Sign up -->
-		<div class="container sign-up">
+		<div id="signup" class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-					<form class="form-horizontal" method="post" action="/api/signup">
+					<form id="signup-form" class="form-horizontal signin-form" method="post" action="/api/signup">
 						<h2>SignUp</h2>
 						<div class="form-group">
 							<label for="username" class="cols-sm-2 control-label">Username</label>
@@ -98,7 +98,7 @@
 							<button type="submit" class="btn btn-primary btn-lg btn-block login-button">SignUp</button>
 						</div>
 						<div class="login-register">
-				            <a href="#" onclick="viewSignIn();">SignIn</a>
+				            <a href="#" onclick="showSignIn();">SignIn</a>
 				         </div>
 					</form>
 				</div>

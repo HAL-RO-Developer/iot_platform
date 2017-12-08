@@ -18,11 +18,16 @@ func main() {
 	r.Static("/image", "./public/image")
 	r.Static("/css", "./public/css")
 
-	//r.LoadHTMLGlob("view/*")
+	r.LoadHTMLGlob("view/*")
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
+	/*
+		r.POST("/dashboard", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "dashboard.html", nil)
+		})
+	*/
 	ws := controller.GetHandle()
 
 	api := r.Group("/api")
