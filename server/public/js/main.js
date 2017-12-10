@@ -17,39 +17,51 @@ $(function () {
 });
 
 $(function () {
-     $('.js-show').each(function () {
+    $('.js-show').each(function () {
         var $pass = $(this).find('.js-pass');
         var $input = $(this).find('.js-check');
         $input.change(function () {
-            if ($(this).prop('checked')) { 
-                $pass.attr('type', 'text'); 
-            } else { 
-                $pass.attr('type', 'password'); 
-            } 
-        }); 
-    }); 
+            if ($(this).prop('checked')) {
+                $pass.attr('type', 'text');
+            } else {
+                $pass.attr('type', 'password');
+            }
+        });
+    });
 });
 
 $(function () {
     $('.signin-form').on('submit', function (event) {
         event.preventDefault();
+        $form = $(this)
+        $name = $('[name="name"]').val()
         $.ajax({
-            url: $(this).attr('action'),
-            type: $(this).attr('method'),
-            data: $(this).serialize(),
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            data: $form.serialize(),
+            dataType: 'json',
             timeout: 10000,
         })
             .done(function (data) {
-                console.log(data)
-                console.log(data['token'])
-                $.cookie('token', data['token'], { expires: 1 })
-                location.href = '/dashboard';   // 仮
+                console.log(data);
+                console.log(data['token']);
+                $token = data['token'];
+                $.cookie('token', $token, { expires: 1 })
+                location.href = '/user/' + $name + '/dashboard';   // 仮
+                // postDashboard($name);
             })
             .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(XMLHttpRequest)
-                console.log(textStatus)
-                console.log(errorThrown)
-                alert(XMLHttpRequest['responseJSON']['err'])
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+                $errMsg = XMLHttpRequest['responseJSON']['err']
+                alert($errMsg);
             });
     });
 });
+
+function postDashboard(name) {
+    $(function () {
+       $.post('/user/' + name + '/dashboard');
+    });
+}

@@ -26,7 +26,9 @@ func main() {
 	})
 
 	// ダッシュボード仮設置
-	r.GET("/dashboard", func(c *gin.Context) {
+	user := r.Group("/user/:name")
+	//user.POST("/dashboard, controller.DashboardController")
+	user.GET("/dashboard", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "dashboard.html", nil)
 	})
 
