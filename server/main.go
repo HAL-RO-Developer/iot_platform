@@ -17,17 +17,19 @@ func main() {
 	r.Static("/js", "./public/js")
 	r.Static("/image", "./public/image")
 	r.Static("/css", "./public/css")
+	r.Static("/fonts", "./public/fonts")
 
 	r.LoadHTMLGlob("view/*")
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
-	/*
-		r.POST("/dashboard", func(c *gin.Context) {
-			c.HTML(http.StatusOK, "dashboard.html", nil)
-		})
-	*/
+
+	// ダッシュボード仮設置
+	r.GET("/dashboard", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "dashboard.html", nil)
+	})
+
 	ws := controller.GetHandle()
 
 	api := r.Group("/api")
