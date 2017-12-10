@@ -5,6 +5,7 @@ function signout(){
             return false;
         }else{
             /*　OKの時の処理 */
+            $.removeCookie( 'token' );
             location.href = '/';
         }
     });
