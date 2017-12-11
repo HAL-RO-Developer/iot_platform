@@ -39,12 +39,12 @@
 								<!-- デバイスの追加 -->
 								<li class="list-group-item">
 									<span class="glyphicon glyphicon-pencil text-primary"></span>
-									<a href="#create-device">Create</a>
+									<a href="#" onclick="showCreateDevice();">Create</a>
 								</li>
 								<!-- 登録デバイスリスト -->
 								<li class="list-group-item">
 									<span class="glyphicon glyphicon-list text-primary"></span>
-									<a href="#">List</a>
+									<a href="#" onclick="showListDevice();">List</a>
 								</li>
 								<!-- デバイスの削除 -->
 								<!--
@@ -104,7 +104,7 @@
 			<!-- Right Pain (Main) -->
 			<div class="col-sm-9 col-md-9">
 				<!-- 初期画面 -->
-				<div id="default" class="panel panel-default">
+				<div id="default" class="panel panel-default default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Dashboard</h3>
 					</div>
@@ -113,17 +113,29 @@
 					</div>
 				</div>
 				<!-- デバイスの追加 -->
-				<div id="create-device" class="panel panel-default">
+				<div id="create-device" class="panel panel-default contents">
 					<div class="panel-heading">
 						<h3 class="panel-title">CREATE DEVICE</h3>
 					</div>
 					<div class="panel-body">
 						<form>
+							<input type="text" id="device-name" name="device-name" />
 							<button type="button" id="create-device-button" name="create-device-button" >CREATE DEVICE</button>
 							<input type="text" id="pin-code" name="pin-code" size="4" readonly />
 							<!--<button type="button" id="copy-pin-code" name="copy-pin-code">COPY</button> -->
 						</form>
 					</div>
+				</div>
+				<!-- デバイスリスト -->
+				<div id="get-device" class="panel panel-default contents">
+					<div class="panel-heading">
+						<h3 class="panel-title">DEVICE LIST</h3>
+					</div>
+					<dev class="panal-body">
+						<table id="device-list">
+							<tr><th>DeviceName</th><th>DeviceID</th><th>MAC-Address</th><th>PIN</th><th>Activate</th><th>Delete</th></tr>
+						</table>
+					</dev>
 				</div>
 			</div>
 		</div>

@@ -12,7 +12,7 @@ function showSignUp() {
     });
 }
 
-$(function () {
+$(function() {
     showSignIn();
 });
 
