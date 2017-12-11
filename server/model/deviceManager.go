@@ -11,10 +11,11 @@ import (
 /* デバイス情報 */
 type Device struct {
 	gorm.Model
-	Name     string
-	DeviceID string
-	Pin      string
-	Mac      string
+	Name       string
+	DeviceName string
+	DeviceID   string
+	Pin        string
+	Mac        string
 }
 
 func CreateDevice(name string) (Device, error) {
