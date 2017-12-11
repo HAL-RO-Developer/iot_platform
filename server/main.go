@@ -25,7 +25,6 @@ func main() {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
 
-	// ダッシュボード仮設置
 	user := r.Group("/user/:name")
 	user.GET("/dashboard", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "dashboard.html", nil)

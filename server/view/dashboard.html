@@ -13,7 +13,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 	<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/js/cookies.js"></script>
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/js/dashboard.js"></script>
 </head>
@@ -119,9 +119,18 @@
 					</div>
 					<div class="panel-body">
 						<form>
-							<input type="text" id="device-name" name="device-name" />
-							<button type="button" id="create-device-button" name="create-device-button" >CREATE DEVICE</button>
-							<input type="text" id="pin-code" name="pin-code" size="4" readonly />
+							<div class="row">
+								<div class="col-xs-4">
+									<input type="text" id="device-name" name="device-name" class="form-control" placeholder="Input device-name (option)" />
+								</div>
+								<div class="col-xs-2">
+									<button type="button" id="create-device-button" name="create-device-button" class="btn btn-primary">CREATE DEVICE</button>
+								</div>
+								<div class="col-xs-2">
+									<input type="text" id="pin-code" name="pin-code" class="form-control" placeholder="PIN" readonly />
+								</div>
+							</div>
+
 							<!--<button type="button" id="copy-pin-code" name="copy-pin-code">COPY</button> -->
 						</form>
 					</div>
@@ -132,9 +141,26 @@
 						<h3 class="panel-title">DEVICE LIST</h3>
 					</div>
 					<dev class="panal-body">
-						<table id="device-list">
-							<tr><th>DeviceName</th><th>DeviceID</th><th>MAC-Address</th><th>PIN</th><th>Activate</th><th>Delete</th></tr>
+						<table id="device-list" class="table table-striped">
+							<tr>
+								<th>#</th>
+								</th>
+								<th>DeviceName</th>
+								<th>DeviceID</th>
+								<th>MAC-Address</th>
+								<th>PIN</th>
+								<th>Activate</th>
+							</tr>
 						</table>
+						<!-- デバイスの削除（未実装） -->
+						<div id="delete-device">
+							<h4>DELETE DEVICE(Unimplemented)</h4>
+							<p>Select the delete number</p>
+							<form>
+								<input type="text" id="device-index" name="device-index" />
+								<button type="button" id="delete-device-button" name="delete-device-button">DELETE DEVICE</button>
+							</form>
+						</div>
 					</dev>
 				</div>
 			</div>

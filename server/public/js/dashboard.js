@@ -1,11 +1,11 @@
 $(function () {
-
-    if ($.cookie('token') == '') {
-        location.href = '/';
-    } else {
+    if (cookies.hasItem('token')) {
         $('.default').css('display', 'block');
         $('.contents').css('display', 'none');
+    } else {
+        location.href = '/';
     }
+
 });
 
 function signout() {
@@ -15,7 +15,7 @@ function signout() {
             return false;
         } else {
             /*　OKの時の処理 */
-            $.removeCookie('token');
+            cookies.removeItem('token');
             location.href = '/';
         }
     });
@@ -31,24 +31,42 @@ function showListDevice() {
     $('.default').css('display', 'none');
     $('.contents').css('display', 'none');
     $('#get-device').css('display', 'block');
-    var $response = getDevice();
-    console.log('response',$response);
+    getDevice().done(function (data) {
+        console.log(data);
+        $.each(data['devices'], function (index, elem) {
+            $('#device-list').append(
+                $('<tr></tr>')
+                .append($('<th></th>').text(index + 1))
+                .append($('<td></td>').text(elem.DeviceName))
+                .append($('<td></td>').text(elem.DeviceID))
+                .append($('<td></td>').text(elem.Mac))
+                .append($('<td></td>').text(elem.Pin))
+                .append($('<td></td>').text(!(elem.Mac == '')))
+            );
+        });
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+        $errMsg = jqXHR['responseJSON']['err']
+        alert($errMsg);
+    });
 }
 
 $(function () {
     $('#create-device-button').on('click', function () {
         $.ajax({
-            url: '/api/device',
-            type: 'post',
-            dataType: 'json',
-            timeout: 10000,
-            headers: {
-                'Authorization': $.cookie('token')
-            },
-            data: {
-                'device_name': $('#device-name').val()
-            },
-        })
+                url: '/api/device',
+                type: 'post',
+                dataType: 'json',
+                timeout: 10000,
+                headers: {
+                    'Authorization': cookies.getItem('token')
+                },
+                data: {
+                    'device_name': $('#device-name').val()
+                },
+            })
             .done(function (data) {
                 $pin = data['pin'];
                 $('#pin-code').val($pin)
@@ -76,23 +94,10 @@ function getDevice() {
         dataType: 'json',
         timeout: 10000,
         headers: {
-            'Authorization': $.cookie('token')
+            'Authorization': cookies.getItem('token')
         },
         data: {
             'device_name': $('#device-name').val()
         }
     })
 }
-
-getDevice().done(function (data) {
-   // 成功時
-})
-    .fail(function (jqXHR, textStatus, errorThrown) {
-        // 失敗時
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log(errorThrown);
-        $errMsg = jqXHR['responseJSON']['err']
-        alert($errMsg);
-    });
-

@@ -1,3 +1,7 @@
+$(function() {
+    showSignIn();
+});
+
 function showSignIn() {
     $(function () {
         $('#signin').css('display', 'block');
@@ -11,10 +15,6 @@ function showSignUp() {
         $('#signup').css('display', 'block');
     });
 }
-
-$(function() {
-    showSignIn();
-});
 
 $(function () {
     $('.js-show').each(function () {
@@ -45,7 +45,7 @@ $(function () {
             .done(function (data) {
                 console.log(data);
                 $token = data['token'];
-                $.cookie('token', $token, { expires: 1 })
+                cookies.setItem('token', $token);
                 location.href = '/user/' + $name + '/dashboard';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
