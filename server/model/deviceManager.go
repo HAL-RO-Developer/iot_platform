@@ -18,15 +18,16 @@ type Device struct {
 	Mac        string
 }
 
-func CreateDevice(name string) (Device, error) {
+func CreateDevice(name string, deviceName string) (Device, error) {
 	deviceID := CreateDeviceID()
 	pin := CreateDevicePin()
 
 	device := Device{
-		Name:     name,
-		DeviceID: deviceID,
-		Mac:      "",
-		Pin:      pin,
+		Name:       name,
+		DeviceID:   deviceID,
+		DeviceName: deviceName,
+		Mac:        "",
+		Pin:        pin,
 	}
 	err := DB.Create(&device).Error
 	return device, err

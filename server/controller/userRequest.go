@@ -114,14 +114,14 @@ func LoginController(c *gin.Context) {
 
 func CreateNewProject(c *gin.Context) {
 	userName, ok := model.AuthorityCheck(c)
-
+	deviceName := c.PostForm("device_name")
 	if !ok {
 		c.JSON(401, gin.H{
 			"err": "ログイン出来ません",
 		})
 		return
 	}
-	device, err := model.CreateDevice(userName)
+	device, err := model.CreateDevice(userName, deviceName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "データベースエラー"})
