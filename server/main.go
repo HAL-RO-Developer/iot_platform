@@ -37,6 +37,7 @@ func main() {
 	api.POST("/signup", controller.CreateUserController)
 	api.POST("/signin", controller.LoginController)
 	api.POST("/device", controller.CreateNewProject)
+	api.GET("/device", controller.GetDevice)
 	api.POST("/function", controller.UserRequestController)
 	api.GET("/ws/:device_id", func(c *gin.Context) {
 		if !controller.UserWebSocketController(c) {

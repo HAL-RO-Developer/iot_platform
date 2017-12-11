@@ -33,6 +33,11 @@ func CreateDevice(name string, deviceName string) (Device, error) {
 	return device, err
 }
 
+func GetDeviceByUserName(name string) []Device {
+	var devices []Device
+	DB.Where("name = ?", name).Find(&devices)
+	return devices
+}
 func CreateDevicePin() string {
 	var pin string
 	for {

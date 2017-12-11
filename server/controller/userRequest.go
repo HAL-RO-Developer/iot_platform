@@ -131,7 +131,18 @@ func CreateNewProject(c *gin.Context) {
 		"pin": device.Pin,
 	})
 }
-
+func GetDevice(c *gin.Context) {
+	userName, ok := model.AuthorityCheck(c)
+	if !ok {
+		c.JSON(401, gin.H{
+			"err": "ログイン出来ません",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"devices": model.GetDeviceByUserName(userName),
+	})
+}
 func UserWebSocketController(c *gin.Context) bool {
 
 	/* デバイスIDサーチ */
