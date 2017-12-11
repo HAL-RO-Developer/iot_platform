@@ -40,28 +40,21 @@ $(function () {
             type: $form.attr('method'),
             data: $form.serialize(),
             dataType: 'json',
-            timeout: 10000,
+            timeout: 10000
         })
             .done(function (data) {
                 console.log(data);
-                console.log(data['token']);
                 $token = data['token'];
                 $.cookie('token', $token, { expires: 1 })
-                location.href = '/user/' + $name + '/dashboard';   // 仮
-                // postDashboard($name);
+                location.href = '/user/' + $name + '/dashboard';
             })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(XMLHttpRequest);
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
-                $errMsg = XMLHttpRequest['responseJSON']['err']
+                $errMsg = jqXHR['responseJSON']['err']
                 alert($errMsg);
             });
     });
 });
 
-function postDashboard(name) {
-    $(function () {
-       $.post('/user/' + name + '/dashboard');
-    });
-}

@@ -39,7 +39,7 @@
 								<!-- デバイスの追加 -->
 								<li class="list-group-item">
 									<span class="glyphicon glyphicon-pencil text-primary"></span>
-									<a href="#">Create</a>
+									<a href="#create-device">Create</a>
 								</li>
 								<!-- 登録デバイスリスト -->
 								<li class="list-group-item">
@@ -103,12 +103,26 @@
 
 			<!-- Right Pain (Main) -->
 			<div class="col-sm-9 col-md-9">
-				<div class="panel panel-default">
+				<!-- 初期画面 -->
+				<div id="default" class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Dashboard</h3>
 					</div>
 					<div class="panel-body">
 						<p>Admin Dashboard Accordion List Group Menu</p>
+					</div>
+				</div>
+				<!-- デバイスの追加 -->
+				<div id="create-device" class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">CREATE DEVICE</h3>
+					</div>
+					<div class="panel-body">
+						<form>
+							<button type="button" id="create-device-button" name="create-device-button" >CREATE DEVICE</button>
+							<input type="text" id="pin-code" name="pin-code" size="4" readonly />
+							<!--<button type="button" id="copy-pin-code" name="copy-pin-code">COPY</button> -->
+						</form>
 					</div>
 				</div>
 			</div>
