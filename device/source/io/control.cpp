@@ -36,7 +36,7 @@ SSHT regist( FunctionManager** fm, FUNCTION_INFO info, String json )
 
     for( SINT i = 0; i < port.size() ; i++ )
     {
-      info.PortId = port[i]["port_no"]; 	/* ポートID */
+      info.PortId = port[i]["port"]; 	/* ポートID */
       info.FuncId = port[i]["function"];	/* 関数ID */
       
 			/* 関数の引数 */

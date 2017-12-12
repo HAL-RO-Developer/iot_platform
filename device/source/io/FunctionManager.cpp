@@ -98,7 +98,7 @@ String FunctionManager::createJson( )
 {
     SCHR json[JSON_SIZE];
 
-    sprintf( json, "{\"port\":%d,\"result\":%d,\"value\":%d}", Port.Id, Result.Result, Result.Value );
+    sprintf( json, "{\"port\":%d,\"value\":%d}", Port.Id, Result.Value );
     return String( json );
 }
 
