@@ -17,9 +17,9 @@ type Result struct {
 }
 
 type Task struct {
-	PortNo int    `json:"port_no"`
-	Func   uint64 `json:"function"`
-	Args   int    `json:"args"`
+	PortNo uint16   `json:"port"`
+	Func   uint16   `json:"function"`
+	Args[] int16  	`json:"args"`
 }
 
 func UserRequestController(c *gin.Context) {
