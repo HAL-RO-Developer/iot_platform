@@ -17,6 +17,7 @@
 #include <FS.h>
 #include <Wire.h>
 #include <Ticker.h>
+#include <ArduinoJson.h>
 
 #endif  /* __ARDUINO_LIBRARY_H__ */
 

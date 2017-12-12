@@ -10,12 +10,13 @@
 /* --- includeファイル --- */
 #include "System.h"     /* システム共通データ定義ヘッダ */
 #include "State.h"      /* 状態に関する定義ヘッダ       */
-#include "StateMatrix.h"
-
+//#include "StateMatrix.h"
 
 /* --- extern宣言 --- */
-//extern const MAIN_STATE_TABLE gMainStateTable[];                  /* 主状態テーブル */
-//extern const MAIN_STATE_TABLE gMainStateTable[];
+extern "C"
+{
+    extern MAIN_STATE_TABLE gMainStateTable[];
+}
 
 /* --- プロトタイプ宣言 --- */
 SUB_STATE_TABLE* getSubState( USHT mainState );
@@ -31,7 +32,7 @@ SSHT ( *getFunction( SUB_STATE_TABLE* subState, USHT id ))( STATE_TABLE*, INFO_C
 
     引数:
     STATE_TABLE     state       状態管理テーブル
-    INFO_COMMON*    common      データオブジェクト(仮データ)
+    INFO_COMMON*    common      データオブジェクト
 
     戻り値:
     SSHT        STATE_OK    正常終了
@@ -56,13 +57,8 @@ SSHT callFunction( STATE_TABLE* state, INFO_COMMON* common )
     table = getSubState( state->MainState );
     if( table == NULL ){
         /* 副状態取得失敗 */
-        Serial.println("err");
         return STATE_NG;
-    }  
-
-    Serial.print("[RTN]SubstateTable[0]=");
-    Serial.println(table[0].SubState);
-    //Serial.println(table[0].SubState);
+    } 
 
     /* --- 状態遷移先関数ポインタの取得 --- */
     function = getFunction( table, state->SubState );
@@ -71,8 +67,6 @@ SSHT callFunction( STATE_TABLE* state, INFO_COMMON* common )
         return STATE_NG;
     }
 
-    Serial.println("[RTN]function");
-    
     /* --- 状態遷移先関数Call --- */
     return ( *function )( state, common );
 }
@@ -114,8 +108,6 @@ SUB_STATE_TABLE* getSubState( USHT mainState )
             break;
         }
     }
-    Serial.print("SubstateTable[0]=");
-    Serial.println(table[0].SubState);
     return table; 
 }
 
@@ -150,7 +142,6 @@ SSHT ( *getFunction( SUB_STATE_TABLE* subState, USHT id ))( STATE_TABLE*, INFO_C
     */
     
     /* --- 検索ループ --- */
-    Serial.println("Function Search");
     for( index = 0; subState[index].Function != NULL; index++ ){
         if( subState[index].SubState == id ){
             /* 関数ポインタ取得 */

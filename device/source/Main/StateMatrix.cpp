@@ -21,9 +21,10 @@ SUB_STATE_TABLE gSetupStateTable[] = {
 
 /* 副状態テーブル [主：動作状態] */
 SUB_STATE_TABLE gActionStateTable[] = {
-	{ STATE_ACTION_REGIST, actionStateRegist },	            /* 関数登録状態 */
+    { STATE_ACTION_RECEIVE, actionStateReceive },	        /* 関数受信状態 */
     { STATE_ACTION_EXECUTE, actionStateExecute },           /* 関数実行状態 */
-    { STATE_ACTION_SEND, actionStateSend },                 /* 結果送信状態 */
+    { STATE_ACTION_IAM, actionStateIam },                  /* 関数通信認証状態 */
+    { STATE_ACTION_SERIAL, actionStateSerial },                 /* 結果送信状態 */
     { NULL , NULL }                 			            /* ストッパ     */
 };
 
@@ -32,11 +33,11 @@ SUB_STATE_TABLE gErrorStateTable[] = {
 	{ STATE_ERROR_CONNECT, errorStateConnect },	            /* WiFi接続エラー状態     */
     { STATE_ERROR_COMMUNICATE, errorStateCommunicate },     /* サーバー通信エラー状態 */
     { STATE_ERROR_OTHER, errorStateOther },                 /* その他各種エラー状態   */
-    { NULL, NULL }                  			            /* ストッパ               */
+    { NULL, NULL }                  			            /* ストッパ              */
 };
 
 /* --- 主状態テーブル --- */
-const MAIN_STATE_TABLE gMainStateTable[] = {          
+MAIN_STATE_TABLE gMainStateTable[] = {          
     { STATE_SETUP, gSetupStateTable },                      /* セットアップ状態 */
     { STATE_ACTION, gActionStateTable },                    /* 動作状態         */
     { STATE_ERROR, gErrorStateTable },                      /* エラー状態       */
@@ -44,3 +45,4 @@ const MAIN_STATE_TABLE gMainStateTable[] = {
 };
 
 /* Copyright HAL College of Technology & Design */
+

@@ -24,9 +24,10 @@ SSHT setupStateAp( STATE_TABLE* state, INFO_COMMON* common );
 SSHT setupStateAction( STATE_TABLE* state, INFO_COMMON* common );
 
 /* 動作状態時 */
-SSHT actionStateRegist( STATE_TABLE* state, INFO_COMMON* common );
+SSHT actionStateReceive( STATE_TABLE* state, INFO_COMMON* common );
 SSHT actionStateExecute( STATE_TABLE* state, INFO_COMMON* common );
-SSHT actionStateSend( STATE_TABLE* state, INFO_COMMON* common );
+SSHT actionStateIam( STATE_TABLE* state, INFO_COMMON* common );
+SSHT actionStateSerial( STATE_TABLE* state, INFO_COMMON* common );
 
 /* エラー状態時 */
 SSHT errorStateConnect( STATE_TABLE* state, INFO_COMMON* common );
