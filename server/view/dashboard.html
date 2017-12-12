@@ -1,25 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head> 
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+<html lang="ja">
 
-        <!-- Website CSS style -->
-        
-		<!-- Website Font style -->
-	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-		
-		<!-- Google Fonts -->
-		<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>IoT Platform - Dashboard</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/dashboard.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/js/cookies.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/js/dashboard.js"></script>
+</head>
 
-		<!-- JavaScript -->
-		<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
-		<script type="text/javascript" src="/js/bootstrap.js"></script>
+<body>
+	<div class="container">
+		<div class="row">
+			<!-- Left Pain (Menu) -->
+			<div class="col-sm-3 col-md-3">
+				<div class="panel-group" id="accordion">
+					<!-- Device Menu -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+									<span class="glyphicon glyphicon-folder-close"></span>
+									Device
+								</a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse in">
+							<ul class="list-group">
+								<!-- デバイスの追加 -->
+								<li class="list-group-item">
+									<span class="glyphicon glyphicon-pencil text-primary"></span>
+									<a href="#" onclick="showCreateDevice();">Create</a>
+								</li>
+								<!-- 登録デバイスリスト -->
+								<li class="list-group-item">
+									<span class="glyphicon glyphicon-list text-primary"></span>
+									<a href="#" onclick="showListDevice();">List</a>
+								</li>
+								<!-- デバイスの削除 -->
+								<!--
+								<li class="list-group-item">
+									<span class="glyphicon glyphicon-remove text-primary"></span>
+									<a href="#">Delete</a>
+								</li>
+								-->
+							</ul>
+						</div>
+					</div>
+					<!-- Help Menu -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+									<span class="glyphicon glyphicon-heart"></span>
+									Help
+								</a>
+							</h4>
+						</div>
+						<div id="collapseTwo" class="panel-collapse collapse">
+							<div class="list-group">
+								<a href="#" class="list-group-item">
+									<h4 class="list-group-item-heading">List group item heading</h4>
+									<p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+								</a>
+							</div>
+							<div class="list-group">
+								<a href="#" class="list-group-item">
+									<h4 class="list-group-item-heading">List group item heading</h4>
+									<p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+								</a>
+							</div>
+							<div class="list-group">
+								<a href="#" class="list-group-item">
+									<h4 class="list-group-item-heading">List group item heading</h4>
+									<p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- Sign out -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a href="#" onclick="signout();">
+									<span class="glyphicon glyphicon-log-out"></span>
+									Sign-out
+								</a>
+							</h4>
+						</div>
+					</div>
+				</div>
+			</div>
 
-		<title>IoT Platform</title>
-    </head>
-    <body>
-        Hello, World
-    </body>
+			<!-- Right Pain (Main) -->
+			<div class="col-sm-9 col-md-9">
+				<!-- 初期画面 -->
+				<div id="default" class="panel panel-default default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Dashboard</h3>
+					</div>
+					<div class="panel-body">
+						<p>Admin Dashboard Accordion List Group Menu</p>
+					</div>
+				</div>
+				<!-- デバイスの追加 -->
+				<div id="create-device" class="panel panel-default contents">
+					<div class="panel-heading">
+						<h3 class="panel-title">CREATE DEVICE</h3>
+					</div>
+					<div class="panel-body">
+						<form>
+							<div class="row">
+								<div class="col-xs-4">
+									<input type="text" id="device-name" name="device-name" class="form-control" placeholder="Input device-name (option)" />
+								</div>
+								<div class="col-xs-2">
+									<button type="button" id="create-device-button" name="create-device-button" class="btn btn-primary">CREATE DEVICE</button>
+								</div>
+								<div class="col-xs-2">
+									<input type="text" id="pin-code" name="pin-code" class="form-control" placeholder="PIN" readonly />
+								</div>
+							</div>
+
+							<!--<button type="button" id="copy-pin-code" name="copy-pin-code">COPY</button> -->
+						</form>
+					</div>
+				</div>
+				<!-- デバイスリスト -->
+				<div id="get-device" class="panel panel-default contents">
+					<div class="panel-heading">
+						<h3 class="panel-title">DEVICE LIST</h3>
+					</div>
+					<dev class="panal-body">
+						<table id="device-list" class="table table-striped">
+							<tr>
+								<th>#</th>
+								</th>
+								<th>DeviceName</th>
+								<th>DeviceID</th>
+								<th>MAC-Address</th>
+								<th>PIN</th>
+								<th>Activate</th>
+							</tr>
+						</table>
+						<!-- デバイスの削除（未実装） -->
+						<div id="delete-device">
+							<h4>DELETE DEVICE(Unimplemented)</h4>
+							<p>Select the delete number</p>
+							<form>
+								<input type="text" id="device-index" name="device-index" />
+								<button type="button" id="delete-device-button" name="delete-device-button">DELETE DEVICE</button>
+							</form>
+						</div>
+					</dev>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
 </html>

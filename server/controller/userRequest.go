@@ -17,9 +17,9 @@ type Result struct {
 }
 
 type Task struct {
-	PortNo int    `json:"port_no"`
-	Func   uint64 `json:"function"`
-	Args   int    `json:"args"`
+	PortNo uint16   `json:"port"`
+	Func   uint16   `json:"function"`
+	Args[] int16  	`json:"args"`
 }
 
 func UserRequestController(c *gin.Context) {
@@ -114,14 +114,14 @@ func LoginController(c *gin.Context) {
 
 func CreateNewProject(c *gin.Context) {
 	userName, ok := model.AuthorityCheck(c)
-
+	deviceName := c.PostForm("device_name")
 	if !ok {
 		c.JSON(401, gin.H{
 			"err": "ログイン出来ません",
 		})
 		return
 	}
-	device, err := model.CreateDevice(userName)
+	device, err := model.CreateDevice(userName, deviceName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "データベースエラー"})
@@ -131,7 +131,18 @@ func CreateNewProject(c *gin.Context) {
 		"pin": device.Pin,
 	})
 }
-
+func GetDevice(c *gin.Context) {
+	userName, ok := model.AuthorityCheck(c)
+	if !ok {
+		c.JSON(401, gin.H{
+			"err": "ログイン出来ません",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"devices": model.GetDeviceByUserName(userName),
+	})
+}
 func UserWebSocketController(c *gin.Context) bool {
 
 	/* デバイスIDサーチ */

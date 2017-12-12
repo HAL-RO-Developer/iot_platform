@@ -11,26 +11,33 @@ import (
 /* デバイス情報 */
 type Device struct {
 	gorm.Model
-	Name     string
-	DeviceID string
-	Pin      string
-	Mac      string
+	Name       string
+	DeviceName string
+	DeviceID   string
+	Pin        string
+	Mac        string
 }
 
-func CreateDevice(name string) (Device, error) {
+func CreateDevice(name string, deviceName string) (Device, error) {
 	deviceID := CreateDeviceID()
 	pin := CreateDevicePin()
 
 	device := Device{
-		Name:     name,
-		DeviceID: deviceID,
-		Mac:      "",
-		Pin:      pin,
+		Name:       name,
+		DeviceID:   deviceID,
+		DeviceName: deviceName,
+		Mac:        "",
+		Pin:        pin,
 	}
 	err := DB.Create(&device).Error
 	return device, err
 }
 
+func GetDeviceByUserName(name string) []Device {
+	var devices []Device
+	DB.Where("name = ?", name).Find(&devices)
+	return devices
+}
 func CreateDevicePin() string {
 	var pin string
 	for {

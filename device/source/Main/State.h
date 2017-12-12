@@ -1,7 +1,7 @@
 /*
     State.h
 
-    状態に関する構造体の定義
+    状態に関するヘッダファイル
 
     Created 2017/09/11
     By Shogo Tanaka
@@ -12,6 +12,5 @@
 #include "InfoStruct.h"         /* 情報管理構造体定義ヘッダ  */
 #include "StateStruct.h"		/* 状態遷移構造体ヘッダ     */
 #include "StatePrototype.h"		/* 状態遷移プロトタイプ宣言 */
-
 
 /* Copyright HAL College of Technology & Design */

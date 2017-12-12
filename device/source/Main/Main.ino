@@ -1,5 +1,5 @@
 /*
-    Main.cpp
+    Main.ino
 
     システムメイン
 
@@ -13,24 +13,30 @@
 #include "System.h"             /* システム共通データ定義ヘッダ */
 #include "State.h"              /* 状態に関する定義ヘッダ       */
 #include "InfoStruct.h"         /* 情報管理構造体定義ヘッダ     */
+#include "StatusLED.h"
 #include "constants.h"
+
+const   SCHR*   settings    = "/settings.json";
+const   SCHR*   ap_ssid     = "ESP8266";
+const   SCHR*   ap_pass     = "password";
 
 STATE_TABLE stateTable;
 SSHT ret = STATE_NG;
 INFO_COMMON common;
 
+StatusLED led_r( SLPR );
+StatusLED led_g( SLPG );
+
 /* --- プロトタイプ宣言 --- */
-void a_init();
+void deviceInit();
 
-void setup(){
-    //WIFICONFIG config;
-
-    // init
-
+void setup()
+{
+  
     memset( &stateTable, 0, sizeof( STATE_TABLE ) );
     memset( &common, 0, sizeof( INFO_COMMON ) );
 
-    a_init();
+    deviceInit();
 
     /* --- 初期状態設定 --- */
 
@@ -38,54 +44,58 @@ void setup(){
     stateTable.MainState = STATE_SETUP;         
     
     /* 副状態 */
-    if( digitalRead( APSWT ) ){
+    if( digitalRead( APSWT ) == HIGH ){
         stateTable.SubState = STATE_SETUP_ACTION;
     }else{
         stateTable.SubState = STATE_SETUP_AP;
     }
-
+    
     /* 個別状態 */
-    stateTable.PieceState = INIT;               
-
-    // 入力系割り込み設定
-    // WDT処理
-    // HWリセット関連処理  
-
-    stateTable.MainState = STATE_ERROR;
-    stateTable.SubState = STATE_ERROR_CONNECT;
     stateTable.PieceState = INIT;
+
+    //demo
+    //stateTable.SubState = STATE_ACTION_SERIAL;
+    //stateTable.SubState = STATE_SETUP_AP;
+
+    Serial.println();
 }
 
-void loop(){
-    Serial.println("----------------");
-    Serial.print("MainState=");
-    Serial.println(stateTable.MainState);
-    Serial.print("SubState=");
-    Serial.println(stateTable.SubState);
-    Serial.print("PieceState=");
-    Serial.println(stateTable.PieceState);
-    Serial.println("----------------");
+void loop()
+{
     ret = callFunction( &stateTable, &common );
-    if( ret == SYSTEM_NG ){
+    if( ret == STATE_NG ){
         stateTable.MainState = STATE_ERROR;     /* 主状態を【エラー】にする */
-        stateTable.SubState = STATE_ERROR_OTHER;
+        stateTable.PieceState = INIT;
     }
 }
 
-// 入力系タイマー割り込み
-
-// 各種初期設定
-void a_init(){
+/* --- 各種初期設定 --- */
+void deviceInit()
+{
+    /* APスイッチ */
     pinMode( APSWT, INPUT );
-    pinMode( SLPR, OUTPUT );
-    pinMode( SLPG, OUTPUT );
-    SPIFFS.begin();
+    
+    /* ステータスLED */
+    led_r.write(LOW);
+    led_g.write(LOW);
+    common.led_r = &led_r;
+    common.led_g = &led_g;
+
+    /* MACアドレス取得 */
+    byte mac_byte[6];
+    WiFi.macAddress( mac_byte );
+    for( int i = 0; i < 6; i++ ){
+        common.mac += String( mac_byte[i], HEX );
+    }
+
+    /* シリアル通信 */
     Serial.begin( 115200 );
-
+    /* I2C通信 */
     Wire.begin();
-
-    digitalWrite( SLPG, HIGH );
-    digitalWrite( SLPR, HIGH );
+    /* ファイルシステム */
+    SPIFFS.begin();
+    
 }
 
 /* Copyright HAL College of Technology & Design */
+

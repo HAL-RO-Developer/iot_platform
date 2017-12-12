@@ -12,7 +12,7 @@ type TaskInfo struct {
 }
 
 type PortTask struct {
-	PortNo int      `json:"port_no"`
+	PortNo int      `json:"port"`
 	Func   uint64   `json:"function"`
 	Args   []string `json:"args"`
 }
@@ -29,9 +29,8 @@ type Message struct {
 }
 
 type ReturnValue struct {
-	PortNo int    `json:"port_no"`
-	Func   uint64 `json:"function"`
-	Res    int    `json:"res"`
+	PortNo uint16   `json:"port"`
+	Value  int16    `json:"value"`
 }
 
 var taskInfo = []TaskInfo{}
