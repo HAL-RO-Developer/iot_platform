@@ -60,3 +60,9 @@ body {
 #delete-device{
     margin-left: 10px;
 }
+
+#device-name,
+#create-device-button,
+#pin-code{
+    margin: 5px 0;
+}
