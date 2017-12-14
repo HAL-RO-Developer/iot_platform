@@ -45,7 +45,7 @@ $(function () {
             .done(function (data) {
                 console.log(data);
                 $token = data['token'];
-                cookies.setItem('token', $token);
+                localStorage.setItem('token', $token);
                 location.href = '/user/' + $name + '/dashboard';
             })
             .fail(function (jqXHR, textStatus, errorThrown) {

@@ -1,9 +1,9 @@
 $(function () {
-    if (cookies.hasItem('token')) {
+    if (localStorage.getItem('token') == null) {
+        location.href = '/';
+    } else {
         $('.default').css('display', 'block');
         $('.contents').css('display', 'none');
-    } else {
-        location.href = '/';
     }
 
 });
@@ -15,7 +15,7 @@ function signout() {
             return false;
         } else {
             /*　OKの時の処理 */
-            cookies.removeItem('token');
+            localStorage.removeItem('token');
             location.href = '/';
         }
     });
@@ -33,16 +33,16 @@ function showListDevice() {
     $('#get-device').css('display', 'block');
     getDevice().done(function (data) {
         console.log(data);
-        $('#device-list .device').remove();    
+        $('#device-list .device').remove();
         $.each(data['devices'], function (index, elem) {
             $('#device-list').append(
                 $('<tr class="device" data-toggle="modal" data-target="#device-context-menu"></tr>')
-                .append($('<th></th>').text(index + 1))
-                .append($('<td class="device-name"></td>').text(elem.DeviceName))
-                .append($('<td class="device-id"></td>').text(elem.DeviceID))
-                .append($('<td class="mac"></td>').text(elem.Mac))
-                .append($('<td class="pin"></td>').text(elem.Pin))
-                .append($('<td class="activate"></td>').text(!(elem.Mac == '')))
+                    .append($('<th></th>').text(index + 1))
+                    .append($('<td class="device-name"></td>').text(elem.DeviceName))
+                    .append($('<td class="device-id"></td>').text(elem.DeviceID))
+                    .append($('<td class="mac"></td>').text(elem.Mac))
+                    .append($('<td class="pin"></td>').text(elem.Pin))
+                    .append($('<td class="activate"></td>').text(!(elem.Mac == '')))
             );
         });
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -57,17 +57,17 @@ function showListDevice() {
 $(function () {
     $('#create-device-button').on('click', function () {
         $.ajax({
-                url: '/api/device',
-                type: 'post',
-                dataType: 'json',
-                timeout: 10000,
-                headers: {
-                    'Authorization': cookies.getItem('token')
-                },
-                data: {
-                    'device_name': $('#device-name').val()
-                },
-            })
+            url: '/api/device',
+            type: 'post',
+            dataType: 'json',
+            timeout: 10000,
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+            data: {
+                'device_name': $('#device-name').val()
+            },
+        })
             .done(function (data) {
                 $pin = data['pin'];
                 $('#pin-code').val($pin)
@@ -95,7 +95,7 @@ function getDevice() {
         dataType: 'json',
         timeout: 10000,
         headers: {
-            'Authorization': cookies.getItem('token')
+            'Authorization': localStorage.getItem('token')
         },
         data: {
             'device_name': $('#device-name').val()
