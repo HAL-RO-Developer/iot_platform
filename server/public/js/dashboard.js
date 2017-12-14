@@ -33,15 +33,16 @@ function showListDevice() {
     $('#get-device').css('display', 'block');
     getDevice().done(function (data) {
         console.log(data);
+        $('#device-list .device').remove();    
         $.each(data['devices'], function (index, elem) {
             $('#device-list').append(
-                $('<tr></tr>')
+                $('<tr class="device" data-toggle="modal" data-target="#device-context-menu"></tr>')
                 .append($('<th></th>').text(index + 1))
-                .append($('<td></td>').text(elem.DeviceName))
-                .append($('<td></td>').text(elem.DeviceID))
-                .append($('<td></td>').text(elem.Mac))
-                .append($('<td></td>').text(elem.Pin))
-                .append($('<td></td>').text(!(elem.Mac == '')))
+                .append($('<td class="device-name"></td>').text(elem.DeviceName))
+                .append($('<td class="device-id"></td>').text(elem.DeviceID))
+                .append($('<td class="mac"></td>').text(elem.Mac))
+                .append($('<td class="pin"></td>').text(elem.Pin))
+                .append($('<td class="activate"></td>').text(!(elem.Mac == '')))
             );
         });
     }).fail(function (jqXHR, textStatus, errorThrown) {
