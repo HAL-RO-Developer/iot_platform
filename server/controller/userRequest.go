@@ -157,3 +157,8 @@ func UserWebSocketController(c *gin.Context) bool {
 	}
 	return true
 }
+
+func Cros(c *gin.Context)  {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Headers", "access-control-allow-origin, access-control-allow-headers")
+}

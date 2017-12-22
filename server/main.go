@@ -33,6 +33,7 @@ func main() {
 	ws := controller.GetHandle()
 
 	api := r.Group("/api")
+	api.Use(controller.Cros)
 	api.POST("/signup", controller.CreateUserController)
 	api.POST("/signin", controller.LoginController)
 	api.POST("/device", controller.CreateNewProject)
