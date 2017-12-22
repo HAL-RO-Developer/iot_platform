@@ -36,7 +36,7 @@ function showListDevice() {
         $('#device-list .device').remove();
         $.each(data['devices'], function (index, elem) {
             $('#device-list').append(
-                $('<tr class="device" data-toggle="modal" data-target="#device-context-menu"></tr>')
+                $(`<tr class="device" data-toggle="modal" data-target="#device-context-menu" data-whatever=${elem.DeviceID}></tr>`)
                     .append($('<th></th>').text(index + 1))
                     .append($('<td class="device-name"></td>').text(elem.DeviceName))
                     .append($('<td class="device-id"></td>').text(elem.DeviceID))
@@ -53,6 +53,15 @@ function showListDevice() {
         alert($errMsg);
     });
 }
+
+$(function(){
+    $('#device-context-menu').on('show.bs.modal', function(event){
+        var device = $(event.relatedTarget);
+        var recipient = device.data('whatever');
+        localStorage.setItem('selected-device', recipient );
+    });
+});
+
 
 $(function () {
     $('#create-device-button').on('click', function () {
@@ -84,9 +93,38 @@ $(function () {
 
 $(function () {
     $("#copy-pin-code").on("click", function () {
-        alert($("#pin-code").val());
+        
     });
 });
+
+$(function () {
+    $("#copy-device-id").on("click", function () {
+        if(copyTextToClipboard(localStorage.getItem('selected-device'))){
+            alert('Copy successful!');
+        }else{
+            alert('Copy Error!');
+        }
+    });
+});
+
+$(function () {
+    $("#remove-device").on("click", function () {
+        
+    });
+});
+
+function copyTextToClipboard(textval){
+    var copyForm = document.createElement("textarea");
+    copyForm.textContent = textval;
+
+    var bodyElm = document.getElementsByTagName("body")[0];
+    bodyElm.appendChild(copyForm);
+
+    copyForm.select();
+    var retVal = document.execCommand('copy');
+    bodyElm.removeChild(copyForm);
+    return retVal;
+}
 
 function getDevice() {
     return $.ajax({
