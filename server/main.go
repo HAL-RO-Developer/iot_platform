@@ -38,16 +38,7 @@ func main() {
 	api.POST("/signin", controller.LoginController)
 	api.POST("/device", controller.CreateNewProject)
 	api.GET("/device", controller.GetDevice)
-	api.OPTIONS("/function",func(c *gin.Context){
-		headers := c.Request.Header.Get("Access-Control-Request-Headers")
-
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", headers)
-
-		c.Data(http.StatusOK, "text/plain", []byte{})
-		c.Abort()
-	})
+	api.OPTIONS("/function",controller.PreflightRequest)
 	api.POST("/function", controller.UserRequestController)
 	api.GET("/ws/:device_id", func(c *gin.Context) {
 		if !controller.UserWebSocketController(c) {
