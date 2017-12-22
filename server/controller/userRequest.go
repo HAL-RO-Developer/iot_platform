@@ -22,6 +22,13 @@ type Task struct {
 	Args[] int16  	`json:"args"`
 }
 
+/* クロスオリジンヘッダー追加 */
+
+func Cros(c *gin.Context)  {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Headers", "access-control-allow-origin, access-control-allow-headers")
+}
+
 func UserRequestController(c *gin.Context) {
 	user, ok := model.AuthorityCheck(c)
 	if !ok {
@@ -131,6 +138,7 @@ func CreateNewProject(c *gin.Context) {
 		"pin": device.Pin,
 	})
 }
+
 func GetDevice(c *gin.Context) {
 	userName, ok := model.AuthorityCheck(c)
 	if !ok {
@@ -143,6 +151,7 @@ func GetDevice(c *gin.Context) {
 		"devices": model.GetDeviceByUserName(userName),
 	})
 }
+
 func UserWebSocketController(c *gin.Context) bool {
 
 	/* デバイスIDサーチ */
@@ -156,9 +165,4 @@ func UserWebSocketController(c *gin.Context) bool {
 		return false
 	}
 	return true
-}
-
-func Cros(c *gin.Context)  {
-	c.Header("Access-Control-Allow-Origin", "*")
-	c.Header("Access-Control-Allow-Headers", "access-control-allow-origin, access-control-allow-headers")
 }
