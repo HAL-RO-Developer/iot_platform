@@ -166,3 +166,14 @@ func UserWebSocketController(c *gin.Context) bool {
 	}
 	return true
 }
+
+func PreflightRequest(c *gin.Context) {
+	headers := c.Request.Header.Get("Access-Control-Request-Headers")
+
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	c.Writer.Header().Set("Access-Control-Allow-Methods", "POST")
+	c.Writer.Header().Set("Access-Control-Allow-Headers", headers)
+
+	c.Data(http.StatusOK, "text/plain", []byte{})
+	c.Abort()
+}
