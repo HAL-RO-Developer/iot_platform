@@ -38,6 +38,7 @@ func GetDeviceByUserName(name string) []Device {
 	DB.Where("name = ?", name).Find(&devices)
 	return devices
 }
+
 func CreateDevicePin() string {
 	var pin string
 	for {
@@ -74,6 +75,7 @@ func CreateUuid(length int, letters []rune) string {
 	}
 	return string(b)
 }
+
 func ExistDeviceById(id string) bool {
 
 	device := []Device{}
@@ -81,18 +83,16 @@ func ExistDeviceById(id string) bool {
 	if len(device) != 0 {
 		return true
 	}
-
 	return false
 }
 
-func ExistDevice(name string, id string) bool {
+func ExistDevice(name string, deviceid string) bool {
 
 	device := []Device{}
-	DB.Find(&device, "name = ? and device_id = ?", name, id)
+	DB.Find(&device, "name = ? and device_id = ?", name, deviceid)
 	if len(device) != 0 {
 		return true
 	}
-
 	return false
 }
 
@@ -102,7 +102,6 @@ func ExistDeviceByIam(deviceid string, macaddr string) bool {
 	if len(device) != 0 {
 		return true
 	}
-
 	return false
 }
 
@@ -116,4 +115,17 @@ func UpdateDeviceMacById(pin string, mac string) (*Device, error) {
 	device.Mac = mac
 	err = DB.Model(&device).Update(&device).Update("pin", "").Error
 	return &device, err
+}
+
+func DeleteDeviceById(user string, deviceId string) bool {
+	device := Device{}
+	device.DeviceID = deviceId
+	err := DB.Where("name = ? and device_id = ?",user, deviceId).First(&device).Error
+	if err != nil {
+		panic(err)
+		return false
+	}
+
+	DB.Delete(&device)
+	return true
 }

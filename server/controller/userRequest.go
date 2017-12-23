@@ -8,6 +8,7 @@ import (
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
+	"fmt"
 )
 
 type Result struct {
@@ -123,7 +124,7 @@ func CreateNewProject(c *gin.Context) {
 	userName, ok := model.AuthorityCheck(c)
 	deviceName := c.PostForm("device_name")
 	if !ok {
-		c.JSON(401, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"err": "ログイン出来ません",
 		})
 		return
@@ -142,7 +143,7 @@ func CreateNewProject(c *gin.Context) {
 func GetDevice(c *gin.Context) {
 	userName, ok := model.AuthorityCheck(c)
 	if !ok {
-		c.JSON(401, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"err": "ログイン出来ません",
 		})
 		return
@@ -176,4 +177,26 @@ func PreflightRequest(c *gin.Context) {
 
 	c.Data(http.StatusOK, "text/plain", []byte{})
 	c.Abort()
+}
+
+func DeleteDevice(c *gin.Context){
+	userName, ok := model.AuthorityCheck(c)
+	deviceId := c.PostForm("device_id")
+	fmt.Println(deviceId)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"err": "ログイン出来ません",
+		})
+		return
+	}
+
+	if !model.DeleteDeviceById(userName, deviceId) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"delete": "デバイスIDが見つかりませんでした。",
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"delete": "削除しました",
+	})
 }
