@@ -192,6 +192,7 @@ func DeleteDevice(c *gin.Context){
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "デバイスIDが見つかりませんでした。",
 		})
+		return
 	}
 
 	model.DeleteDeviceById(userName, deviceId)
