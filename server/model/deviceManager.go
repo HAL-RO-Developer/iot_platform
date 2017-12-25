@@ -121,7 +121,7 @@ func DeleteDeviceById(user string, deviceId string) bool {
 	device := Device{}
 
 	device.DeviceID = deviceId
-	DB.First(&device)
+	DB.Where("name = ? and device_id = ?", user, deviceId).First(&device)
 	DB.Delete(&device)
 	return true
 }
