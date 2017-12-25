@@ -119,13 +119,9 @@ func UpdateDeviceMacById(pin string, mac string) (*Device, error) {
 
 func DeleteDeviceById(user string, deviceId string) bool {
 	device := Device{}
-	device.DeviceID = deviceId
-	err := DB.Where("name = ? and device_id = ?",user, deviceId).First(&device).Error
-	if err != nil {
-		panic(err)
-		return false
-	}
 
+	device.DeviceID = deviceId
+	DB.First(&device)
 	DB.Delete(&device)
 	return true
 }

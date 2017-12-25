@@ -38,7 +38,7 @@ func main() {
 	api.POST("/signin", controller.LoginController)
 	api.POST("/device", controller.CreateNewProject)
 	api.GET("/device", controller.GetDevice)
-	api.DELETE("/delete", controller.DeleteDevice)
+	api.DELETE("/device", controller.DeleteDevice)
 	api.OPTIONS("/function",controller.PreflightRequest)
 	api.POST("/function", controller.UserRequestController)
 	api.GET("/ws/:device_id", func(c *gin.Context) {

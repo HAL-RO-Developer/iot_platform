@@ -8,7 +8,6 @@ import (
 	"github.com/HAL-RO-Developer/iot_platform/server/controller/validation"
 	"github.com/HAL-RO-Developer/iot_platform/server/model"
 	"github.com/gin-gonic/gin"
-	"fmt"
 )
 
 type Result struct {
@@ -182,7 +181,6 @@ func PreflightRequest(c *gin.Context) {
 func DeleteDevice(c *gin.Context){
 	userName, ok := model.AuthorityCheck(c)
 	deviceId := c.PostForm("device_id")
-	fmt.Println(deviceId)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"err": "ログイン出来ません",
@@ -190,12 +188,13 @@ func DeleteDevice(c *gin.Context){
 		return
 	}
 
-	if !model.DeleteDeviceById(userName, deviceId) {
+	if !model.ExistDevice(userName,deviceId){
 		c.JSON(http.StatusBadRequest, gin.H{
-			"delete": "デバイスIDが見つかりませんでした。",
+			"err": "デバイスIDが見つかりませんでした。",
 		})
 	}
 
+	model.DeleteDeviceById(userName, deviceId)
 	c.JSON(http.StatusOK, gin.H{
 		"delete": "削除しました",
 	})
