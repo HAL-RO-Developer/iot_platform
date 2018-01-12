@@ -7,7 +7,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/yaml.v2"
-	"github.com/tkc/go-echo-server-sandbox/config"
 )
 
 var DB = NewDBConn()
@@ -17,7 +16,7 @@ func NewDBConn() *gorm.DB {
 	if os.Getenv("DB_SOURCE") != "" {
 		db_source = os.Getenv("DB_SOURCE")
 	}
-	db, err := gorm.Open(GetDBConfig("dbconfig.yml",db_source))
+	db, err := gorm.Open(GetDBConfig("dbconfig.yml", db_source))
 	if err != nil {
 		panic(err)
 	}
@@ -25,7 +24,7 @@ func NewDBConn() *gorm.DB {
 }
 
 func GetDBConn() *gorm.DB {
-	return db
+	return DB
 }
 
 func GetDBConfig(configPath string, dbname string) (string, string) {
