@@ -36,7 +36,7 @@ function showListDevice() {
         $('#device-list .device').remove();
         $.each(data['devices'], function (index, elem) {
             $('#device-list').append(
-                $(`<tr class="device" data-toggle="modal" data-target="#device-context-menu" data-whatever=${elem.DeviceID}></tr>`)
+                $(`<tr class="device" data-toggle="modal" data-target="#device-context-menu" data-whatever=${index}></tr>`)
                     .append($('<th></th>').text(index + 1))
                     .append($('<td class="device-name"></td>').text(elem.DeviceName))
                     .append($('<td class="device-id"></td>').text(elem.DeviceID))
@@ -51,6 +51,9 @@ function showListDevice() {
         console.log(errorThrown);
         $errMsg = jqXHR['responseJSON']['err']
         alert($errMsg);
+        /* サインインページに遷移 */
+        localStorage.removeItem('token');
+        location.href = '/';
     });
 }
 
@@ -58,7 +61,7 @@ $(function(){
     $('#device-context-menu').on('show.bs.modal', function(event){
         var device = $(event.relatedTarget);
         var recipient = device.data('whatever');
-        localStorage.setItem('selected-device', recipient );
+        localStorage.setItem('rn', recipient );
     });
 });
 
@@ -87,29 +90,56 @@ $(function () {
                 console.log(errorThrown);
                 $errMsg = jqXHR['responseJSON']['err']
                 alert($errMsg);
+                /* サインインページに遷移 */
+                localStorage.removeItem('token');
+                location.href = '/';
             });
     });
 });
 
 $(function () {
     $("#copy-pin-code").on("click", function () {
-        
+        var rn = parseInt(localStorage.getItem('rn'));
+        var pin = $(`#device-list .device:eq(${rn}) .pin`).text();
+        if(copyTextToClipboard(pin)){
+            alert('Copy successful!');
+        }else{
+            alert('Copy Error!');
+        }
+        $('#device-context-menu').modal('hide');
     });
 });
 
 $(function () {
     $("#copy-device-id").on("click", function () {
-        if(copyTextToClipboard(localStorage.getItem('selected-device'))){
+        var rn = parseInt(localStorage.getItem('rn'));
+        var device_id = $(`#device-list .device:eq(${rn}) .device-id`).text();
+        if(copyTextToClipboard(device_id)){
             alert('Copy successful!');
         }else{
             alert('Copy Error!');
         }
+        $('#device-context-menu').modal('hide');
     });
 });
 
 $(function () {
     $("#remove-device").on("click", function () {
-        
+        var rn = parseInt(localStorage.getItem('rn'));
+        var device_id = $(`#device-list .device:eq(${rn}) .device-id`).text();
+        removeDevice(device_id)
+            .done(function (data) {
+                alert('削除しました')
+                $('#device-context-menu').modal('hide');
+                $(`#device-list .device:eq(${rn})`).remove();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                $errMsg = jqXHR['responseJSON']['err']
+                alert($errMsg);
+            });
     });
 });
 
@@ -137,6 +167,21 @@ function getDevice() {
         },
         data: {
             'device_name': $('#device-name').val()
+        }
+    })
+}
+
+function removeDevice(device_id) {
+    return $.ajax({
+        url: '/api/device',
+        type: 'delete',
+        dataType: 'json',
+        timeout: 10000,
+        headers: {
+            'Authorization': localStorage.getItem('token')
+        },
+        data: {
+            'device_id': device_id
         }
     })
 }
