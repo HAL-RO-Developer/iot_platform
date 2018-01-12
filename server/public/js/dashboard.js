@@ -127,22 +127,11 @@ $(function () {
     $("#remove-device").on("click", function () {
         var rn = parseInt(localStorage.getItem('rn'));
         var device_id = $(`#device-list .device:eq(${rn}) .device-id`).text();
-        $.ajax({
-            url: '/api/device',
-            type: 'delete',
-            dataType: 'json',
-            timeout: 10000,
-            headers: {
-                'Authorization': localStorage.getItem('token')
-            },
-            data: {
-                'device_id': device_id
-            },
-        })
+        removeDevice(device_id)
             .done(function (data) {
                 alert('削除しました')
                 $('#device-context-menu').modal('hide');
-                // テーブルを更新する処理
+                $(`#device-list .device:eq(${rn})`).remove();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
@@ -178,6 +167,21 @@ function getDevice() {
         },
         data: {
             'device_name': $('#device-name').val()
+        }
+    })
+}
+
+function removeDevice(device_id) {
+    return $.ajax({
+        url: '/api/device',
+        type: 'delete',
+        dataType: 'json',
+        timeout: 10000,
+        headers: {
+            'Authorization': localStorage.getItem('token')
+        },
+        data: {
+            'device_id': device_id
         }
     })
 }
