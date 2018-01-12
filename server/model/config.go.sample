@@ -1,3 +1,0 @@
-package model
-
-var dbResource = "root:password@/iotplatform?charset=utf8&parseTime=True&loc=Local"

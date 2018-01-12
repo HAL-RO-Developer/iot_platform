@@ -1,25 +1,44 @@
 package model
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
+	"io/ioutil"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/yaml.v2"
+	"github.com/tkc/go-echo-server-sandbox/config"
 )
 
-var DB = newConnection()
+var DB = NewDBConn()
 
-func newConnection() *gorm.DB {
-	db, err := gorm.Open("mysql", dbResource)
+func NewDBConn() *gorm.DB {
+	db_source := "develop"
+	if os.Getenv("DB_SOURCE") != "" {
+		db_source = os.Getenv("DB_SOURCE")
+	}
+	db, err := gorm.Open(GetDBConfig("dbconfig.yml",db_source))
 	if err != nil {
 		panic(err)
 	}
-
 	return db
 }
 
-func ToHash(pass string) string {
-	converted := sha256.Sum256([]byte(pass))
-	return hex.EncodeToString(converted[:])
+func GetDBConn() *gorm.DB {
+	return db
+}
+
+func GetDBConfig(configPath string, dbname string) (string, string) {
+	var buf, err = ioutil.ReadFile(configPath)
+	if err != nil {
+		panic(err)
+	}
+	m := make(map[interface{}]interface{})
+	err = yaml.Unmarshal(buf, &m)
+	if err != nil {
+		panic(err)
+	}
+	driver := m[dbname].(map[interface{}]interface{})["dialect"].(string)
+	source := m[dbname].(map[interface{}]interface{})["datasource"].(string)
+	return driver, source
 }
