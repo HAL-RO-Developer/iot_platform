@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015 Ugorji Nwoke. All rights reserved.
+// Copyright (c) 2012-2018 Ugorji Nwoke. All rights reserved.
 // Use of this source code is governed by a MIT license found in the LICENSE file.
 
 package codec
@@ -17,6 +17,7 @@ type Rpc interface {
 	ClientCodec(conn io.ReadWriteCloser, h Handle) rpc.ClientCodec
 }
 
+// RPCOptions holds options specific to rpc functionality
 type RPCOptions struct {
 	// RPCNoBuffer configures whether we attempt to buffer reads and writes during RPC calls.
 	//
@@ -103,7 +104,7 @@ func (c *rpcCodec) write(obj1, obj2 interface{}, writeObj2 bool) (err error) {
 }
 
 func (c *rpcCodec) swallow(err *error) {
-	defer panicToErr(err)
+	defer panicToErr(c.dec, err)
 	c.dec.swallow()
 }
 
@@ -210,7 +211,7 @@ type goRpc struct{}
 //   var clientCodec = GoRpc.ClientCodec(conn, handle)
 //
 // Example 2: you can also explicitly create a buffered connection yourself,
-//            and not worry about configuring the buffer sizes in the Handle.
+// and not worry about configuring the buffer sizes in the Handle.
 //   var handle codec.Handle     // codec handle
 //   var conn io.ReadWriteCloser // connection got from a socket
 //   var bufconn = struct {      // bufconn here is a buffered io.ReadWriteCloser
