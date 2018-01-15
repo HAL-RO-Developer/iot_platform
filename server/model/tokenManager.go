@@ -3,6 +3,9 @@ package model
 import (
 	"time"
 
+	"crypto/sha256"
+	"encoding/hex"
+
 	"github.com/dgrijalva/jwt-go"
 	request "github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
@@ -27,7 +30,7 @@ func CreateTokenString(name string) (string, error) {
 
 	token.Claims = jwt.MapClaims{
 		"user": name,
-		"exp":  time.Now().Add(time.Hour * 1).Unix(),
+		"exp":  time.Now().Add(time.Hour * 48).Unix(),
 	}
 
 	/*
@@ -51,4 +54,9 @@ func AuthorityCheck(c *gin.Context) (string, bool) {
 	} else {
 		return "", false
 	}
+}
+
+func ToHash(pass string) string {
+	converted := sha256.Sum256([]byte(pass))
+	return hex.EncodeToString(converted[:])
 }
